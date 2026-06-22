@@ -3,27 +3,24 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-export default function ParticleCanvas() {
+export const ParticleCanvas: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // If mobile viewport (width < 768px), do not load Three.js to protect mobile rendering performance/LCP
-    if (window.innerWidth < 768) {
-      return;
-    }
+    // Skip Three.js on mobile/tablet to boost rendering speeds
+    if (window.innerWidth < 768) return;
 
-    // Dimensions
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    // Scene setup
+    // Scene
     const scene = new THREE.Scene();
-    
+
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-    camera.position.z = 80;
+    camera.position.z = 40;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -31,87 +28,114 @@ export default function ParticleCanvas() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // Particle Config
-    const particleCount = 180;
-    const positions = new Float32Array(particleCount * 3);
-    const velocities: number[] = [];
-    
-    // Random positions and velocities
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 150;     // x
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 150; // y
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 150; // z
-
-      velocities.push(
-        (Math.random() - 0.5) * 0.08, // vx
-        (Math.random() - 0.5) * 0.08, // vy
-        (Math.random() - 0.5) * 0.08  // vz
-      );
-    }
-
-    // Geometries
-    const particleGeometry = new THREE.BufferGeometry();
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    // Create a circular particle texture
-    const canvas = document.createElement('canvas');
-    canvas.width = 16;
-    canvas.height = 16;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
-      gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 16, 16);
-    }
-    const particleTexture = new THREE.CanvasTexture(canvas);
-
-    const particleMaterial = new THREE.PointsMaterial({
-      size: 1.8,
-      map: particleTexture,
+    // 1. Mesh Gradient Background using ShaderMaterial
+    const bgGeometry = new THREE.PlaneGeometry(200, 200);
+    const bgMaterial = new THREE.ShaderMaterial({
       transparent: true,
-      blending: THREE.NormalBlending,
       depthWrite: false,
-      color: new THREE.Color('#4f46e5'), // Indigo-600 for light background visibility
-      opacity: 0.45
+      uniforms: {
+        uTime: { value: 0 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        varying vec2 vUv;
+        
+        void main() {
+          vec2 uv = vUv;
+          
+          // Wave effects
+          float wave1 = sin(uv.x * 2.5 + uTime * 0.12) * 0.5 + 0.5;
+          float wave2 = cos(uv.y * 3.0 - uTime * 0.08) * 0.5 + 0.5;
+          float wave3 = sin((uv.x + uv.y) * 1.8 + uTime * 0.05) * 0.5 + 0.5;
+          
+          // 3 custom color points
+          vec3 deepBlue = vec3(0.039, 0.067, 0.157);  // #0A1128
+          vec3 darkPurple = vec3(0.11, 0.039, 0.208); // #1C0A35
+          vec3 voidBlack = vec3(0.031, 0.039, 0.059);  // #080A0F
+          
+          vec3 mix1 = mix(deepBlue, darkPurple, wave1);
+          vec3 finalColor = mix(mix1, voidBlack, wave2 * wave3);
+          
+          gl_FragColor = vec4(finalColor, 0.4);
+        }
+      `,
+    });
+    const bgMesh = new THREE.Mesh(bgGeometry, bgMaterial);
+    scene.add(bgMesh);
+
+    // 2. Stars Field: 2000 points
+    const starCount = 2000;
+    const starGeometry = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+      starPositions[i * 3] = (Math.random() - 0.5) * 120; // x
+      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 120; // y
+      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 80; // z
+    }
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    const starMaterial = new THREE.PointsMaterial({
+      size: 0.12,
+      color: 0x60A5FA, // Accent Glow
+      transparent: true,
+      opacity: 0.6,
+      depthWrite: false,
+    });
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+
+    // 3. Floating Wireframe Geometries (Up to 5)
+    const shapes: THREE.Mesh[] = [];
+    const wireframeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x3B82F6, // --accent-primary
+      wireframe: true,
+      transparent: true,
+      opacity: 0.06,
+      depthWrite: false,
     });
 
-    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particleSystem);
+    const geometries = [
+      new THREE.IcosahedronGeometry(4, 1),
+      new THREE.TorusGeometry(3, 1, 8, 24),
+      new THREE.OctahedronGeometry(3.5, 1),
+      new THREE.IcosahedronGeometry(2.5, 0),
+      new THREE.TorusGeometry(2, 0.6, 6, 18),
+    ];
 
-    // Connections (Lines)
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color('#6366f1'), // Indigo-500 line
-      transparent: true,
-      opacity: 0.08,
-      blending: THREE.NormalBlending,
-      depthWrite: false,
+    const positions = [
+      new THREE.Vector3(-18, 12, -10),
+      new THREE.Vector3(15, -10, -5),
+      new THREE.Vector3(10, 14, -12),
+      new THREE.Vector3(-12, -12, -8),
+      new THREE.Vector3(2, 4, -15),
+    ];
+
+    geometries.forEach((geom, idx) => {
+      const mesh = new THREE.Mesh(geom, wireframeMaterial);
+      mesh.position.copy(positions[idx]);
+      scene.add(mesh);
+      shapes.push(mesh);
     });
-    
-    const maxConnections = particleCount * 4;
-    const linePositions = new Float32Array(maxConnections * 3 * 2); // 2 vertices per line
-    
-    const lineGeometry = new THREE.BufferGeometry();
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    
-    const lineSystem = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lineSystem);
 
-    // Mouse positions
-    let mouseX = 0;
-    let mouseY = 0;
+    // Mouse Parallax Trackers
     let targetMouseX = 0;
     let targetMouseY = 0;
+    let currentMouseX = 0;
+    let currentMouseY = 0;
 
-    const handleMouseMove = (event: MouseEvent) => {
-      targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      targetMouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+    const handleMouseMove = (e: MouseEvent) => {
+      targetMouseX = (e.clientX / window.innerWidth) - 0.5;
+      targetMouseY = (e.clientY / window.innerHeight) - 0.5;
     };
-
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Scroll progress
+    // Scroll depth adjustment
     let scrollY = 0;
     const handleScroll = () => {
       scrollY = window.scrollY;
@@ -119,99 +143,42 @@ export default function ParticleCanvas() {
     window.addEventListener('scroll', handleScroll);
 
     // Animation Loop
-    let animationFrameId: number;
-    
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+    let animId = 0;
+    const startTime = Date.now();
 
-      // Smooth mouse tracking
-      mouseX += (targetMouseX - mouseX) * 0.05;
-      mouseY += (targetMouseY - mouseY) * 0.05;
+    const tick = () => {
+      animId = requestAnimationFrame(tick);
+      const elapsedTime = (Date.now() - startTime) * 0.001;
 
-      const posAttr = particleGeometry.getAttribute('position') as THREE.BufferAttribute;
-      const posArray = posAttr.array as Float32Array;
+      // Update shader time
+      bgMaterial.uniforms.uTime.value = elapsedTime;
 
-      // Rotate systems based on mouse
-      particleSystem.rotation.y = mouseX * 0.15;
-      particleSystem.rotation.x = -mouseY * 0.15;
-      lineSystem.rotation.y = mouseX * 0.15;
-      lineSystem.rotation.x = -mouseY * 0.15;
+      // Mouse Parallax
+      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
 
-      // Slowly rotate scene automatically
-      particleSystem.rotation.z += 0.0008;
-      lineSystem.rotation.z += 0.0008;
+      stars.rotation.x = currentMouseY * 0.15;
+      stars.rotation.y = currentMouseX * 0.15;
 
-      // Adjust camera position slightly on scroll to give parallax depth
-      camera.position.y = -scrollY * 0.02;
-      camera.lookAt(0, -scrollY * 0.02, 0);
+      // Slowly rotate shapes
+      shapes.forEach((mesh, index) => {
+        const factor = index % 2 === 0 ? 1 : -1;
+        mesh.rotation.x += 0.001 * factor;
+        mesh.rotation.y += 0.0015 * factor;
+        mesh.rotation.z += 0.0005;
+        
+        // Floating drift
+        mesh.position.y += Math.sin(elapsedTime * 0.5 + index) * 0.005;
+      });
 
-      for (let i = 0; i < particleCount; i++) {
-        // Move particle
-        posArray[i * 3] += velocities[i * 3];
-        posArray[i * 3 + 1] += velocities[i * 3 + 1];
-        posArray[i * 3 + 2] += velocities[i * 3 + 2];
-
-        // Boundary checks (bounce back within cube)
-        const boundary = 75;
-        if (Math.abs(posArray[i * 3]) > boundary) {
-          velocities[i * 3] *= -1;
-          posArray[i * 3] = Math.sign(posArray[i * 3]) * boundary;
-        }
-        if (Math.abs(posArray[i * 3 + 1]) > boundary) {
-          velocities[i * 3 + 1] *= -1;
-          posArray[i * 3 + 1] = Math.sign(posArray[i * 3 + 1]) * boundary;
-        }
-        if (Math.abs(posArray[i * 3 + 2]) > boundary) {
-          velocities[i * 3 + 2] *= -1;
-          posArray[i * 3 + 2] = Math.sign(posArray[i * 3 + 2]) * boundary;
-        }
-      }
-      posAttr.needsUpdate = true;
-
-      // Connect points
-      let connectionIndex = 0;
-      const linePosAttr = lineGeometry.getAttribute('position') as THREE.BufferAttribute;
-      const linePosArray = linePosAttr.array as Float32Array;
-
-      linePosArray.fill(0);
-
-      const maxDist = 28;
-
-      for (let i = 0; i < particleCount; i++) {
-        const x1 = posArray[i * 3];
-        const y1 = posArray[i * 3 + 1];
-        const z1 = posArray[i * 3 + 2];
-
-        for (let j = i + 1; j < particleCount; j++) {
-          const x2 = posArray[j * 3];
-          const y2 = posArray[j * 3 + 1];
-          const z2 = posArray[j * 3 + 2];
-
-          const dx = x1 - x2;
-          const dy = y1 - y2;
-          const dz = z1 - z2;
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-          if (dist < maxDist && connectionIndex < maxConnections) {
-            linePosArray[connectionIndex * 6] = x1;
-            linePosArray[connectionIndex * 6 + 1] = y1;
-            linePosArray[connectionIndex * 6 + 2] = z1;
-
-            linePosArray[connectionIndex * 6 + 3] = x2;
-            linePosArray[connectionIndex * 6 + 4] = y2;
-            linePosArray[connectionIndex * 6 + 5] = z2;
-
-            connectionIndex++;
-          }
-        }
-      }
-      linePosAttr.needsUpdate = true;
-      lineGeometry.setDrawRange(0, connectionIndex * 2);
+      // Camera scroll parallax
+      camera.position.y = -scrollY * 0.015;
+      camera.lookAt(0, -scrollY * 0.015, 0);
 
       renderer.render(scene, camera);
     };
 
-    animate();
+    tick();
 
     const handleResize = () => {
       width = window.innerWidth;
@@ -226,17 +193,18 @@ export default function ParticleCanvas() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(animId);
       
       if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
         containerRef.current.removeChild(renderer.domElement);
       }
-      
-      particleGeometry.dispose();
-      particleMaterial.dispose();
-      particleTexture.dispose();
-      lineGeometry.dispose();
-      lineMaterial.dispose();
+
+      bgGeometry.dispose();
+      bgMaterial.dispose();
+      starGeometry.dispose();
+      starMaterial.dispose();
+      geometries.forEach(g => g.dispose());
+      wireframeMaterial.dispose();
       renderer.dispose();
     };
   }, []);
@@ -244,8 +212,9 @@ export default function ParticleCanvas() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-gradient-to-tr from-[#f4f6fb] via-[#eef2f7] to-[#e0e7ff] md:bg-transparent"
-      id="3d-particles"
+      className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-bg-void"
+      id="three-background"
     />
   );
-}
+};
+export default ParticleCanvas;

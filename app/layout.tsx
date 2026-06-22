@@ -50,6 +50,10 @@ export const metadata: Metadata = {
   }
 };
 
+import { CursorProvider } from "@/lib/cursor-context";
+import CustomCursor from "@/components/cursor/CustomCursor";
+import PageTransition from "@/components/layout/PageTransition";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -61,8 +65,16 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans">
-        {children}
+      <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+      </head>
+      <body className="min-h-full flex flex-col font-sans bg-bg-void text-text-secondary">
+        <CursorProvider>
+          <CustomCursor />
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </CursorProvider>
       </body>
     </html>
   );
