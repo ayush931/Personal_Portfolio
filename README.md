@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌟 Interactive 3D Developer Portfolio
 
-## Getting Started
+A premium, interactive 3D developer portfolio website built using modern web standards. This portfolio showcases projects, experience, skills, and real-time GitHub integration, complete with an interactive background particle canvas and a self-hosted contact CRM.
 
-First, run the development server:
+[![Next.js Version](https://img.shields.io/badge/Next.js-16.2-black?style=flat-square&logo=nextdotjs)](https://nextjs.org/)
+[![React Version](https://img.shields.io/badge/React-19.0-blue?style=flat-square&logo=react)](https://react.dev/)
+[![Three.js](https://img.shields.io/badge/Three.js-WebGL-orange?style=flat-square&logo=threedotjs)](https://threejs.org/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🎨 Design & Aesthetics
+This application is designed with high visual excellence:
+- **Interactive 3D Particle Canvas**: Dynamic WebGL-based custom floating particle field reacting to mouse movement.
+- **Glassmorphism**: Sleek frosted glass panel designs matching professional dark-mode aesthetics.
+- **Modern Typography**: Seamlessly styled using modern geist-sans and geist-mono typography.
+- **Smooth Animations**: Tailored hover micro-interactions and transitions.
+
+---
+
+## ⚡ Features
+- **Categorized Skills Matrix**: Fully interactive, categorized skill set filtering panel.
+- **Accordion Experience Timeline**: Expandable career history timeline highlighting previous engineering positions.
+- **Github Statistics Dashboard**: Fetches and displays GitHub stats and visualizer blocks.
+- **CRM Contact Inbox**: A secure, embedded CRM panel (with custom password authentication `ayush123`) to view, manage, and delete contact inquiries locally via `localStorage`.
+
+---
+
+## 🛠️ Technology Stack
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Library**: [React](https://react.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) (using `@tailwindcss/postcss`)
+- **3D Engine**: [Three.js](https://threejs.org/) (`three`, `@types/three`)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+
+---
+
+## 📂 Project Structure
+```text
+├── app/
+│   ├── favicon.ico
+│   ├── globals.css         # Global Tailwind style rules
+│   ├── layout.tsx          # App entry wrapper and Metadata
+│   └── page.tsx            # Main Portfolio Page (Hero, Skills, Experience, CRM, Contact)
+├── components/
+│   ├── icons.tsx           # Custom SVG Brand Icons
+│   ├── GithubStats.tsx     # GitHub activity visualizations and metrics
+│   └── ParticleCanvas.tsx  # Three.js custom particle rendering canvas
+├── public/                 # Static assets (images, profile pictures)
+└── tsconfig.json           # TypeScript configuration details
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 📋 Prerequisites
+Ensure you have [Node.js](https://nodejs.org/) (v18+) installed.
 
-## Learn More
+### 🔧 Installation & Setup
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ayush931/Personal_Portfolio.git
+   cd Personal_Portfolio
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Build the production application:**
+   ```bash
+   npm run build
+   ```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔒 CRM Panel Credentials
+The contact section includes an embedded client-side CRM system to inspect message submissions.
+* **Passcode**: `ayush123` (locally encrypted / checked via React state)
