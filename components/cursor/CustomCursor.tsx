@@ -133,32 +133,32 @@ export const CustomCursor: React.FC = () => {
         return {
           width: 56,
           height: 56,
-          backgroundColor: 'rgba(29, 78, 216, 0.2)', // --accent-subtle
-          borderColor: '#60A5FA', // --accent-glow
+          backgroundColor: 'var(--accent-subtle)',
+          borderColor: 'var(--accent-glow)',
           borderRadius: '50%'
         };
       case 'text':
         return {
           width: 4,
           height: 24,
-          backgroundColor: '#3B82F6', // --accent-primary
-          borderColor: '#3B82F6',
+          backgroundColor: 'var(--accent-primary)',
+          borderColor: 'var(--accent-primary)',
           borderRadius: '2px'
         };
       case 'project':
         return {
           width: 60,
           height: 60,
-          backgroundColor: projectColor || 'rgba(59, 130, 246, 0.1)',
-          borderColor: projectColor || '#3B82F6',
+          backgroundColor: projectColor || 'var(--accent-subtle)',
+          borderColor: projectColor || 'var(--accent-glow)',
           borderRadius: '50%'
         };
       default:
         return {
           width: 32,
           height: 32,
-          backgroundColor: 'rgba(59, 130, 246, 0)',
-          borderColor: '#3B82F6', // --accent-primary
+          backgroundColor: 'transparent',
+          borderColor: 'var(--accent-primary)',
           borderRadius: '50%'
         };
     }

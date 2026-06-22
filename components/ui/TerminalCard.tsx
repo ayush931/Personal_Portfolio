@@ -85,7 +85,7 @@ export const TerminalCard: React.FC = () => {
       className="w-full bg-bg-surface border border-border-subtle rounded-xl overflow-hidden shadow-2xl font-mono text-[12px] md:text-sm text-text-primary"
     >
       {/* Top Bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#0B0D13] border-b border-border-subtle/50">
+      <div className="flex items-center justify-between px-4 py-3 bg-bg-void border-b border-border-subtle/50">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
           <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />

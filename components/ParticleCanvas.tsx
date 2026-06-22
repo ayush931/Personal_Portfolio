@@ -55,13 +55,13 @@ export const ParticleCanvas: React.FC = () => {
           float wave2 = cos(uv.y * 3.0 - uTime * 0.08) * 0.5 + 0.5;
           float wave3 = sin((uv.x + uv.y) * 1.8 + uTime * 0.05) * 0.5 + 0.5;
           
-          // 3 custom color points
-          vec3 deepBlue = vec3(0.039, 0.067, 0.157);  // #0A1128
-          vec3 darkPurple = vec3(0.11, 0.039, 0.208); // #1C0A35
-          vec3 voidBlack = vec3(0.031, 0.039, 0.059);  // #080A0F
+          // Dark Mode color points
+          vec3 darkIndigo = vec3(0.039, 0.035, 0.102);    // #0A091A
+          vec3 darkMagenta = vec3(0.102, 0.039, 0.121);   // #1A0A1F
+          vec3 darkVoid = vec3(0.015, 0.015, 0.035);      // #040409
           
-          vec3 mix1 = mix(deepBlue, darkPurple, wave1);
-          vec3 finalColor = mix(mix1, voidBlack, wave2 * wave3);
+          vec3 mix1 = mix(darkIndigo, darkMagenta, wave1);
+          vec3 finalColor = mix(mix1, darkVoid, wave2 * wave3);
           
           gl_FragColor = vec4(finalColor, 0.4);
         }
@@ -82,7 +82,7 @@ export const ParticleCanvas: React.FC = () => {
     starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
     const starMaterial = new THREE.PointsMaterial({
       size: 0.12,
-      color: 0x60A5FA, // Accent Glow
+      color: 0xEC4899, // Accent Glow (#EC4899)
       transparent: true,
       opacity: 0.6,
       depthWrite: false,
@@ -93,7 +93,7 @@ export const ParticleCanvas: React.FC = () => {
     // 3. Floating Wireframe Geometries (Up to 5)
     const shapes: THREE.Mesh[] = [];
     const wireframeMaterial = new THREE.MeshBasicMaterial({
-      color: 0x3B82F6, // --accent-primary
+      color: 0x7C3AED, // Accent Primary (#7C3AED)
       wireframe: true,
       transparent: true,
       opacity: 0.06,
@@ -152,6 +152,8 @@ export const ParticleCanvas: React.FC = () => {
 
       // Update shader time
       bgMaterial.uniforms.uTime.value = elapsedTime;
+
+
 
       // Mouse Parallax
       currentMouseX += (targetMouseX - currentMouseX) * 0.05;

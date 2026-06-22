@@ -80,7 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
       <motion.header
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 transition-all duration-300 frosted-glass border-b border-border-subtle/50"
         style={{
-          backgroundColor: 'rgba(8, 10, 15, 0.7)',
+          backgroundColor: 'rgba(4, 4, 9, 0.7)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
         }}
@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
         </nav>
 
         {/* Right Section */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 md:gap-4">
           {/* Open to Work Badge */}
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/20 text-[10px] font-mono font-medium text-emerald-400">
             <span className="relative flex h-2 w-2">
@@ -150,6 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
             </span>
             OPEN TO WORK
           </div>
+
 
           {/* Hire Me Button */}
           <a
@@ -167,9 +168,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
             }}
           >
             {/* Gradient border ring */}
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full" />
+            <span className="absolute inset-0 bg-gradient-to-r from-accent-primary to-accent-glow rounded-full" />
             {/* Gradient background fill on hover */}
-            <span className="btn-gradient-bg absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full opacity-0" />
+            <span className="btn-gradient-bg absolute inset-0 bg-gradient-to-r from-accent-primary to-accent-glow rounded-full opacity-0" />
             {/* Inner background block (to make outline card) */}
             <span className="absolute inset-[1px] bg-bg-void rounded-full group-hover:opacity-0 transition-opacity duration-300" />
             {/* Button label */}

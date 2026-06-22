@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="w-full bg-[#080A0F] border-t border-border-subtle/80 py-12 px-6 md:px-12 relative z-10 select-none">
+    <footer className="w-full bg-bg-void border-t border-border-subtle/80 py-12 px-6 md:px-12 relative z-10 select-none">
       <div className="w-full max-w-6xl mx-auto space-y-8">
         
         {/* Top half */}

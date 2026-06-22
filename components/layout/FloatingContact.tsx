@@ -115,7 +115,7 @@ export const FloatingContact: React.FC = () => {
             {/* Dismiss X button */}
             <button
               onClick={handleDismiss}
-              className="absolute top-0 right-0 p-1 bg-bg-surface hover:bg-bg-elevated border border-border-subtle rounded-full transform translate-x-1 -translate-y-1 hover:text-white"
+              className="absolute top-0 right-0 p-1 bg-bg-surface hover:bg-bg-elevated border border-border-subtle rounded-full transform translate-x-1 -translate-y-1 hover:text-text-primary"
               aria-label="Dismiss Badge"
             >
               <X className="w-2.5 h-2.5" />

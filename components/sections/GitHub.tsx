@@ -166,7 +166,7 @@ export const GitHub: React.FC = () => {
               </span>
               {/* Contribution chart embed image */}
               <div 
-                className="w-full overflow-x-auto rounded-lg p-2 bg-[#0E1117] border border-border-subtle/40 flex items-center justify-center min-h-[140px]"
+                className="w-full overflow-x-auto rounded-lg p-2 bg-bg-void border border-border-subtle/40 flex items-center justify-center min-h-[140px]"
                 onMouseEnter={() => {
                   setCursorType('hover');
                   setCursorText('GRAPH');
