@@ -14,13 +14,39 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ayush Kumar | Full Stack Software Engineer Portfolio",
-  description: "Explore the 3D portfolio of Ayush Kumar, a Full Stack Software Engineer specializing in MERN stack, Next.js, and high performance SaaS architecture.",
-  keywords: ["Ayush Kumar", "Full Stack Engineer", "Web Developer Portfolio", "Three.js Portfolio", "React Developer", "Next.js Portfolio"],
+  description: "Ayush Kumar — Full Stack Software Engineer specializing in microservices, React, FastAPI, and React Native. Open to full-time engineering roles.",
+  keywords: ["Ayush Kumar", "Full Stack Engineer", "Web Developer Portfolio", "Three.js Portfolio", "React Developer", "Next.js Portfolio", "Patna Software Engineer"],
   authors: [{ name: "Ayush Kumar" }],
+  metadataBase: new URL("https://anotherayush.in"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Ayush Kumar | Full Stack Software Engineer Portfolio",
+    description: "Ayush Kumar — Full Stack Software Engineer specializing in microservices, React, FastAPI, and React Native. Open to full-time engineering roles.",
+    url: "https://anotherayush.in",
+    siteName: "Ayush Kumar Portfolio",
+    images: [
+      {
+        url: "/avatar.png",
+        width: 800,
+        height: 600,
+        alt: "Ayush Kumar Portfolio Hero Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ayush Kumar | Full Stack Software Engineer Portfolio",
+    description: "Ayush Kumar — Full Stack Software Engineer specializing in microservices, React, FastAPI, and React Native. Open to full-time engineering roles.",
+    images: ["/avatar.png"],
+  },
   icons: {
-    icon: "/profile_image.png",
-    shortcut: "/profile_image.png",
-    apple: "/profile_image.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   }
 };
 

@@ -9,6 +9,11 @@ export default function ParticleCanvas() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // If mobile viewport (width < 768px), do not load Three.js to protect mobile rendering performance/LCP
+    if (window.innerWidth < 768) {
+      return;
+    }
+
     // Dimensions
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -239,7 +244,7 @@ export default function ParticleCanvas() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent"
+      className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-gradient-to-tr from-[#f4f6fb] via-[#eef2f7] to-[#e0e7ff] md:bg-transparent"
       id="3d-particles"
     />
   );

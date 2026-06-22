@@ -24,9 +24,14 @@ import {
   Star
 } from 'lucide-react';
 import { Github, Linkedin } from '@/components/icons';
-import ParticleCanvas from '@/components/ParticleCanvas';
-import GithubStats from '@/components/GithubStats';
+import dynamic from 'next/dynamic';
 import TiltCard from '@/components/TiltCard';
+
+// Lazy load ParticleCanvas to prioritize initial text paint (LCP optimization)
+const ParticleCanvas = dynamic(() => import('@/components/ParticleCanvas'), {
+  ssr: false,
+  loading: () => null
+});
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -34,29 +39,36 @@ export default function Home() {
   const [selectedSkillCategory, setSelectedSkillCategory] = useState('all');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSkillDropdownOpen, setIsSkillDropdownOpen] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formState, setFormState] = useState({ name: '', email: '', message: '' });
+  const [loadCanvas, setLoadCanvas] = useState(false);
+
+  // Delay canvas loading slightly to prioritize text rendering
+  useEffect(() => {
+    const timer = setTimeout(() => setLoadCanvas(true), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Update active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'skills', 'experience', 'projects', 'github', 'contact'];
-      const scrollPosition = window.scrollY + 200;
+      const sections = ['hero', 'about', 'skills', 'experience', 'projects', 'github', 'contact'];
+      const threshold = 160; // Threshold in pixels from viewport top
 
+      let currentSection = 'hero';
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= threshold && rect.bottom > threshold) {
+            currentSection = section;
             break;
           }
         }
       }
+      setActiveSection(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initialize active state on mount
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -67,56 +79,48 @@ export default function Home() {
     { id: 'frontend', name: 'Frontend', icon: Terminal },
     { id: 'backend', name: 'Backend', icon: Cpu },
     { id: 'databases', name: 'Databases', icon: Database },
-    { id: 'devops', name: 'DevOps & Cloud', icon: Cloud },
-    { id: 'engineering', name: 'Engineering Principles', icon: LineChart }
+    { id: 'devops', name: 'DevOps & Cloud', icon: Cloud }
   ];
 
   const skillsData = [
     // Languages
-    { name: 'TypeScript', category: 'languages', level: 90 },
-    { name: 'JavaScript (ES6+)', category: 'languages', level: 95 },
-    { name: 'SQL', category: 'languages', level: 85 },
-    { name: 'C++', category: 'languages', level: 75 },
-    { name: 'Python', category: 'languages', level: 80 },
+    { name: 'TypeScript', category: 'languages', primary: true },
+    { name: 'JavaScript (ES6+)', category: 'languages', primary: false },
+    { name: 'SQL', category: 'languages', primary: false },
+    { name: 'C++', category: 'languages', primary: false },
+    { name: 'Python', category: 'languages', primary: false },
     
     // Frontend
-    { name: 'Next.js', category: 'frontend', level: 92 },
-    { name: 'React.js', category: 'frontend', level: 95 },
-    { name: 'React Native (Expo)', category: 'frontend', level: 88 },
-    { name: 'Tailwind CSS', category: 'frontend', level: 90 },
-    { name: 'Redux Toolkit', category: 'frontend', level: 85 },
-    { name: 'Expo Router', category: 'frontend', level: 85 },
+    { name: 'Next.js', category: 'frontend', primary: true },
+    { name: 'React.js', category: 'frontend', primary: false },
+    { name: 'React Native (Expo)', category: 'frontend', primary: true },
+    { name: 'Tailwind CSS', category: 'frontend', primary: false },
+    { name: 'Redux Toolkit', category: 'frontend', primary: false },
+    { name: 'Expo Router', category: 'frontend', primary: false },
     
     // Backend
-    { name: 'Node.js', category: 'backend', level: 90 },
-    { name: 'Express.js', category: 'backend', level: 92 },
-    { name: 'RESTful APIs', category: 'backend', level: 95 },
-    { name: 'FastAPI', category: 'backend', level: 80 },
-    { name: 'WebSockets', category: 'backend', level: 85 },
-    { name: 'Microservices', category: 'backend', level: 82 },
-    { name: 'JWT & OAuth 2.0', category: 'backend', level: 90 },
-    { name: 'RBAC (Auth)', category: 'backend', level: 88 },
+    { name: 'Node.js', category: 'backend', primary: true },
+    { name: 'FastAPI', category: 'backend', primary: true },
+    { name: 'Express.js', category: 'backend', primary: false },
+    { name: 'RabbitMQ', category: 'backend', primary: false },
+    { name: 'RESTful APIs', category: 'backend', primary: false },
+    { name: 'WebSockets', category: 'backend', primary: false },
+    { name: 'Microservices', category: 'backend', primary: false },
+    { name: 'JWT & OAuth 2.0', category: 'backend', primary: false },
+    { name: 'RBAC (Auth)', category: 'backend', primary: false },
 
     // Databases
-    { name: 'PostgreSQL', category: 'databases', level: 88 },
-    { name: 'MongoDB', category: 'databases', level: 90 },
-    { name: 'Redis', category: 'databases', level: 80 },
-    { name: 'Prisma ORM', category: 'databases', level: 90 },
-    { name: 'Neon Serverless', category: 'databases', level: 85 },
-    { name: 'Query Optimization', category: 'databases', level: 82 },
+    { name: 'PostgreSQL', category: 'databases', primary: true },
+    { name: 'MongoDB', category: 'databases', primary: false },
+    { name: 'Redis', category: 'databases', primary: false },
+    { name: 'Prisma ORM', category: 'databases', primary: false },
+    { name: 'Neon Serverless', category: 'databases', primary: false },
 
-    // DevOps
-    { name: 'Docker', category: 'devops', level: 80 },
-    { name: 'AWS (EC2/S3)', category: 'devops', level: 78 },
-    { name: 'CI/CD (Actions)', category: 'devops', level: 82 },
-    { name: 'RabbitMQ', category: 'devops', level: 85 },
-    { name: 'Turborepo', category: 'devops', level: 88 },
-    
-    // Engineering
-    { name: 'Data Structures', category: 'engineering', level: 85 },
-    { name: 'System Design', category: 'engineering', level: 80 },
-    { name: 'API Design', category: 'engineering', level: 90 },
-    { name: 'Performance Tuning', category: 'engineering', level: 85 },
+    // DevOps & Cloud
+    { name: 'Docker', category: 'devops', primary: true },
+    { name: 'AWS (EC2/S3)', category: 'devops', primary: false },
+    { name: 'GitHub Actions', category: 'devops', primary: false },
+    { name: 'Turborepo', category: 'devops', primary: false }
   ];
 
   const filteredSkills = selectedSkillCategory === 'all'
@@ -130,9 +134,9 @@ export default function Home() {
       company: 'NexoGrafix Private Limited',
       period: 'Apr 2026 – Present',
       points: [
-        'Developed a Microsoft Word Add-in in TypeScript using the Office.js API, automating document formatting and style enforcement against client-defined custom style guides, which reduced manual effort by 60%.',
-        'Architected a full-stack document conversion platform (OCR + XML + EPUB pipeline) using FastAPI and React, decomposed into independent microservices.',
-        'Built XML and EPUB microservices supporting JATS/DocBook schemas, configurable templates, and automated EPUB 3 generation with automated table of contents, chapters, and validation.'
+        'Built a Microsoft Word Add-in (TypeScript + Office.js) that automated style guide enforcement for client documents — cutting manual formatting effort by 60%.',
+        'Architected a full-stack document conversion platform (DocStream) using FastAPI and React, divided into high-throughput microservices.',
+        'Created XML and EPUB microservices supporting JATS/DocBook schemas to automate EPUB 3 generation with built-in validation.'
       ],
       tech: ['TypeScript', 'Office.js API', 'FastAPI', 'React.js', 'Microservices', 'JATS/DocBook']
     },
@@ -141,10 +145,10 @@ export default function Home() {
       company: 'ShipU Logistics Private Limited',
       period: 'Sept 2025 – Jan 2026',
       points: [
-        'Designed a logistics management platform using MERN stack and Next.js with shipment tracking, delivery workflows, and RBAC security.',
-        'Boosted backend database query performance by 25% via optimized PostgreSQL queries and Prisma ORM connection pooling.',
-        'Architected event-driven microservices using RabbitMQ and containerized applications with Docker, deploying to AWS stages.',
-        'Organized the multi-package project in a Turborepo monorepo, enabling shared modules across services and cutting duplicates by 35%.'
+        'Designed a logistics management platform (MERN + Next.js) that integrated shipment tracking and RBAC security.',
+        'Optimized PostgreSQL queries and Prisma ORM connection pooling, boosting database response times by 25%.',
+        'Deployed event-driven microservices using RabbitMQ and Docker to AWS staging environments.',
+        'Restructured the codebase into a Turborepo monorepo, cutting duplicate code dependencies by 35% and accelerating release cycles.'
       ],
       tech: ['Next.js', 'MERN Stack', 'PostgreSQL', 'Prisma ORM', 'RabbitMQ', 'Docker', 'AWS', 'Turborepo']
     },
@@ -153,9 +157,9 @@ export default function Home() {
       company: 'Shabra Softech Solution Pvt. Ltd.',
       period: 'Feb 2025 – Jul 2025',
       points: [
-        'Migrated a legacy MERN monolith codebase to a Turborepo monorepo structure, increasing developer velocity and boosting code reusability by 40%.',
-        'Built production-grade Next.js and React Native mobile applications serving 1,000+ monthly active users, designing shared UI packages.',
-        'Implemented secure JWT, OAuth 2.0, and Role-Based Access Control (RBAC), reducing auth issues by 50% while maintaining 95%+ sprint delivery.'
+        'Migrated a legacy MERN monolith into a Turborepo monorepo, increasing code reusability by 40%.',
+        'Shipped Next.js and React Native production apps, scaling user engagement to 1,000+ active monthly users.',
+        'Integrated JWT, OAuth 2.0, and RBAC authorization pipelines, reducing authentication tickets by 50%.'
       ],
       tech: ['React Native', 'Next.js', 'Zustand', 'Turborepo', 'JWT', 'OAuth 2.0', 'RBAC']
     }
@@ -163,6 +167,19 @@ export default function Home() {
 
   // Projects Data
   const projects = [
+    {
+      title: 'DocStream',
+      subtitle: 'Document Conversion Platform',
+      description: 'A microservices-based pipeline transforming PDFs and raw images into structured JATS/DocBook XML and automated EPUB 3 publications.',
+      highlights: [
+        'OCR microservice running PaddleOCR and Tesseract via RabbitMQ and Celery workers for async queue management',
+        'FastAPI API layer backed by PostgreSQL and Redis for high-speed job state persistence',
+        'Responsive React client dashboard utilizing TanStack Query and Zustand for real-time tracking'
+      ],
+      tech: ['FastAPI', 'Celery', 'RabbitMQ', 'Redis', 'PostgreSQL', 'React', 'PaddleOCR', 'Docker'],
+      github: '#',
+      isPrivateProd: true
+    },
     {
       title: 'Excalidraw Clone',
       subtitle: 'Real-Time Collaborative Whiteboard',
@@ -173,7 +190,8 @@ export default function Home() {
         'Applied React memoisation and state diffing to reduce unnecessary layout re-renders by 60%'
       ],
       tech: ['Next.js', 'WebSockets', 'Turborepo', 'PostgreSQL', 'TypeScript'],
-      github: 'https://github.com/ayush931/excalidraw'
+      github: 'https://github.com/ayush931/excalidraw',
+      isPrivateProd: false
     },
     {
       title: 'RideSync',
@@ -185,47 +203,15 @@ export default function Home() {
         'Implemented global state with Zustand, Expo Router, and 15% smaller bundle size via code splitting'
       ],
       tech: ['React Native', 'Expo Router', 'Clerk Auth', 'Neon PostgreSQL', 'Zustand'],
-      github: 'https://github.com/ayush931/RideSync'
+      github: 'https://github.com/ayush931/RideSync',
+      isPrivateProd: false
     }
   ];
 
-  // Form handle
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormState(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formState.name || !formState.email || !formState.message) return;
-
-    // Create message object
-    const newMsg = {
-      id: Date.now().toString(),
-      name: formState.name,
-      email: formState.email,
-      message: formState.message,
-      timestamp: new Date().toLocaleString()
-    };
-
-    // Save to localStorage CRM
-    const existing = localStorage.getItem('crm_messages');
-    const messages = existing ? JSON.parse(existing) : [];
-    messages.unshift(newMsg);
-    localStorage.setItem('crm_messages', JSON.stringify(messages));
-    
-    setFormSubmitted(true);
-    setFormState({ name: '', email: '', message: '' });
-
-    setTimeout(() => {
-      setFormSubmitted(false);
-    }, 5000);
-  };
-
   return (
     <div className="relative min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
-      {/* 3D Canvas Background */}
-      <ParticleCanvas />
+      {/* 3D Canvas Background (Lazy-loaded after LCP) */}
+      {loadCanvas && <ParticleCanvas />}
 
       {/* Fixed Sticky Header with Claymorphism */}
       <header className="fixed top-0 left-0 right-0 z-40 w-full bg-white/70 backdrop-blur-md border-b border-card-border/30 transition-all duration-300 shadow-sm">
@@ -241,15 +227,14 @@ export default function Home() {
           </a>
 
           {/* Desktop Navigation using clay tags */}
-          <nav className="hidden md:flex items-center gap-2">
-            {['hero', 'skills', 'experience', 'projects', 'github', 'contact'].map((sec) => (
+          <nav className="hidden md:flex items-center gap-2.5">
+            {['hero', 'about', 'skills', 'experience', 'projects', 'github', 'contact'].map((sec) => (
               <a
                 key={sec}
                 href={`#${sec}`}
-                className={`px-4.5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                  activeSection === sec
-                    ? 'clay-btn font-extrabold scale-105 shadow-md shadow-accent/25 border border-white/20'
-                    : 'clay-badge text-foreground/75 hover:scale-105 hover:-translate-y-0.5'
+                onClick={() => setActiveSection(sec)}
+                className={`px-3.5 py-2 rounded-full nav-tab text-[10px] uppercase tracking-wider ${
+                  activeSection === sec ? 'nav-tab-active' : 'nav-tab-inactive'
                 }`}
               >
                 {sec === 'hero' ? 'home' : sec}
@@ -259,6 +244,15 @@ export default function Home() {
 
           {/* Contact Action */}
           <div className="flex items-center gap-3">
+            {/* Pulsing Green Dot Badge */}
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full clay-badge text-[10px] font-bold text-emerald-600 bg-emerald-50/50 border border-emerald-100">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Open to Work
+            </div>
+
             <a
               href="mailto:ayushkumar9315983@gmail.com"
               className="inline-flex items-center gap-1.5 px-4.5 py-2 text-xs font-bold rounded-full clay-btn cursor-pointer"
@@ -282,24 +276,32 @@ export default function Home() {
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-x-0 top-16 bottom-0 z-30 bg-white/95 backdrop-blur-md md:hidden transition-all duration-300 border-t border-card-border">
-          <nav className="flex flex-col p-6 gap-4">
-            {['hero', 'skills', 'experience', 'projects', 'github', 'contact'].map((sec) => (
+          <nav className="flex flex-col p-6 gap-3.5">
+            {['hero', 'about', 'skills', 'experience', 'projects', 'github', 'contact'].map((sec) => (
               <a
                 key={sec}
                 href={`#${sec}`}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`p-3.5 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all text-center ${
-                  activeSection === sec
-                    ? 'clay-btn font-extrabold shadow-md border border-white/20'
-                    : 'clay-badge text-foreground/80 hover:bg-foreground/[0.04]'
+                onClick={() => {
+                  setActiveSection(sec);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`p-3.5 rounded-2xl nav-tab text-sm uppercase tracking-wider text-center ${
+                  activeSection === sec ? 'nav-tab-active' : 'nav-tab-inactive'
                 }`}
               >
                 {sec === 'hero' ? 'home' : sec}
               </a>
             ))}
+            <div className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-emerald-600">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Currently Open to Work
+            </div>
             <a
               href="mailto:ayushkumar9315983@gmail.com"
-              className="mt-4 flex items-center justify-center gap-2 p-3 text-sm font-bold text-white bg-gradient-to-r from-accent to-accent-secondary rounded-xl hover:opacity-90 shadow-md"
+              className="mt-2 flex items-center justify-center gap-2 p-3 text-sm font-bold text-white bg-gradient-to-r from-accent to-accent-secondary rounded-xl hover:opacity-90 shadow-md"
             >
               <Mail className="w-4 h-4" />
               Send Email
@@ -311,11 +313,11 @@ export default function Home() {
       {/* Main Sections Wrapper */}
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 pt-24 pb-8 relative">
         {/* Decorative dynamic glows behind sections */}
-        <div className="absolute top-[15%] left-[5%] w-96 h-96 rounded-full bg-accent/5 filter blur-[100px] animate-pulse-slow pointer-events-none -z-20" />
-        <div className="absolute top-[45%] right-[5%] w-[450px] h-[450px] rounded-full bg-accent-secondary/5 filter blur-[120px] animate-pulse-slow pointer-events-none -z-20" />
+        <div className="absolute top-[15%] left-[5%] w-96 h-96 rounded-full bg-accent/5 filter blur-[100px] pointer-events-none -z-20" />
+        <div className="absolute top-[45%] right-[5%] w-[450px] h-[450px] rounded-full bg-accent-secondary/5 filter blur-[120px] pointer-events-none -z-20" />
 
         {/* HERO SECTION */}
-        <section id="hero" className="min-h-[80vh] flex flex-col justify-center py-12 md:py-20 relative">
+        <section id="hero" className="min-h-[75vh] flex flex-col justify-center py-12 md:py-16 relative">
           <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
             {/* Left Content */}
             <div className="space-y-6 flex-1 text-center md:text-left">
@@ -333,10 +335,10 @@ export default function Home() {
               </h2>
 
               <p className="text-base sm:text-lg text-text-muted leading-relaxed font-sans max-w-xl mx-auto md:mx-0">
-                I specialize in crafting premium web & mobile architectures. Proficient in the MERN stack, Next.js, React Native, Node.js, and event-driven microservices. I build robust APIs that achieve up to 25% faster response times and 40% better code reusability.
+                I build full-stack systems that go to production — from event-driven microservices and OCR pipelines to real-time mobile apps. Currently at NexoGrafix, open to my next challenge.
               </p>
 
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2 items-center">
                 <a
                   href="#projects"
                   className="inline-flex items-center gap-2 px-6 py-3 font-bold rounded-full clay-btn cursor-pointer"
@@ -362,18 +364,18 @@ export default function Home() {
               </div>
 
               {/* Quick Metrics */}
-              <div className="grid grid-cols-3 gap-4 pt-8 border-t border-card-border max-w-lg mx-auto md:mx-0">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-card-border max-w-xl mx-auto md:mx-0">
                 <div>
-                  <div className="text-2xl md:text-3xl font-extrabold text-accent">1+</div>
-                  <div className="text-[10px] md:text-xs text-text-muted font-semibold uppercase tracking-wider">Years Exp</div>
+                  <div className="text-xl md:text-2xl font-extrabold text-accent">3 Companies</div>
+                  <div className="text-[10px] md:text-xs text-text-muted font-bold uppercase tracking-wider">Production</div>
                 </div>
                 <div>
-                  <div className="text-2xl md:text-3xl font-extrabold text-violet-500">25%</div>
-                  <div className="text-[10px] md:text-xs text-text-muted font-semibold uppercase tracking-wider">Fast Response</div>
+                  <div className="text-xl md:text-2xl font-extrabold text-violet-500">1,000+ Users</div>
+                  <div className="text-[10px] md:text-xs text-text-muted font-bold uppercase tracking-wider">Served in Prod</div>
                 </div>
                 <div>
-                  <div className="text-2xl md:text-3xl font-extrabold text-indigo-500">40%</div>
-                  <div className="text-[10px] md:text-xs text-text-muted font-semibold uppercase tracking-wider">Code Reuse</div>
+                  <div className="text-xl md:text-2xl font-extrabold text-indigo-500 font-sans">Microservices</div>
+                  <div className="text-[10px] md:text-xs text-text-muted font-bold uppercase tracking-wider">Architect</div>
                 </div>
               </div>
             </div>
@@ -386,10 +388,57 @@ export default function Home() {
               {/* Profile Image container with premium clay styling */}
               <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full clay-card border-4 border-white p-3.5 shadow-2xl hover:scale-105 transition-all duration-500 cursor-pointer animate-float overflow-hidden flex items-center justify-center">
                 <img 
-                  src="/profile_image.png" 
-                  alt="Ayush Kumar" 
-                  className="w-full h-full rounded-full object-cover object-[center_20%] shadow-inner"
+                  src="/avatar.png" 
+                  alt="Ayush Kumar Avatar" 
+                  className="w-full h-full rounded-full object-cover shadow-inner"
                 />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ABOUT SECTION */}
+        <section id="about" className="py-20 border-t border-card-border scroll-mt-16">
+          <div className="space-y-12">
+            <div className="text-center space-y-3">
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+                About <span className="gradient-text">Me</span>
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-10 items-center">
+              {/* Left text description */}
+              <div className="md:col-span-3 space-y-6 text-base text-text-muted leading-relaxed font-sans">
+                <p>
+                  I'm a Full Stack Engineer based in Patna, India, currently building <span className="font-bold text-foreground">DocStream</span> at NexoGrafix — a document conversion platform (OCR &rarr; XML &rarr; EPUB) in a microservices architecture using FastAPI, React, and RabbitMQ. I specialize in data structures, API design, and performance tuning.
+                </p>
+                <p>
+                  I hold an <span className="font-bold text-foreground">MBA in Marketing</span> alongside my engineering background. That unique combination means I can architect a Celery worker queue AND write the PRD for why it needs to exist.
+                </p>
+                <p>
+                  Previously at ShipU Logistics and Shabra Softech, where I shipped production systems, migrated a legacy monolith to a Turborepo monorepo, and helped serve 1,000+ monthly active users.
+                </p>
+              </div>
+
+              {/* Right JSON Terminal block */}
+              <div className="md:col-span-2 w-full">
+                <div className="clay-card rounded-[2rem] p-6 font-mono text-xs text-foreground/90 space-y-4 bg-white/80">
+                  <div className="flex items-center gap-2 pb-3 border-b border-card-border/50">
+                    <span className="w-3 h-3 rounded-full bg-red-400" />
+                    <span className="w-3 h-3 rounded-full bg-yellow-400" />
+                    <span className="w-3 h-3 rounded-full bg-green-400" />
+                    <span className="text-[10px] text-text-muted ml-2">ayush_profile.json</span>
+                  </div>
+                  <div className="space-y-1.5 leading-relaxed">
+                    <p><span className="text-purple-600">const</span> <span className="text-blue-600">engineer</span> = &#123;</p>
+                    <p className="pl-4"><span className="text-indigo-600">currently</span>: <span className="text-emerald-600">"Junior SWE @ NexoGrafix"</span>,</p>
+                    <p className="pl-4"><span className="text-indigo-600">building</span>: <span className="text-emerald-600">"DocStream (OCR pipeline)"</span>,</p>
+                    <p className="pl-4"><span className="text-indigo-600">open_to</span>: <span className="text-emerald-600">"Full Stack / Backend roles"</span>,</p>
+                    <p className="pl-4"><span className="text-indigo-600">location</span>: <span className="text-emerald-600">"Patna &rarr; Open to relocation"</span>,</p>
+                    <p className="pl-4"><span className="text-indigo-600">bonus</span>: <span className="text-emerald-600">"MBA + Engineering = rare combo"</span></p>
+                    <p>&#125;;</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -407,11 +456,16 @@ export default function Home() {
               </p>
             </div>
 
+            {/* Label indicating production-tested focus */}
+            <p className="text-xs font-bold text-center text-text-muted font-mono tracking-wider">
+              1 year of production use across all core skills below.
+            </p>
+
             {/* Mobile Dropdown Category Filter (Claymorphic) */}
             <div className="relative md:hidden w-full max-w-xs mx-auto">
               <button
                 onClick={() => setIsSkillDropdownOpen(!isSkillDropdownOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 clay-card rounded-2xl font-bold text-sm text-foreground hover:bg-white cursor-pointer"
+                className="w-full flex items-center justify-between px-4 py-3 clay-card rounded-2xl font-bold text-sm text-foreground hover:bg-white cursor-pointer bg-white"
                 id="skill-dropdown-btn"
               >
                 <span className="flex items-center gap-2">
@@ -471,11 +525,13 @@ export default function Home() {
               {filteredSkills.map((skill) => (
                 <div
                   key={skill.name}
-                  className="clay-badge px-5 py-3 rounded-2xl flex items-center gap-2.5 hover:border-accent/30 hover:-translate-y-1 hover:scale-105 transition-all duration-300 group cursor-default"
+                  className={`clay-badge px-5 py-3 rounded-2xl flex items-center gap-2.5 hover:border-accent/30 hover:-translate-y-1 hover:scale-105 transition-all duration-300 group cursor-default ${
+                    skill.primary ? 'clay-badge-active border-accent/40 font-bold' : ''
+                  }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-gradient-to-br from-accent to-accent-secondary" />
+                  <span className={`w-2 h-2 rounded-full ${skill.primary ? 'bg-accent' : 'bg-gradient-to-br from-accent to-accent-secondary'}`} />
                   <span className="font-mono text-sm font-bold tracking-tight text-foreground group-hover:text-accent transition-colors duration-300">
-                    {skill.name}
+                    {skill.name} {skill.primary && <span className="text-[10px] text-accent font-semibold ml-1">(Primary)</span>}
                   </span>
                 </div>
               ))}
@@ -541,6 +597,24 @@ export default function Home() {
                       </div>
                     </div>
 
+                    {/* Product Callout box for NexoGrafix */}
+                    {exp.company === 'NexoGrafix Private Limited' && (
+                      <div className="mt-3.5 mb-2.5 p-3.5 rounded-xl bg-accent-glow border border-accent/15 flex items-center justify-between text-xs translate-z-10 bg-white/70">
+                        <span className="font-sans text-text-muted">
+                          Core Product: <span className="font-bold text-foreground">DocStream</span> (Document Conversion Pipeline)
+                        </span>
+                        <a
+                          href="https://github.com/ayush931" 
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline font-bold flex items-center gap-1 cursor-pointer font-mono"
+                          onClick={(e) => e.stopPropagation()} // Prevent card accordion toggle
+                        >
+                          Codebase <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    )}
+
                     {/* Bullet Points (Collapsed state) */}
                     <div 
                       className={`overflow-hidden transition-all duration-500 ease-in-out preserve-3d ${
@@ -582,35 +656,42 @@ export default function Home() {
                 Featured <span className="gradient-text">Projects</span>
               </h2>
               <p className="text-sm md:text-base text-text-muted max-w-xl mx-auto leading-relaxed">
-                A showcase of production-ready systems, real-time whiteboards, and geolocation ride booking applications.
+                A showcase of production systems, real-time whiteboards, and geolocation logistics applications.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {projects.map((proj, idx) => (
                 <TiltCard
                   key={proj.title}
-                  className="clay-card clay-card-indigo rounded-[2rem] flex flex-col justify-between transition-all duration-300 relative overflow-hidden group min-h-[380px] preserve-3d"
-                  maxTilt={10}
-                  scale={1.03}
+                  className="clay-card clay-card-indigo rounded-[2rem] flex flex-col justify-between transition-all duration-300 relative overflow-hidden group min-h-[410px] preserve-3d"
+                  maxTilt={8}
+                  scale={1.02}
                 >
-                  <div className="p-6 md:p-8 space-y-4 preserve-3d">
+                  <div className="p-6 space-y-4 preserve-3d">
                     <div>
                       <div className="flex items-center justify-between translate-z-20">
                         <span className="text-xs font-bold uppercase tracking-widest text-accent font-mono inline-block">
                           Project {idx + 1}
                         </span>
-                        <a 
-                          href={proj.github} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="p-2.5 rounded-full clay-badge hover:bg-accent hover:text-white border border-card-border hover:scale-110 active:scale-95 transition-all text-text-muted cursor-pointer"
-                          aria-label="GitHub Repository"
-                        >
-                          <Github className="w-4.5 h-4.5" />
-                        </a>
+                        
+                        {proj.isPrivateProd ? (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-bold bg-amber-50 text-amber-600 border border-amber-100 font-mono shadow-sm">
+                            Private • In Production
+                          </span>
+                        ) : (
+                          <a 
+                            href={proj.github} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="p-2.5 rounded-full clay-badge hover:bg-accent hover:text-white border border-card-border hover:scale-110 active:scale-95 transition-all text-text-muted cursor-pointer bg-white"
+                            aria-label="GitHub Repository"
+                          >
+                            <Github className="w-4 h-4" />
+                          </a>
+                        )}
                       </div>
-                      <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-foreground mt-2 group-hover:text-accent transition-colors duration-300 translate-z-30">
+                      <h3 className="text-lg md:text-xl font-extrabold tracking-tight text-foreground mt-2 group-hover:text-accent transition-colors duration-300 translate-z-30">
                         {proj.title}
                       </h3>
                       <p className="text-xs font-mono text-text-muted font-semibold mt-1 translate-z-20">
@@ -618,13 +699,13 @@ export default function Home() {
                       </p>
                     </div>
 
-                    <p className="text-sm text-foreground/80 leading-relaxed font-sans translate-z-10">
+                    <p className="text-xs text-foreground/80 leading-relaxed font-sans translate-z-10">
                       {proj.description}
                     </p>
 
-                    <div className="space-y-2 pt-2 translate-z-15">
-                      <div className="text-xs font-bold text-foreground font-mono">Key Highlights:</div>
-                      <ul className="space-y-1.5 text-xs text-text-muted font-sans pl-4 list-disc list-outside">
+                    <div className="space-y-2 pt-1 translate-z-15">
+                      <div className="text-[10px] font-bold text-foreground font-mono">Highlights:</div>
+                      <ul className="space-y-1.5 text-[10px] text-text-muted font-sans pl-4 list-disc list-outside">
                         {proj.highlights.map((hl, hlIdx) => (
                           <li key={hlIdx} className="leading-relaxed">{hl}</li>
                         ))}
@@ -632,11 +713,11 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="px-6 md:px-8 pb-6 md:pb-8 flex flex-wrap gap-2 pt-3 border-t border-card-border/40 translate-z-20">
+                  <div className="px-6 pb-6 flex flex-wrap gap-1.5 pt-3 border-t border-card-border/40 translate-z-20">
                     {proj.tech.map((t) => (
                       <span
                         key={t}
-                        className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-foreground/[0.03] border border-card-border text-text-muted font-mono"
+                        className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-foreground/[0.03] border border-card-border text-text-muted font-mono"
                       >
                         {t}
                       </span>
@@ -653,14 +734,78 @@ export default function Home() {
           <div className="space-y-12">
             <div className="text-center space-y-3">
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
-                GitHub <span className="gradient-text">Integration Hub</span>
+                GitHub <span className="gradient-text">Contributions</span>
               </h2>
               <p className="text-sm md:text-base text-text-muted max-w-xl mx-auto leading-relaxed">
-                Explore real-time repository stats and developer activities directly from my GitHub profile.
+                I commit daily. Here's the proof of my open-source activities and development consistency.
               </p>
             </div>
 
-            <GithubStats />
+            <div className="max-w-4xl mx-auto space-y-8">
+              {/* Contribution chart widget */}
+              <div className="clay-card rounded-[2rem] p-6 md:p-8 flex flex-col items-center justify-center relative overflow-hidden bg-white/80">
+                <h3 className="text-base font-bold text-foreground mb-4 font-mono w-full text-left">
+                  Commit Timeline
+                </h3>
+                <div className="w-full overflow-x-auto py-2 flex justify-center">
+                  <img
+                    src="https://ghchart.ssh.surf/ayush931?theme=light"
+                    alt="Ayush's GitHub Contribution Chart"
+                    className="min-w-[600px] h-auto object-contain max-w-full"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              {/* Pinned Repos Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="clay-card rounded-2xl p-6 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 bg-white/85">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-accent font-mono">Pinned Repository</span>
+                      <a href="https://github.com/ayush931/excalidraw" target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-accent">
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                    <h4 className="text-base font-extrabold text-foreground">excalidraw-clone</h4>
+                    <p className="text-xs text-text-muted">A performance-oriented collaborative whiteboard clone. WebSockets sync, optimized database connections.</p>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-card-border/50 mt-4 text-[10px] text-text-muted font-mono font-bold">
+                    <span>TypeScript • Next.js</span>
+                    <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /> Pinned</span>
+                  </div>
+                </div>
+
+                <div className="clay-card rounded-2xl p-6 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 bg-white/85">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-accent font-mono">Pinned Repository</span>
+                      <a href="https://github.com/ayush931/RideSync" target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-accent">
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                    <h4 className="text-base font-extrabold text-foreground">RideSync</h4>
+                    <p className="text-xs text-text-muted">Real-time ride-booking mobile application. Geolocation tracking, Zustand state engine, Expo routing.</p>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-card-border/50 mt-4 text-[10px] text-text-muted font-mono font-bold">
+                    <span>TypeScript • React Native</span>
+                    <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /> Pinned</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Daily commitment action */}
+              <div className="text-center pt-2">
+                <a
+                  href="https://github.com/ayush931"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 font-bold rounded-full clay-btn cursor-pointer"
+                >
+                  I commit daily. Here's proof &rarr;
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -671,156 +816,50 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
                 Get In <span className="gradient-text">Touch</span>
               </h2>
-              <p className="text-sm md:text-base text-text-muted max-w-xl mx-auto leading-relaxed">
-                Feel free to reach out for project proposals, collaboration, or job opportunities.
-              </p>
             </div>
 
-            <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
-              {/* Contact Information Details */}
-              <div className="md:col-span-2 space-y-6 flex flex-col justify-between">
-                <div className="space-y-6">
-                  <h3 className="text-xl font-bold tracking-tight text-foreground">Contact Information</h3>
-                  <p className="text-sm text-text-muted leading-relaxed font-sans">
-                    Have an exciting product idea or a developer role? Shoot me a message, send an email, or give me a call. I usually respond within 24 hours.
-                  </p>
+            <div className="max-w-2xl mx-auto clay-card p-8 md:p-10 rounded-[2rem] bg-white/80 text-center space-y-6">
+              <p className="text-base text-text-muted leading-relaxed font-sans max-w-md mx-auto">
+                Have an exciting product idea or a developer role? Let's connect. I typically respond within 24 hours.
+              </p>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3.5 group cursor-pointer">
-                      <div className="w-11 h-11 rounded-xl clay-badge clay-badge-active flex items-center justify-center text-accent group-hover:scale-105 transition-transform duration-300">
-                        <Mail className="w-4.5 h-4.5" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase font-mono tracking-widest text-text-muted">Email</div>
-                        <a href="mailto:ayushkumar9315983@gmail.com" className="text-sm font-semibold text-foreground hover:text-accent transition-colors font-mono">
-                          ayushkumar9315983@gmail.com
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3.5 group cursor-pointer">
-                      <div className="w-11 h-11 rounded-xl clay-badge clay-badge-active flex items-center justify-center text-accent group-hover:scale-105 transition-transform duration-300">
-                        <Phone className="w-4.5 h-4.5" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase font-mono tracking-widest text-text-muted">Phone</div>
-                        <a href="tel:+917070472634" className="text-sm font-semibold text-foreground hover:text-accent transition-colors font-mono">
-                          +91 7070472634
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3.5 group cursor-default">
-                      <div className="w-11 h-11 rounded-xl clay-badge flex items-center justify-center text-accent">
-                        <MapPin className="w-4.5 h-4.5" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase font-mono tracking-widest text-text-muted">Location</div>
-                        <span className="text-sm font-semibold text-foreground font-sans">
-                          Patna, Bihar, India
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Social widgets */}
-                <div className="pt-6 border-t border-card-border/50 space-y-3">
-                  <div className="text-xs font-bold text-foreground font-mono">Connect Socially</div>
-                  <div className="flex gap-3">
-                    <a
-                      href="https://github.com/ayush931"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl clay-badge flex items-center justify-center text-foreground hover:text-accent hover:scale-110 active:scale-95 transition-all cursor-pointer"
-                    >
-                      <Github className="w-4.5 h-4.5" />
-                    </a>
-                    <a
-                      href="https://www.linkedin.com/in/ayush-kumar-b4b9b422a" 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl clay-badge flex items-center justify-center text-foreground hover:text-accent hover:scale-110 active:scale-95 transition-all cursor-pointer"
-                    >
-                      <Linkedin className="w-4.5 h-4.5" />
-                    </a>
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto pt-2">
+                <a
+                  href="mailto:ayushkumar9315983@gmail.com"
+                  className="flex items-center justify-center gap-2 p-3 text-xs font-bold clay-badge hover:bg-accent hover:text-white transition-all cursor-pointer rounded-xl border border-card-border bg-white"
+                >
+                  <Mail className="w-4 h-4" />
+                  Email
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/ayush-kumar-b4b9b422a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 p-3 text-xs font-bold clay-badge hover:bg-accent hover:text-white transition-all cursor-pointer rounded-xl border border-card-border bg-white"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/ayush931"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 p-3 text-xs font-bold clay-badge hover:bg-accent hover:text-white transition-all cursor-pointer rounded-xl border border-card-border bg-white"
+                >
+                  <Github className="w-4 h-4" />
+                  GitHub
+                </a>
               </div>
 
-              {/* Form panel with Claymorphism */}
-              <div className="md:col-span-3">
-                <div className="clay-card p-6 md:p-8 rounded-[2rem] relative overflow-hidden bg-card-bg">
-                  {formSubmitted ? (
-                    <div className="h-72 flex flex-col justify-center items-center text-center space-y-4 animate-float">
-                      <div className="w-14 h-14 rounded-full bg-accent-glow text-accent flex items-center justify-center border border-accent/20">
-                        <Sparkles className="w-6 h-6" />
-                      </div>
-                      <h4 className="text-lg font-bold text-foreground">Message Sent Successfully!</h4>
-                      <p className="text-sm text-text-muted max-w-xs leading-relaxed font-sans">
-                        Thank you for reaching out. Ayush has received your message and will get back to you shortly!
-                      </p>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleFormSubmit} className="space-y-5">
-                      <div className="space-y-1.5">
-                        <label htmlFor="name" className="text-xs font-bold font-mono text-foreground uppercase">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          value={formState.name}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="John Doe"
-                          className="w-full px-4 py-3 rounded-xl clay-input text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all text-sm font-sans"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label htmlFor="email" className="text-xs font-bold font-mono text-foreground uppercase">
-                          Email Address
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formState.email}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="johndoe@example.com"
-                          className="w-full px-4 py-3 rounded-xl clay-input text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all text-sm font-sans"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label htmlFor="message" className="text-xs font-bold font-mono text-foreground uppercase">
-                          Your Message
-                        </label>
-                        <textarea
-                          id="message"
-                          name="message"
-                          value={formState.message}
-                          onChange={handleInputChange}
-                          required
-                          rows={4}
-                          placeholder="Hey Ayush, let's collaborate on a Next.js 3D application!"
-                          className="w-full px-4 py-3 rounded-xl clay-input text-foreground focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all text-sm font-sans resize-none"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 font-bold rounded-xl clay-btn cursor-pointer"
-                      >
-                        Send Message
-                        <Send className="w-4 h-4" />
-                      </button>
-                    </form>
-                  )}
-                </div>
+              <div className="pt-6 border-t border-card-border/50">
+                <a
+                  href="https://cal.com/ayush931"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 font-bold rounded-xl clay-btn cursor-pointer"
+                >
+                  Book a 15-min call &rarr;
+                </a>
               </div>
             </div>
           </div>
@@ -833,7 +872,7 @@ export default function Home() {
           <div className="text-center md:text-left space-y-1">
             <div className="text-sm font-bold text-foreground">Ayush Kumar</div>
             <div className="text-xs text-text-muted font-mono">
-              © {new Date().getFullYear()} All Rights Reserved. Built with Next.js & Three.js.
+              Designed & built by Ayush Kumar · Next.js + Three.js
             </div>
           </div>
           
