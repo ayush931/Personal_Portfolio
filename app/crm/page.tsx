@@ -41,7 +41,8 @@ export default function CrmPage() {
 
   const handleCrmLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (crmPassword === 'ayush123') {
+    const correctPassword = process.env.NEXT_PUBLIC_CRM_PASSWORD;
+    if (crmPassword === correctPassword) {
       setCrmAuthenticated(true);
       setCrmError('');
       loadCrmMessages();

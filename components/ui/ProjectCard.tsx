@@ -15,6 +15,7 @@ interface ProjectCardProps {
   tech: string[];
   github?: string;
   isPrivate?: boolean;
+  image?: string;
   className?: string;
 }
 
@@ -27,6 +28,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   tech,
   github,
   isPrivate = false,
+  image,
   className = '',
 }) => {
   const { setCursorType, setCursorText, setProjectColor } = useCursor();
@@ -47,13 +49,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     hover: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } },
   };
 
+  const handleCardClick = () => {
+    if (!isPrivate && github) {
+      window.open(github, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div
-      className={`glow-border-wrapper h-full ${className}`}
+      className={`glow-border-wrapper h-full ${!isPrivate && github ? 'cursor-pointer' : ''} ${className}`}
+      onClick={handleCardClick}
       onMouseEnter={() => {
         setIsHovered(true);
         setCursorType('project');
-        setCursorText('VIEW');
+        setCursorText(isPrivate ? 'PRIVATE' : 'OPEN');
         setProjectColor(isPrivate ? 'rgba(239, 68, 68, 0.15)' : 'rgba(59, 130, 246, 0.15)');
       }}
       onMouseLeave={() => {
@@ -86,6 +95,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               <Github className="w-3.5 h-3.5 text-text-tertiary" />
             )}
           </div>
+
+          {/* Project Preview Image Mockup */}
+          {image && (
+            <div className="relative w-full h-40 md:h-44 rounded-xl overflow-hidden bg-bg-elevated border border-border-subtle/60 group/img shadow-inner transition-colors duration-300">
+              <img
+                src={image}
+                alt={`${title} preview`}
+                className="w-full h-full object-cover filter grayscale contrast-125 brightness-95 group-hover/img:grayscale-0 group-hover/img:scale-105 group-hover/img:brightness-100 transition-all duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg-surface/90 via-transparent to-transparent pointer-events-none" />
+            </div>
+          )}
 
           {/* Heading */}
           <div className="space-y-1">
@@ -157,6 +178,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               github && (
                 <a
                   href={github}
+                  onClick={(e) => e.stopPropagation()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase text-text-secondary hover:text-text-primary transition-colors duration-200"

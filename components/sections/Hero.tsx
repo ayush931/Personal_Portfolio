@@ -103,6 +103,30 @@ export const Hero: React.FC = () => {
         { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power3.inOut' },
         1.4
       );
+
+      // Scroll parallax for left text content
+      gsap.to('.hero-left-content', {
+        yPercent: -15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
+
+      // Scroll parallax for right profile card
+      gsap.to('.hero-profile-container', {
+        yPercent: 15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
     }, heroRef);
 
     return () => ctx.revert();
@@ -126,7 +150,7 @@ export const Hero: React.FC = () => {
       <div className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-between gap-12 z-10">
         
         {/* Left Side Info */}
-        <div className="flex-1 space-y-6 text-left max-w-2xl">
+        <div className="hero-left-content flex-1 space-y-6 text-left max-w-2xl">
           {/* Eyebrow */}
           <div className="hero-eyebrow text-xs font-mono text-text-tertiary tracking-widest uppercase">
             &gt; ayush.kumar ~ portfolio

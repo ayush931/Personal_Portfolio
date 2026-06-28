@@ -23,7 +23,6 @@ This application is designed with high visual excellence:
 - **Categorized Skills Matrix**: Fully interactive, categorized skill set filtering panel.
 - **Accordion Experience Timeline**: Expandable career history timeline highlighting previous engineering positions.
 - **Github Statistics Dashboard**: Fetches and displays GitHub stats and visualizer blocks.
-- **CRM Contact Inbox**: A secure, embedded CRM panel (with custom password authentication `ayush123`) to view, manage, and delete contact inquiries locally via `localStorage`.
 
 ---
 
@@ -83,7 +82,3 @@ Ensure you have [Node.js](https://nodejs.org/) (v18+) installed.
    ```
 
 ---
-
-## 🔒 CRM Panel Credentials
-The contact section includes an embedded client-side CRM system to inspect message submissions.
-* **Passcode**: `ayush123` (locally encrypted / checked via React state)

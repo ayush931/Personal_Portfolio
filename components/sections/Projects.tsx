@@ -1,14 +1,36 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ProjectCard from '../ui/ProjectCard';
-import { motion } from 'framer-motion';
 import { Github } from '../icons';
 import { ArrowRight } from 'lucide-react';
 import { useCursor } from '../cursor/useCursor';
+import { gsap } from '@/lib/gsap';
 
 export const Projects: React.FC = () => {
   const { setCursorType, setCursorText } = useCursor();
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.project-card-reveal',
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: 'top 85%',
+          }
+        }
+      );
+    }, gridRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -25,7 +47,10 @@ export const Projects: React.FC = () => {
         </div>
 
         {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 grid-rows-auto md:grid-rows-[minmax(320px,_auto)_minmax(280px,_auto)]">
+        <div 
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 grid-rows-auto md:grid-rows-[minmax(320px,_auto)_minmax(280px,_auto)]"
+        >
           
           {/* Project 1 — DocStream (colspan: 2, rowspan: 1) */}
           <ProjectCard
@@ -40,7 +65,8 @@ export const Projects: React.FC = () => {
             ]}
             tech={['FastAPI', 'Celery', 'RabbitMQ', 'Redis', 'PostgreSQL', 'React', 'Docker']}
             isPrivate={true}
-            className="md:col-span-2 row-span-1"
+            image="/projects/docstream_mockup.png"
+            className="md:col-span-2 row-span-1 project-card-reveal opacity-0"
           />
 
           {/* Project 3 — RideSync (colspan: 1, rowspan: 2) */}
@@ -56,7 +82,8 @@ export const Projects: React.FC = () => {
             ]}
             tech={['React Native', 'Expo', 'Clerk', 'Neon PostgreSQL', 'Zustand']}
             github="https://github.com/ayush931/RideSync"
-            className="md:col-span-1 md:row-span-2"
+            image="/projects/ridesync_mockup.png"
+            className="md:col-span-1 md:row-span-2 project-card-reveal opacity-0"
           />
 
           {/* Project 2 — Excalidraw Clone (colspan: 1, rowspan: 1) */}
@@ -67,12 +94,13 @@ export const Projects: React.FC = () => {
             description="A real-time whiteboard for collaborative design. Handles concurrent connections smoothly."
             tech={['Next.js', 'WebSockets', 'PostgreSQL', 'Turborepo', 'TypeScript']}
             github="https://github.com/ayush931/excalidraw"
-            className="md:col-span-1 row-span-1"
+            image="/projects/excalidraw_mockup.png"
+            className="md:col-span-1 row-span-1 project-card-reveal opacity-0"
           />
 
           {/* GitHub CTA card (colspan: 1, rowspan: 1) */}
           <div
-            className="glow-border-wrapper h-full md:col-span-1 row-span-1"
+            className="glow-border-wrapper h-full md:col-span-1 row-span-1 project-card-reveal opacity-0"
             onMouseEnter={() => {
               setCursorType('hover');
               setCursorText('GITHUB');
