@@ -86,13 +86,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           
           {/* Label status */}
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[9px] md:text-[10px] text-text-tertiary uppercase tracking-widest">
+            <span className="font-mono text-[9px] md:text-[10px] text-text-tertiary uppercase tracking-widest flex items-center gap-1.5">
+              <span className={`w-1.5 h-1.5 rounded-full ${isPrivate ? 'bg-red-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
               {label}
             </span>
             {isPrivate ? (
               <Lock className="w-3.5 h-3.5 text-red-500/80" />
             ) : (
-              <Github className="w-3.5 h-3.5 text-text-tertiary" />
+              <Github className="w-3.5 h-3.5 text-text-tertiary group-hover:text-text-primary transition-colors" />
             )}
           </div>
 

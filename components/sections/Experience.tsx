@@ -6,6 +6,16 @@ import { gsap, ScrollTrigger } from '@/lib/gsap';
 
 const experiences = [
   {
+    role: 'Master of Computer Applications (MCA)',
+    company: 'IIIT Ranchi & IIT Patna',
+    period: '2026 – Present',
+    points: [
+      'Pursuing postgraduate computer applications program focusing on advanced software systems, distributed architectures, database optimization, and algorithm design.',
+      'Engaging in dual-campus collaborative projects and coursework across Indian Institute of Information Technology, Ranchi, and Indian Institute of Technology, Patna.',
+    ],
+    tech: ['Algorithms', 'System Design', 'DBMS', 'Software Engineering'],
+  },
+  {
     role: 'Junior Software Engineer',
     company: 'NexoGrafix Private Limited',
     period: 'Apr 2026 – Present',
@@ -89,7 +99,7 @@ export const Experience: React.FC = () => {
             {/* Scroll Fill Indicator */}
             <div
               ref={fillLineRef}
-              className="w-full h-full bg-accent-primary origin-top transform scale-y-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+              className="w-full h-full bg-accent-primary origin-top transform scale-y-0 shadow-[0_0_10px_var(--accent-glow-shadow)]"
             />
           </div>
 

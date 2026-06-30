@@ -35,6 +35,7 @@ export const ParticleCanvas: React.FC = () => {
       depthWrite: false,
       uniforms: {
         uTime: { value: 0 },
+        uIsLight: { value: 0.0 },
       },
       vertexShader: `
         varying vec2 vUv;
@@ -45,6 +46,7 @@ export const ParticleCanvas: React.FC = () => {
       `,
       fragmentShader: `
         uniform float uTime;
+        uniform float uIsLight;
         varying vec2 vUv;
         
         void main() {
@@ -55,15 +57,15 @@ export const ParticleCanvas: React.FC = () => {
           float wave2 = cos(uv.y * 3.0 - uTime * 0.08) * 0.5 + 0.5;
           float wave3 = sin((uv.x + uv.y) * 1.8 + uTime * 0.05) * 0.5 + 0.5;
           
-          // Dark Mode color points
-          vec3 darkIndigo = vec3(0.039, 0.035, 0.102);    // #0A091A
-          vec3 darkMagenta = vec3(0.102, 0.039, 0.121);   // #1A0A1F
-          vec3 darkVoid = vec3(0.015, 0.015, 0.035);      // #040409
+          // Interpolate between dark and light mode color points
+          vec3 bgIndigo = mix(vec3(0.039, 0.035, 0.102), vec3(0.97, 0.98, 0.99), uIsLight);    // #0A091A vs #F8FAFC
+          vec3 bgMagenta = mix(vec3(0.102, 0.039, 0.121), vec3(0.94, 0.96, 0.98), uIsLight);   // #1A0A1F vs #F1F5F9
+          vec3 bgVoid = mix(vec3(0.015, 0.015, 0.035), vec3(0.97, 0.98, 0.99), uIsLight);      // #040409 vs #F8FAFC
           
-          vec3 mix1 = mix(darkIndigo, darkMagenta, wave1);
-          vec3 finalColor = mix(mix1, darkVoid, wave2 * wave3);
+          vec3 mix1 = mix(bgIndigo, bgMagenta, wave1);
+          vec3 finalColor = mix(mix1, bgVoid, wave2 * wave3);
           
-          gl_FragColor = vec4(finalColor, 0.4);
+          gl_FragColor = vec4(finalColor, mix(0.4, 0.8, uIsLight));
         }
       `,
     });
@@ -191,10 +193,38 @@ export const ParticleCanvas: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
+    // Theme checking logic & mutation observer
+    const checkTheme = () => {
+      const isLight = document.documentElement.classList.contains('light');
+      bgMaterial.uniforms.uIsLight.value = isLight ? 1.0 : 0.0;
+      
+      if (isLight) {
+        starMaterial.color.setHex(0xDB2777);
+        starMaterial.opacity = 0.35;
+        wireframeMaterial.color.setHex(0x6D28D9);
+        wireframeMaterial.opacity = 0.03;
+      } else {
+        starMaterial.color.setHex(0xEC4899);
+        starMaterial.opacity = 0.6;
+        wireframeMaterial.color.setHex(0x7C3AED);
+        wireframeMaterial.opacity = 0.06;
+      }
+    };
+
+    const themeObserver = new MutationObserver(() => {
+      checkTheme();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    checkTheme();
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+      themeObserver.disconnect();
       cancelAnimationFrame(animId);
       
       if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {

@@ -69,13 +69,13 @@ export const About: React.FC = () => {
               className="about-p text-sm md:text-base text-text-secondary leading-relaxed font-sans"
               style={{ clipPath: 'inset(0 100% 0 0)' }}
             >
-              I'm a Full Stack Engineer based in Patna, India, currently building <span className="text-text-primary font-semibold">DocStream</span> at NexoGrafix — a document conversion platform (OCR &rarr; XML &rarr; EPUB) in a microservices architecture using FastAPI, React, and RabbitMQ. I specialize in data structures, API design, and performance tuning.
+              I'm a Full Stack Engineer based in Patna, India, currently building <span className="text-text-primary font-semibold">DocStream</span> at <a href="https://nexografix.com/" target="_blank" rel="noopener noreferrer" className="text-accent-primary font-medium hover:text-accent-glow transition-colors duration-300">NexoGrafix</a> — a document conversion platform (OCR &rarr; XML &rarr; EPUB) in a microservices architecture using FastAPI, React, and RabbitMQ. I specialize in data structures, API design, and performance tuning.
             </p>
             <p 
               className="about-p text-sm md:text-base text-text-secondary leading-relaxed font-sans"
               style={{ clipPath: 'inset(0 100% 0 0)' }}
             >
-              I hold an <span className="text-text-primary font-semibold">MBA in Marketing</span> alongside my engineering background. That unique combination means I can architect a Celery worker queue AND write the PRD for why it needs to exist.
+              Currently, I am pursuing my <span className="text-text-primary font-semibold">Master of Computer Applications (MCA)</span> from <span className="text-accent-primary font-medium">IIIT Ranchi &amp; IIT Patna</span> (2026 – Present), while holding an <span className="text-text-primary font-semibold">MBA in Marketing</span> alongside my engineering background. That unique combination means I can architect a Celery worker queue AND write the PRD for why it needs to exist.
             </p>
             <p 
               className="about-p text-sm md:text-base text-text-secondary leading-relaxed font-sans"

@@ -49,27 +49,29 @@ export const Projects: React.FC = () => {
         {/* Bento Grid Layout */}
         <div 
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 grid-rows-auto md:grid-rows-[minmax(320px,_auto)_minmax(280px,_auto)]"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 grid-rows-auto md:grid-rows-[minmax(320px,_auto)_minmax(320px,_auto)_minmax(280px,_auto)]"
         >
           
-          {/* Project 1 — DocStream (colspan: 2, rowspan: 1) */}
+          {/* Project 1 — Aetheria (colspan: 2, rowspan: 1) */}
           <ProjectCard
-            label="Currently Building · Private"
-            title="DocStream"
-            subtitle="Document Conversion Platform"
-            description="A 4-microservice pipeline converting PDFs and scanned images into structured XML and EPUB — used in production at NexoGrafix."
+            label="Open Source"
+            title="Aetheria"
+            subtitle="Real-Time 2D Multiplayer Sandbox World"
+            description="A real-time multiplayer 2D sandbox world featuring physics sync, customizable room decoration grids, WebRTC proximity voice feeds, and interactive mini-games."
             highlights={[
-              'OCR engine: PaddleOCR + Tesseract via Celery workers + RabbitMQ',
-              'FastAPI backend, React frontend, PostgreSQL + Redis for job state',
-              'EPUB 3 output with automated TOC, JATS/DocBook XML schema support',
+              'Engineered a real-time sync pipeline using Socket.io and Phaser Arcade Physics (20Hz updates with client-side linear interpolation for 60 FPS)',
+              'WebRTC proximity signaling for peer-to-peer voice feeds and drag-and-drop grid room decoration with coordinate persistence',
+              'Canvas-integrated multiplayer mini-games (Chess, Tic-Tac-Toe, Connect Four) and single-player retro games (Snake, Memory Match)',
+              'Zero-friction Prisma ORM connection pools with Neon PostgreSQL serverless adapters and in-memory local fallbacks',
+              'Admin auditing utilities dashboard (AdminPanel.tsx) monitoring live sockets, server uptime, database records, and role overrides',
             ]}
-            tech={['FastAPI', 'Celery', 'RabbitMQ', 'Redis', 'PostgreSQL', 'React', 'Docker']}
-            isPrivate={true}
-            image="/projects/docstream_mockup.png"
+            tech={['Phaser', 'Socket.io', 'WebRTC', 'Prisma', 'PostgreSQL', 'React', 'TypeScript']}
+            github="https://github.com/ayush931/Aetheria"
+            image="/projects/aetheria_mockup.jpg"
             className="md:col-span-2 row-span-1 project-card-reveal opacity-0"
           />
 
-          {/* Project 3 — RideSync (colspan: 1, rowspan: 2) */}
+          {/* Project 2 — RideSync (colspan: 1, rowspan: 2) */}
           <ProjectCard
             label="Open Source"
             title="RideSync"
@@ -86,7 +88,24 @@ export const Projects: React.FC = () => {
             className="md:col-span-1 md:row-span-2 project-card-reveal opacity-0"
           />
 
-          {/* Project 2 — Excalidraw Clone (colspan: 1, rowspan: 1) */}
+          {/* Project 3 — DocStream (colspan: 2, rowspan: 1) */}
+          <ProjectCard
+            label="Currently Building · Private"
+            title="DocStream"
+            subtitle="Document Conversion Platform"
+            description="A 4-microservice pipeline converting PDFs and scanned images into structured XML and EPUB — used in production at NexoGrafix."
+            highlights={[
+              'OCR engine: PaddleOCR + Tesseract via Celery workers + RabbitMQ',
+              'FastAPI backend, React frontend, PostgreSQL + Redis for job state',
+              'EPUB 3 output with automated TOC, JATS/DocBook XML schema support',
+            ]}
+            tech={['FastAPI', 'Celery', 'RabbitMQ', 'Redis', 'PostgreSQL', 'React', 'Docker']}
+            isPrivate={true}
+            image="/projects/docstream_mockup.png"
+            className="md:col-span-2 row-span-1 project-card-reveal opacity-0"
+          />
+
+          {/* Project 4 — Excalidraw Clone (colspan: 1, rowspan: 1) */}
           <ProjectCard
             label="Open Source"
             title="Excalidraw Clone"
@@ -98,9 +117,9 @@ export const Projects: React.FC = () => {
             className="md:col-span-1 row-span-1 project-card-reveal opacity-0"
           />
 
-          {/* GitHub CTA card (colspan: 1, rowspan: 1) */}
+          {/* GitHub CTA card (colspan: 2, rowspan: 1) */}
           <div
-            className="glow-border-wrapper h-full md:col-span-1 row-span-1 project-card-reveal opacity-0"
+            className="glow-border-wrapper h-full md:col-span-2 row-span-1 project-card-reveal opacity-0"
             onMouseEnter={() => {
               setCursorType('hover');
               setCursorText('GITHUB');

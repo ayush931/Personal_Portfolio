@@ -177,33 +177,31 @@ export const Contact: React.FC = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="py-28 px-6 md:px-12 border-t border-border-subtle/50 relative scroll-mt-16 flex flex-col justify-center items-center overflow-hidden"
+      className="py-24 px-6 md:px-12 border-t border-border-subtle/50 relative scroll-mt-16 overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-primary/[0.005] to-accent-glow/[0.01] pointer-events-none" />
 
-      <div className="w-full max-w-6xl space-y-12 relative z-10 text-center">
+      <div className="w-full max-w-6xl mx-auto space-y-12 relative z-10">
         
-        {/* Header eyebrow */}
-        <div className="font-mono text-xs text-accent-primary uppercase tracking-widest">
-          &gt; 06. Contact
+        {/* Header */}
+        <div className="text-left space-y-3">
+          <div className="space-y-2">
+            <span className="font-mono text-xs text-accent-primary uppercase tracking-widest block">&gt; 06. Contact</span>
+            <h2 className="text-h2 font-display text-text-primary flex flex-wrap gap-x-3">
+              {["Let's", 'build', 'something.'].map((word, wIdx) => (
+                <span key={wIdx} className="contact-word inline-block opacity-0">
+                  {word}
+                </span>
+              ))}
+            </h2>
+          </div>
+          <p className="contact-subtext opacity-0 max-w-xl text-sm md:text-base text-text-secondary leading-relaxed font-sans">
+            Open to full-time engineering roles, remote opportunities, and interesting codebase challenges.
+          </p>
         </div>
 
-        {/* Large display header (Word-by-word reveal) */}
-        <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold text-text-primary tracking-tight select-none leading-none">
-          {["Let's", 'build', 'something.'].map((word, wIdx) => (
-            <span key={wIdx} className="contact-word inline-block mr-3 opacity-0">
-              {word}
-            </span>
-          ))}
-        </h2>
-
-        {/* Subtext */}
-        <p className="contact-subtext opacity-0 max-w-xl mx-auto text-sm md:text-base text-text-secondary leading-relaxed font-sans">
-          Open to full-time engineering roles, remote opportunities, and interesting codebase challenges.
-        </p>
-
         {/* Responsive Layout Grid Split */}
-        <div className="contact-grid-container grid grid-cols-1 lg:grid-cols-5 gap-8 text-left pt-6 max-w-5xl mx-auto">
+        <div className="contact-grid-container grid grid-cols-1 lg:grid-cols-5 gap-8 text-left pt-6">
           
           {/* Left Column: Socials and Calendar Booking (Col span: 2) */}
           <div className="lg:col-span-2 space-y-6 flex flex-col justify-between">

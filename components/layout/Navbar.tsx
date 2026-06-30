@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Sun, Moon } from 'lucide-react';
 import { useCursor } from '../cursor/useCursor';
 import { gsap } from '@/lib/gsap';
 
@@ -15,6 +16,25 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const hireBtnRef = useRef<HTMLAnchorElement>(null);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isLight = document.documentElement.classList.contains('light');
+      setTheme(isLight ? 'light' : 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    if (nextTheme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+    localStorage.setItem('theme', nextTheme);
+    setTheme(nextTheme);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,14 +98,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 transition-all duration-300 frosted-glass border-b border-border-subtle/50"
+        className="fixed left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-6 md:px-8 w-[92%] max-w-5xl rounded-full border border-border-subtle/55 shadow-2xl transition-colors duration-300"
         style={{
-          backgroundColor: 'rgba(4, 4, 9, 0.7)',
+          backgroundColor: 'var(--navbar-bg, rgba(4, 4, 9, 0.75))',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
         }}
         animate={{
-          height: isScrolled ? 54 : 70,
+          height: isScrolled ? 52 : 64,
+          top: isScrolled ? 12 : 16,
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
@@ -143,14 +164,47 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
         {/* Right Section */}
         <div className="flex items-center gap-3 md:gap-4">
           {/* Open to Work Badge */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/20 text-[10px] font-mono font-medium text-emerald-400">
+          <div className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-mono font-medium transition-colors duration-300 ${
+            theme === 'light'
+              ? 'bg-emerald-100/60 border-emerald-500/30 text-emerald-700'
+              : 'bg-emerald-950/30 border-emerald-500/20 text-emerald-400'
+          }`}>
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                theme === 'light' ? 'bg-emerald-500' : 'bg-emerald-400'
+              }`}></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             OPEN TO WORK
           </div>
 
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 rounded-full bg-bg-surface border border-border-subtle hover:border-accent-primary/50 flex items-center justify-center text-text-secondary hover:text-text-primary transition-all duration-300 hover:scale-110 active:scale-90 relative overflow-hidden group magnetic-pull"
+            onMouseEnter={() => {
+              setCursorType('hover');
+              setCursorText(theme === 'dark' ? 'LIGHT' : 'DARK');
+            }}
+            onMouseLeave={() => {
+              setCursorType('default');
+              setCursorText('');
+            }}
+            aria-label="Toggle Theme"
+          >
+            <motion.div
+              initial={false}
+              animate={{ rotate: theme === 'dark' ? 0 : 180 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400 group-hover:text-amber-300 transition-colors" />
+              ) : (
+                <Moon className="w-4 h-4 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
+              )}
+            </motion.div>
+          </button>
 
           {/* Hire Me Button */}
           <a
@@ -251,9 +305,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
               transition={{ delay: 0.6 }}
               className="absolute bottom-12 flex flex-col items-center gap-3"
             >
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/20 text-[10px] font-mono font-medium text-emerald-400">
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-mono font-medium transition-colors duration-300 ${
+                theme === 'light'
+                  ? 'bg-emerald-100/60 border-emerald-500/30 text-emerald-700'
+                  : 'bg-emerald-950/30 border-emerald-500/20 text-emerald-400'
+              }`}>
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    theme === 'light' ? 'bg-emerald-500' : 'bg-emerald-400'
+                  }`}></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
                 OPEN TO WORK

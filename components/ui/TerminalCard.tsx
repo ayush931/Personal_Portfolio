@@ -12,11 +12,11 @@ const terminalContent: TerminalLine[] = [
   { text: 'whoami', isCommand: true },
   { text: 'Ayush Kumar, Full Stack Engineer', isCommand: false },
   { text: 'cat current_role.txt', isCommand: true },
-  { text: 'Junior SWE @ NexoGrafix\nBuilding: DocStream (OCR → XML → EPUB pipeline)', isCommand: false },
+  { text: 'Junior SWE @ NexoGrafix\nPursuing: MCA @ IIIT Ranchi & IIT Patna', isCommand: false },
   { text: 'cat open_to.txt', isCommand: true },
   { text: 'Full Stack / Backend roles\nOpen to relocation from Patna', isCommand: false },
   { text: 'echo $BONUS', isCommand: true },
-  { text: 'MBA + Engineering = rare combo', isCommand: false },
+  { text: 'MCA + MBA + Engineering = rare combo', isCommand: false },
 ];
 
 export const TerminalCard: React.FC = () => {

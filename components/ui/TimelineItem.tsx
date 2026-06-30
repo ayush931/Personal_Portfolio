@@ -26,10 +26,11 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
   return (
     <div className="relative flex md:gap-8 group pl-8 md:pl-0">
       
-      {/* Timeline Dot & Connector line (desktop only) */}
+      {/* Connector line (desktop only) */}
+      <div className="hidden md:block absolute left-[30px] top-[31px] w-[18px] h-[1.5px] bg-border-subtle group-hover:bg-accent-primary/40 transition-colors duration-300 pointer-events-none" />
+      
+      {/* Timeline Dot */}
       <div className="absolute left-0 md:left-[30px] top-6 flex items-center justify-center -translate-x-1/2 z-10">
-        {/* Connector to spine */}
-        <div className="hidden md:block absolute left-4 w-6 h-[1.5px] bg-border-subtle group-hover:bg-accent-primary/40 transition-colors duration-300" />
         
         {/* Pulser Dot */}
         <motion.div
@@ -37,7 +38,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
           whileInView={{ scale: [1, 1.4, 1] }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          className="w-3.5 h-3.5 rounded-full bg-accent-primary border-2 border-bg-void shadow-[0_0_10px_rgba(59,130,246,0.8)] relative"
+          className="w-3.5 h-3.5 rounded-full bg-accent-primary border-2 border-bg-void shadow-[0_0_10px_var(--accent-glow-shadow)] relative"
         >
           <span className="absolute inset-0 rounded-full bg-accent-primary/30 animate-ping" />
         </motion.div>
@@ -49,7 +50,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-        className="w-full md:ml-12 bg-bg-surface border border-border-subtle hover:border-accent-primary/40 rounded-2xl p-6 md:p-8 transition-all duration-400 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(8,10,15,0.8)]"
+        className="w-full md:ml-12 bg-bg-surface border border-border-subtle hover:border-accent-primary/40 rounded-2xl p-6 md:p-8 transition-all duration-400 hover:-translate-y-1 hover:shadow-[0_10px_30px_var(--card-shadow-hover)]"
         onMouseEnter={() => {
           setCursorType('hover');
           setCursorText('VIEW');

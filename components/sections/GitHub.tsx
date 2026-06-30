@@ -38,6 +38,14 @@ const PINNED_REPOS: RepoConfig[] = [
     defaultForks: 0,
   },
   {
+    path: 'ayush931/Aetheria',
+    name: 'Aetheria',
+    defaultDescription: 'A real-time 2D multiplayer sandbox world built using Socket.io and Phaser Arcade Physics (20Hz updates with client-side linear interpolation to 60 FPS), featuring WebRTC proximity voice feeds, wardrobe customizers, and interactive rooms.',
+    defaultLanguage: 'TypeScript',
+    defaultStars: 0,
+    defaultForks: 0,
+  },
+  {
     path: 'ayush931/Arohio_Another_Backend',
     name: 'Arohio_Another_Backend',
     defaultDescription: 'FastAPI backend service for generating, managing, and exporting WCAG-compliant Alt Text. Supports bulk document/media processing (PDFs, images, Excel), OCR, and includes an AI-powered accessibility assistant.',
