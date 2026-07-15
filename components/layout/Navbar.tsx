@@ -16,14 +16,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, setActiveSection 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const hireBtnRef = useRef<HTMLAnchorElement>(null);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-
-  useEffect(() => {
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window !== 'undefined') {
-      const isLight = document.documentElement.classList.contains('light');
-      setTheme(isLight ? 'light' : 'dark');
+      return document.documentElement.classList.contains('light') ? 'light' : 'dark';
     }
-  }, []);
+    return 'dark';
+  });
 
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';

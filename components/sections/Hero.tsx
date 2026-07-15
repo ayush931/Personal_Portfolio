@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, ArrowRight, Download, ChevronDown } from 'lucide-react';
+import { ArrowRight, Download, ChevronDown } from 'lucide-react';
 import { Github } from '../icons';
 import { useCursor } from '../cursor/useCursor';
 import { gsap } from '@/lib/gsap';
@@ -20,7 +19,6 @@ const Typewriter: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [reverse, setReverse] = useState(false);
-  const [text, setText] = useState('');
 
   useEffect(() => {
     if (subIndex === roles[index].length + 1 && !reverse) {
@@ -29,9 +27,11 @@ const Typewriter: React.FC = () => {
     }
 
     if (subIndex === 0 && reverse) {
-      setReverse(false);
-      setIndex((prev) => (prev + 1) % roles.length);
-      return;
+      const timeout = setTimeout(() => {
+        setReverse(false);
+        setIndex((prev) => (prev + 1) % roles.length);
+      }, 0);
+      return () => clearTimeout(timeout);
     }
 
     const timeout = setTimeout(() => {
@@ -41,9 +41,7 @@ const Typewriter: React.FC = () => {
     return () => clearTimeout(timeout);
   }, [subIndex, reverse, index]);
 
-  useEffect(() => {
-    setText(roles[index].substring(0, subIndex));
-  }, [subIndex, index]);
+  const text = roles[index].substring(0, subIndex);
 
   return <span className="typewriter-cursor text-accent-primary">{text}</span>;
 };
@@ -145,30 +143,28 @@ export const Hero: React.FC = () => {
     <section
       id="hero"
       ref={heroRef}
-      className="min-h-screen flex flex-col justify-center items-center py-20 px-6 md:px-12 relative overflow-hidden"
+      className="min-h-screen flex flex-col justify-center items-center pt-32 pb-20 px-6 md:px-12 relative overflow-hidden"
     >
       <div className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-between gap-12 z-10">
         
         {/* Left Side Info */}
         <div className="hero-left-content flex-1 space-y-6 text-left max-w-2xl">
-          {/* Eyebrow Status Badge */}
-          <div className="hero-eyebrow inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-subtle/40 border border-accent-primary/20 text-[10px] font-mono text-accent-primary tracking-widest uppercase mb-2 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>sys.status == active</span>
-          </div>
-
           {/* Heading */}
           <div className="space-y-3">
             <h1 className="text-hero font-display text-text-primary select-none leading-none tracking-tight">
-              Hi, I'm <br />
+              Hi, I&apos;m <br />
               <span className="inline-block bg-gradient-to-r from-accent-primary via-accent-glow to-accent-primary bg-[length:200%_auto] animate-text-gradient bg-clip-text text-transparent pb-1">
                 {name}
               </span>
             </h1>
             
-            {/* Typewriter role cycling */}
-            <div className="hero-role text-xl sm:text-2xl font-mono h-8 flex items-center">
+            {/* Typewriter role cycling & status badge */}
+            <div className="hero-role flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-lg sm:text-xl md:text-2xl h-8">
               <Typewriter />
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-accent-subtle/50 border border-accent-primary/20 text-[9px] font-bold text-accent-primary tracking-widest uppercase shadow-sm select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>sys.status == active</span>
+              </span>
             </div>
           </div>
 

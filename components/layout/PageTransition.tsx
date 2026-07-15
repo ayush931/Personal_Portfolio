@@ -9,9 +9,20 @@ export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ childr
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
+    let isMounted = true;
+    const loadTimer = setTimeout(() => {
+      if (isMounted) setLoading(true);
+    }, 0);
+
+    const timer = setTimeout(() => {
+      if (isMounted) setLoading(false);
+    }, 400);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(loadTimer);
+      clearTimeout(timer);
+    };
   }, [pathname]);
 
   return (

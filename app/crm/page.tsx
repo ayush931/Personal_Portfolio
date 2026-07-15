@@ -1,26 +1,36 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Link from 'next/link';
 import { 
   Inbox, 
   Lock, 
   Trash2, 
   LogOut, 
-  Mail, 
-  X,
-  Sparkles,
-  ArrowLeft,
-  ChevronRight,
-  ShieldCheck,
-  FileText
+  ArrowLeft, 
+  ShieldCheck
 } from 'lucide-react';
 import ParticleCanvas from '@/components/ParticleCanvas';
-import TiltCard from '@/components/TiltCard';
+
+interface CrmMessage {
+  id: string;
+  subject?: string;
+  message?: string;
+  name?: string;
+  email?: string;
+  timestamp?: string;
+}
 
 export default function CrmPage() {
   const [crmPassword, setCrmPassword] = useState('');
   const [crmAuthenticated, setCrmAuthenticated] = useState(false);
-  const [crmMessages, setCrmMessages] = useState<any[]>([]);
+  const [crmMessages, setCrmMessages] = useState<CrmMessage[]>(() => {
+    if (typeof window !== 'undefined') {
+      const data = localStorage.getItem('crm_messages');
+      return data ? JSON.parse(data) : [];
+    }
+    return [];
+  });
   const [crmError, setCrmError] = useState('');
 
   // Load CRM messages from localStorage
@@ -34,10 +44,6 @@ export default function CrmPage() {
       }
     }
   };
-
-  useEffect(() => {
-    loadCrmMessages();
-  }, []);
 
   const handleCrmLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,8 +65,8 @@ export default function CrmPage() {
   const handleDeleteMessage = (id: string) => {
     const existing = localStorage.getItem('crm_messages');
     if (existing) {
-      const messages = JSON.parse(existing);
-      const filtered = messages.filter((m: any) => m.id !== id);
+      const messages = JSON.parse(existing) as CrmMessage[];
+      const filtered = messages.filter((m: CrmMessage) => m.id !== id);
       localStorage.setItem('crm_messages', JSON.stringify(filtered));
       setCrmMessages(filtered);
     }
@@ -97,13 +103,13 @@ export default function CrmPage() {
             </div>
           </div>
           
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold clay-badge hover:bg-foreground/[0.01] transition-all duration-300 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Main Portfolio
-          </a>
+          </Link>
         </div>
 
         {/* CRM Body */}

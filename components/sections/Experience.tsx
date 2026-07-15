@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import TimelineItem from '../ui/TimelineItem';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap } from '@/lib/gsap';
 
 const experiences = [
   {

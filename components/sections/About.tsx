@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useCursor } from '../cursor/useCursor';
 import TerminalCard from '../ui/TerminalCard';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { gsap } from '@/lib/gsap';
 
 export const About: React.FC = () => {
   const { setCursorType, setCursorText } = useCursor();
@@ -69,7 +69,7 @@ export const About: React.FC = () => {
               className="about-p text-sm md:text-base text-text-secondary leading-relaxed font-sans"
               style={{ clipPath: 'inset(0 100% 0 0)' }}
             >
-              I'm a Full Stack Engineer based in Patna, India, currently building <span className="text-text-primary font-semibold">DocStream</span> at <a href="https://nexografix.com/" target="_blank" rel="noopener noreferrer" className="text-accent-primary font-medium hover:text-accent-glow transition-colors duration-300">NexoGrafix</a> — a document conversion platform (OCR &rarr; XML &rarr; EPUB) in a microservices architecture using FastAPI, React, and RabbitMQ. I specialize in data structures, API design, and performance tuning.
+              I&apos;m a Full Stack Engineer based in Patna, India, currently building <span className="text-text-primary font-semibold">DocStream</span> at <a href="https://nexografix.com/" target="_blank" rel="noopener noreferrer" className="text-accent-primary font-medium hover:text-accent-glow transition-colors duration-300">NexoGrafix</a> — a document conversion platform (OCR &rarr; XML &rarr; EPUB) in a microservices architecture using FastAPI, React, and RabbitMQ. I specialize in data structures, API design, and performance tuning.
             </p>
             <p 
               className="about-p text-sm md:text-base text-text-secondary leading-relaxed font-sans"

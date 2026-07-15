@@ -10,17 +10,14 @@ export const FloatingContact: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed, setIsDismissed] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('floating-contact-dismissed') === 'true';
+    }
+    return false;
+  });
 
   useEffect(() => {
-    // Check session storage
-    if (typeof window !== 'undefined') {
-      const dismissed = sessionStorage.getItem('floating-contact-dismissed');
-      if (dismissed === 'true') {
-        setIsDismissed(true);
-      }
-    }
-
     const handleScroll = () => {
       setIsVisible(window.scrollY > 300);
     };
