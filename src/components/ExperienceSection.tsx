@@ -78,10 +78,10 @@ export const ExperienceSection: React.FC = () => {
         
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
         >
           <div>
@@ -108,15 +108,15 @@ export const ExperienceSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Massive Typographic Metrics Overview Grid with 3D Tilt */}
+        {/* Massive Typographic Metrics Overview Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {experiences.map((exp, index) => (
             <motion.div
               key={exp.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 40, scale: 0.95, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
             >
               <TiltCard
                 onClick={() => setActiveTab(exp.id)}
@@ -138,11 +138,16 @@ export const ExperienceSection: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Massive Metric Display */}
+                {/* Massive Metric Display with Scroll Glow */}
                 <div className="space-y-1 my-3">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-signal-cyan via-signal-green to-oled-text font-mono tracking-tighter">
+                  <motion.div
+                    whileInView={{ scale: [0.92, 1], opacity: [0, 1] }}
+                    viewport={{ once: false }}
+                    transition={{ duration: 0.5, delay: 0.1 + index * 0.08 }}
+                    className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-signal-cyan via-signal-green to-oled-text font-mono tracking-tighter"
+                  >
                     {exp.metricHero}
-                  </div>
+                  </motion.div>
                   <div className="text-[11px] font-mono text-signal-cyan tracking-tight font-semibold line-clamp-2">
                     {exp.metricLabel}
                   </div>
@@ -164,9 +169,9 @@ export const ExperienceSection: React.FC = () => {
           .map((exp) => (
             <motion.div
               key={exp.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.4 }}
               className="p-6 sm:p-8 rounded-lg border border-oled-border bg-oled-card space-y-6"
             >
               {/* Panel Header */}

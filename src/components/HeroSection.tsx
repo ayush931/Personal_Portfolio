@@ -44,10 +44,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-7 space-y-6"
           >
-            <div className="space-y-2">
-              <div className="text-xs font-mono text-signal-cyan uppercase tracking-widest flex items-center space-x-2">
-                <Terminal className="w-4 h-4" />
-                <span>Ayush Kumar — Full-Stack Software Engineer</span>
+            <div className="space-y-3">
+              <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-oled-surface border border-signal-cyan/40 text-xs font-mono text-signal-cyan font-bold shadow-glow-cyan">
+                <Terminal className="w-3.5 h-3.5 text-signal-green" />
+                <span>AYUSH KUMAR // FULL-STACK ENGINEER & SYSTEMS ARCHITECT</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-oled-text font-sans leading-[1.08]">

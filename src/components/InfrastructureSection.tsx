@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Terminal, Hash, Search, Shield, Cpu, Filter } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SkillCategory {
   permissions: string;
@@ -117,11 +118,17 @@ export const InfrastructureSection: React.FC = () => {
     .filter((cat) => cat.items.length > 0);
 
   return (
-    <section id="infrastructure" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid">
+    <section id="infrastructure" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
+        >
           <div>
             <div className="text-xs font-mono text-signal-amber uppercase tracking-widest flex items-center space-x-2">
               <Hash className="w-4 h-4" />
@@ -134,10 +141,16 @@ export const InfrastructureSection: React.FC = () => {
           <p className="text-xs font-mono text-oled-muted max-w-md">
             // Styled like a POSIX terminal `ls -la /var/ayush/capabilities` output.
           </p>
-        </div>
+        </motion.div>
 
         {/* Terminal Controls Bar */}
-        <div className="p-4 bg-oled-card border border-oled-border rounded-lg flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="p-4 bg-oled-card border border-oled-border rounded-lg flex flex-wrap items-center justify-between gap-4 font-mono text-xs"
+        >
           
           {/* Category Filters */}
           <div className="flex flex-wrap items-center gap-2">
@@ -181,10 +194,16 @@ export const InfrastructureSection: React.FC = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* POSIX Terminal ls -la Output Box */}
-        <div className="bg-oled-card border border-oled-border rounded-lg overflow-hidden font-mono text-xs">
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.98, filter: "blur(4px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="bg-oled-card border border-oled-border rounded-lg overflow-hidden font-mono text-xs"
+        >
           
           {/* Terminal Title Bar */}
           <div className="px-4 py-2.5 bg-oled-bg border-b border-oled-border flex items-center justify-between text-oled-muted text-[11px]">
@@ -210,8 +229,15 @@ export const InfrastructureSection: React.FC = () => {
                 No matching stack modules found for &quot;{searchQuery}&quot;
               </div>
             ) : (
-              filteredCategories.map((cat) => (
-                <div key={cat.key} className="space-y-3">
+              filteredCategories.map((cat, catIdx) => (
+                <motion.div
+                  key={cat.key}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.4, delay: catIdx * 0.1 }}
+                  className="space-y-3"
+                >
                   <div className="flex flex-wrap items-center space-x-3 text-oled-text">
                     <span className="text-signal-green">{cat.permissions}</span>
                     <span className="text-oled-muted">{cat.links}</span>
@@ -235,7 +261,7 @@ export const InfrastructureSection: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               ))
             )}
           </div>
@@ -246,7 +272,7 @@ export const InfrastructureSection: React.FC = () => {
             <span>MEM_USAGE: 42MB</span>
           </div>
 
-        </div>
+        </motion.div>
 
       </div>
     </section>

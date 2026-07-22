@@ -54,10 +54,10 @@ export const EducationSection: React.FC = () => {
         
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
         >
           <div>
@@ -79,10 +79,10 @@ export const EducationSection: React.FC = () => {
           {credentials.map((cred, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              initial={{ opacity: 0, y: 40, scale: 0.96, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
             >
               <TiltCard depth={12} className="h-full">
                 <div className="p-6 bg-oled-card border border-oled-border rounded-lg space-y-6 flex flex-col justify-between hover:border-signal-cyan transition-all group shadow-sm hover:shadow-glow-cyan h-full">

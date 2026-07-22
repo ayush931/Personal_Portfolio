@@ -132,10 +132,10 @@ LIMIT 5;`,
         
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
         >
           <div>
@@ -160,10 +160,10 @@ LIMIT 5;`,
             return (
               <motion.div
                 key={proj.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                initial={{ opacity: 0, y: 50, scale: 0.96, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
               >
                 <TiltCard depth={10} className="bg-oled-card border border-oled-border rounded-lg overflow-hidden transition-all hover:border-oled-hover">
                   {/* Card Header & Controls Bar */}
