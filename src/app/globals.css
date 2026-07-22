@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 9 9 11;
+    --card: 18 18 21;
+    --signal-cyan: 94 234 212;
+    --signal-green: 0 255 156;
+  }
+
+  body {
+    background-color: #09090b;
+    color: #fafafa;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+    selection-background-color: rgba(94, 234, 212, 0.25);
+    selection-color: #ffffff;
+  }
+
+  ::selection {
+    background: rgba(94, 234, 212, 0.2);
+    color: #5EEAD4;
+  }
+}
+
+/* OLED Technical Grid Pattern */
+.bg-tech-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.bg-dot-grid {
+  background-size: 24px 24px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Subtle Film Noise Texture Overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom Scrollbar for OLED Terminal feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #24242c;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5EEAD4;
+}
+
+/* Terminal Glow Utilities */
+.text-shadow-cyan {
+  text-shadow: 0 0 12px rgba(94, 234, 212, 0.4);
+}
+
+.text-shadow-green {
+  text-shadow: 0 0 12px rgba(0, 255, 156, 0.4);
+}
+
+.border-glow-cyan {
+  box-shadow: 0 0 15px -3px rgba(94, 234, 212, 0.3);
+}
+
+/* Keyboard focus rings */
+*:focus-visible {
+  outline: 2px solid #5EEAD4;
+  outline-offset: 2px;
+}
