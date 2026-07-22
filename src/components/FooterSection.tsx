@@ -29,17 +29,17 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
   };
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText("ayushkumar9315983@gmail.com");
+    navigator.clipboard.writeText("ayushkumar93183@gmail.com");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
   return (
-    <footer id="contact" className="w-full pt-16 pb-12 bg-oled-bg border-t border-oled-border font-mono text-xs">
+    <footer id="contact" className="relative z-10 w-full pt-16 pb-12 bg-oled-bg border-t border-oled-border font-mono text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Contact Stream Box */}
-        <div className="p-8 bg-oled-card border border-oled-border rounded-lg space-y-8">
+        <div className="p-8 bg-oled-card border border-oled-border rounded-lg space-y-8 shadow-2xl">
           
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-oled-border pb-6">
             <div>
@@ -79,7 +79,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
               <div className="flex items-center justify-between gap-2 pt-1">
                 {emailRevealed ? (
                   <span className="text-sm font-bold text-signal-cyan select-all">
-                    ayushkumar9315983@gmail.com
+                    ayushkumar93183@gmail.com
                   </span>
                 ) : (
                   <span className="text-sm text-oled-muted font-mono tracking-widest">
