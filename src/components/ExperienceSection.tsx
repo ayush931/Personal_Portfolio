@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { Cpu, Server, GitBranch, ArrowRight, Zap, CheckCircle2, ChevronRight, Download } from "lucide-react";
+import { motion } from "framer-motion";
+import { TiltCard } from "./TiltCard";
 
 interface ExperienceItem {
   id: string;
@@ -71,11 +73,17 @@ export const ExperienceSection: React.FC = () => {
   ];
 
   return (
-    <section id="experience" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid">
+    <section id="experience" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
+        >
           <div>
             <div className="text-xs font-mono text-signal-green uppercase tracking-widest flex items-center space-x-2">
               <Cpu className="w-4 h-4" />
@@ -98,47 +106,55 @@ export const ExperienceSection: React.FC = () => {
               <span>DOWNLOAD_RESUME.PDF</span>
             </a>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Massive Typographic Metrics Overview */}
+        {/* Massive Typographic Metrics Overview Grid with 3D Tilt */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {experiences.map((exp) => (
-            <div
+          {experiences.map((exp, index) => (
+            <motion.div
               key={exp.id}
-              onClick={() => setActiveTab(exp.id)}
-              className={`p-6 rounded-lg border transition-all cursor-pointer relative overflow-hidden group ${
-                activeTab === exp.id
-                  ? "bg-oled-card border-signal-cyan shadow-glow-cyan"
-                  : "bg-oled-card/50 border-oled-border hover:border-oled-hover"
-              }`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
             >
-              {/* Top Meta */}
-              <div className="flex items-center justify-between text-xs font-mono text-oled-muted mb-3">
-                <span className="flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-signal-cyan" />
-                  <span className="text-oled-text font-bold truncate max-w-[140px]">{exp.company}</span>
-                </span>
-                <span className="px-2 py-0.5 rounded bg-oled-surface border border-oled-border text-[10px]">
-                  {exp.period}
-                </span>
-              </div>
-
-              {/* Massive Metric Display */}
-              <div className="space-y-1 my-3">
-                <div className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-signal-cyan via-signal-green to-oled-text font-mono tracking-tighter">
-                  {exp.metricHero}
+              <TiltCard
+                onClick={() => setActiveTab(exp.id)}
+                depth={12}
+                className={`p-6 rounded-lg border transition-all cursor-pointer relative overflow-hidden group ${
+                  activeTab === exp.id
+                    ? "bg-oled-card border-signal-cyan shadow-glow-cyan"
+                    : "bg-oled-card/50 border-oled-border hover:border-oled-hover"
+                }`}
+              >
+                {/* Top Meta */}
+                <div className="flex items-center justify-between text-xs font-mono text-oled-muted mb-3">
+                  <span className="flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-signal-cyan" />
+                    <span className="text-oled-text font-bold truncate max-w-[140px]">{exp.company}</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-oled-surface border border-oled-border text-[10px]">
+                    {exp.period}
+                  </span>
                 </div>
-                <div className="text-[11px] font-mono text-signal-cyan tracking-tight font-semibold line-clamp-2">
-                  {exp.metricLabel}
-                </div>
-              </div>
 
-              {/* Role Title */}
-              <div className="flex items-center justify-between pt-3 border-t border-oled-border text-xs font-mono">
-                <span className="text-oled-text font-bold truncate">{exp.role}</span>
-                <ChevronRight className={`w-4 h-4 shrink-0 transition-transform ${activeTab === exp.id ? "rotate-90 text-signal-cyan" : "text-oled-muted"}`} />
-              </div>
-            </div>
+                {/* Massive Metric Display */}
+                <div className="space-y-1 my-3">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-signal-cyan via-signal-green to-oled-text font-mono tracking-tighter">
+                    {exp.metricHero}
+                  </div>
+                  <div className="text-[11px] font-mono text-signal-cyan tracking-tight font-semibold line-clamp-2">
+                    {exp.metricLabel}
+                  </div>
+                </div>
+
+                {/* Role Title */}
+                <div className="flex items-center justify-between pt-3 border-t border-oled-border text-xs font-mono">
+                  <span className="text-oled-text font-bold truncate">{exp.role}</span>
+                  <ChevronRight className={`w-4 h-4 shrink-0 transition-transform ${activeTab === exp.id ? "rotate-90 text-signal-cyan" : "text-oled-muted"}`} />
+                </div>
+              </TiltCard>
+            </motion.div>
           ))}
         </div>
 
@@ -146,9 +162,12 @@ export const ExperienceSection: React.FC = () => {
         {experiences
           .filter((e) => e.id === activeTab)
           .map((exp) => (
-            <div
+            <motion.div
               key={exp.id}
-              className="p-6 sm:p-8 rounded-lg border border-oled-border bg-oled-card space-y-6 animate-in fade-in duration-200"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="p-6 sm:p-8 rounded-lg border border-oled-border bg-oled-card space-y-6"
             >
               {/* Panel Header */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-oled-border pb-4">
@@ -195,7 +214,7 @@ export const ExperienceSection: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
 
       </div>

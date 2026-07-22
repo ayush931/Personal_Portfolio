@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { FolderGit2, ExternalLink, Github, Terminal, Code2, Layers, Cpu, Check, Activity, Gamepad2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { TiltCard } from "./TiltCard";
 
 interface Project {
   id: string;
@@ -125,11 +127,17 @@ LIMIT 5;`,
   };
 
   return (
-    <section id="projects" className="w-full py-16 md:py-24 border-b border-oled-border">
+    <section id="projects" className="w-full py-16 md:py-24 border-b border-oled-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
+        >
           <div>
             <div className="text-xs font-mono text-signal-cyan uppercase tracking-widest flex items-center space-x-2">
               <FolderGit2 className="w-4 h-4" />
@@ -142,7 +150,7 @@ LIMIT 5;`,
           <p className="text-xs font-mono text-oled-muted max-w-md">
             // Multiplayer 2D engines, CRDT whiteboard sync, and low-latency dispatch systems.
           </p>
-        </div>
+        </motion.div>
 
         {/* Vertical Breathing Room Project Cards */}
         <div className="space-y-12">
@@ -150,146 +158,151 @@ LIMIT 5;`,
             const currentTab = activeTabMap[proj.id] || "overview";
 
             return (
-              <div
+              <motion.div
                 key={proj.id}
-                className="bg-oled-card border border-oled-border rounded-lg overflow-hidden transition-all hover:border-oled-hover"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                {/* Card Header & Controls Bar */}
-                <div className="px-6 py-4 border-b border-oled-border bg-oled-bg flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-signal-cyan font-bold">0{idx + 1}.</span>
-                    <h3 className="text-base font-bold text-oled-text font-sans">{proj.title}</h3>
-                    <span className="px-2 py-0.5 rounded bg-oled-surface border border-oled-border text-signal-green text-[10px]">
-                      {proj.badge}
-                    </span>
+                <TiltCard depth={10} className="bg-oled-card border border-oled-border rounded-lg overflow-hidden transition-all hover:border-oled-hover">
+                  {/* Card Header & Controls Bar */}
+                  <div className="px-6 py-4 border-b border-oled-border bg-oled-bg flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-signal-cyan font-bold">0{idx + 1}.</span>
+                      <h3 className="text-base font-bold text-oled-text font-sans">{proj.title}</h3>
+                      <span className="px-2 py-0.5 rounded bg-oled-surface border border-oled-border text-signal-green text-[10px]">
+                        {proj.badge}
+                      </span>
+                    </div>
+
+                    {/* Inspector View Mode Tabs */}
+                    <div className="flex items-center space-x-1 bg-oled-surface p-1 rounded border border-oled-border">
+                      <button
+                        onClick={() => setTab(proj.id, "overview")}
+                        className={`px-3 py-1 rounded text-[11px] transition-colors ${
+                          currentTab === "overview"
+                            ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
+                            : "text-oled-muted hover:text-oled-text"
+                        }`}
+                      >
+                        SPECIFICATION
+                      </button>
+                      <button
+                        onClick={() => setTab(proj.id, "code")}
+                        className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
+                          currentTab === "code"
+                            ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
+                            : "text-oled-muted hover:text-oled-text"
+                        }`}
+                      >
+                        <Code2 className="w-3 h-3" />
+                        <span>CODE_DIFF</span>
+                      </button>
+                      <button
+                        onClick={() => setTab(proj.id, "arch")}
+                        className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
+                          currentTab === "arch"
+                            ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
+                            : "text-oled-muted hover:text-oled-text"
+                        }`}
+                      >
+                        <Layers className="w-3 h-3" />
+                        <span>PIPELINE</span>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Inspector View Mode Tabs */}
-                  <div className="flex items-center space-x-1 bg-oled-surface p-1 rounded border border-oled-border">
-                    <button
-                      onClick={() => setTab(proj.id, "overview")}
-                      className={`px-3 py-1 rounded text-[11px] transition-colors ${
-                        currentTab === "overview"
-                          ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
-                          : "text-oled-muted hover:text-oled-text"
-                      }`}
-                    >
-                      SPECIFICATION
-                    </button>
-                    <button
-                      onClick={() => setTab(proj.id, "code")}
-                      className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
-                        currentTab === "code"
-                          ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
-                          : "text-oled-muted hover:text-oled-text"
-                      }`}
-                    >
-                      <Code2 className="w-3 h-3" />
-                      <span>CODE_DIFF</span>
-                    </button>
-                    <button
-                      onClick={() => setTab(proj.id, "arch")}
-                      className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
-                        currentTab === "arch"
-                          ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
-                          : "text-oled-muted hover:text-oled-text"
-                      }`}
-                    >
-                      <Layers className="w-3 h-3" />
-                      <span>PIPELINE</span>
-                    </button>
-                  </div>
-                </div>
+                  {/* Card Content Body based on Tab */}
+                  <div className="p-6 sm:p-8">
+                    {currentTab === "overview" && (
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div className="lg:col-span-8 space-y-4">
+                          <div className="text-sm font-mono text-signal-cyan">{proj.subtitle}</div>
+                          <p className="text-base text-oled-muted font-sans leading-relaxed">
+                            {proj.description}
+                          </p>
 
-                {/* Card Content Body based on Tab */}
-                <div className="p-6 sm:p-8">
-                  {currentTab === "overview" && (
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                      <div className="lg:col-span-8 space-y-4">
-                        <div className="text-sm font-mono text-signal-cyan">{proj.subtitle}</div>
-                        <p className="text-base text-oled-muted font-sans leading-relaxed">
-                          {proj.description}
-                        </p>
+                          <div className="space-y-2 pt-2">
+                            <div className="text-xs font-mono text-oled-text font-bold">KEY TECHNICAL HIGHLIGHTS:</div>
+                            <div className="space-y-2 font-sans text-sm text-oled-muted">
+                              {proj.keyFeatures.map((feat, fIdx) => (
+                                <div key={fIdx} className="flex items-start space-x-2">
+                                  <span className="text-signal-green font-mono font-bold">&gt;</span>
+                                  <span>{feat}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
 
-                        <div className="space-y-2 pt-2">
-                          <div className="text-xs font-mono text-oled-text font-bold">KEY TECHNICAL HIGHLIGHTS:</div>
-                          <div className="space-y-2 font-sans text-sm text-oled-muted">
-                            {proj.keyFeatures.map((feat, fIdx) => (
-                              <div key={fIdx} className="flex items-start space-x-2">
-                                <span className="text-signal-green font-mono font-bold">&gt;</span>
-                                <span>{feat}</span>
-                              </div>
-                            ))}
+                        {/* Right side metric box & links */}
+                        <div className="lg:col-span-4 p-6 bg-oled-surface rounded border border-oled-border space-y-6 text-center font-mono">
+                          <div>
+                            <div className="text-xs text-oled-muted">{proj.metricLabel}</div>
+                            <div className="text-4xl font-extrabold text-signal-cyan mt-1">{proj.metric}</div>
+                          </div>
+
+                          <div className="flex flex-col space-y-2 pt-4 border-t border-oled-border text-xs">
+                            <a
+                              href={proj.githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded bg-oled-bg border border-oled-border hover:border-signal-cyan text-oled-text hover:text-signal-cyan transition-all"
+                            >
+                              <Github className="w-4 h-4" />
+                              <span>VIEW_SOURCE_CODE</span>
+                            </a>
                           </div>
                         </div>
                       </div>
+                    )}
 
-                      {/* Right side metric box & links */}
-                      <div className="lg:col-span-4 p-6 bg-oled-surface rounded border border-oled-border space-y-6 text-center font-mono">
-                        <div>
-                          <div className="text-xs text-oled-muted">{proj.metricLabel}</div>
-                          <div className="text-4xl font-extrabold text-signal-cyan mt-1">{proj.metric}</div>
+                    {currentTab === "code" && (
+                      <div className="space-y-4 font-mono">
+                        <div className="flex items-center justify-between text-xs text-oled-muted">
+                          <span className="text-signal-green">&gt; core_implementation.ts</span>
+                          <span>LANG: TYPESCRIPT // STRICT</span>
                         </div>
+                        <pre className="p-4 rounded bg-oled-bg border border-oled-border text-xs text-oled-text overflow-x-auto leading-relaxed">
+                          <code>{proj.codeSnippet}</code>
+                        </pre>
+                      </div>
+                    )}
 
-                        <div className="flex flex-col space-y-2 pt-4 border-t border-oled-border text-xs">
-                          <a
-                            href={proj.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded bg-oled-bg border border-oled-border hover:border-signal-cyan text-oled-text hover:text-signal-cyan transition-all"
+                    {currentTab === "arch" && (
+                      <div className="space-y-4 font-mono">
+                        <div className="text-xs text-oled-muted">&gt; PIPELINE_FLOW_DIAGRAM</div>
+                        <div className="p-6 rounded bg-oled-bg border border-oled-border text-center space-y-4">
+                          <div className="text-sm text-signal-cyan font-bold">
+                            {proj.architectureDiagram}
+                          </div>
+                          <div className="text-xs text-oled-muted max-w-lg mx-auto">
+                            Decoupled architecture optimized for state determinism, low latency event loops, and horizontal scaling.
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Tags Footer */}
+                    <div className="mt-6 pt-4 border-t border-oled-border flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+                      <div className="flex flex-wrap gap-2">
+                        {proj.tags.map((t) => (
+                          <span
+                            key={t}
+                            className="px-2.5 py-1 rounded bg-oled-bg border border-oled-border text-oled-muted hover:text-signal-cyan transition-colors"
                           >
-                            <Github className="w-4 h-4" />
-                            <span>VIEW_SOURCE_CODE</span>
-                          </a>
-                        </div>
+                            #{t}
+                          </span>
+                        ))}
                       </div>
-                    </div>
-                  )}
-
-                  {currentTab === "code" && (
-                    <div className="space-y-4 font-mono">
-                      <div className="flex items-center justify-between text-xs text-oled-muted">
-                        <span className="text-signal-green">&gt; core_implementation.ts</span>
-                        <span>LANG: TYPESCRIPT // STRICT</span>
+                      <div className="text-oled-muted text-[11px]">
+                        STATUS: PRODUCTION_READY
                       </div>
-                      <pre className="p-4 rounded bg-oled-bg border border-oled-border text-xs text-oled-text overflow-x-auto leading-relaxed">
-                        <code>{proj.codeSnippet}</code>
-                      </pre>
-                    </div>
-                  )}
-
-                  {currentTab === "arch" && (
-                    <div className="space-y-4 font-mono">
-                      <div className="text-xs text-oled-muted">&gt; PIPELINE_FLOW_DIAGRAM</div>
-                      <div className="p-6 rounded bg-oled-bg border border-oled-border text-center space-y-4">
-                        <div className="text-sm text-signal-cyan font-bold">
-                          {proj.architectureDiagram}
-                        </div>
-                        <div className="text-xs text-oled-muted max-w-lg mx-auto">
-                          Decoupled architecture optimized for state determinism, low latency event loops, and horizontal scaling.
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tags Footer */}
-                  <div className="mt-6 pt-4 border-t border-oled-border flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
-                    <div className="flex flex-wrap gap-2">
-                      {proj.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="px-2.5 py-1 rounded bg-oled-bg border border-oled-border text-oled-muted hover:text-signal-cyan transition-colors"
-                        >
-                          #{t}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="text-oled-muted text-[11px]">
-                      STATUS: PRODUCTION_READY
                     </div>
                   </div>
-                </div>
-              </div>
+                </TiltCard>
+              </motion.div>
             );
           })}
         </div>

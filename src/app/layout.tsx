@@ -15,26 +15,32 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ayush Kumar | Tech Lead & Full-Stack Systems Engineer",
+  title: "Ayush Kumar | Full-Stack Software Engineer & Systems Architect",
   description:
-    "Tech Lead & Systems Engineer specializing in real-time sync engines, event-driven microservices, multi-user WebSocket architectures, and monorepos.",
+    "Full-Stack Software Engineer specializing in real-time sync engines, event-driven microservices, multi-user WebSocket architectures, FastAPI, and Turborepos.",
   keywords: [
     "Ayush Kumar",
-    "Tech Lead",
-    "Systems Engineer",
     "Full-Stack Engineer",
+    "Systems Architect",
     "Patna India",
     "WebSockets",
-    "Event Driven Architecture",
+    "FastAPI",
     "Turborepo",
     "Next.js",
     "React Native",
   ],
   authors: [{ name: "Ayush Kumar", url: "https://github.com/ayush931" }],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   openGraph: {
     title: "Ayush Kumar — Systems & Real-Time Engineer",
     description:
-      "Architecting event-driven pipelines, sub-100ms multi-user sync engines, and robust monorepo infrastructures.",
+      "Architecting event-driven pipelines, sub-100ms multi-user sync engines, and robust microservices.",
     type: "website",
   },
   robots: {

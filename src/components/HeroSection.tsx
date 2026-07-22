@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Terminal, ArrowDownRight, Github, Mail, ShieldCheck, Play, Download } from "lucide-react";
+import { Terminal, Github, Mail, ShieldCheck, Play, Download } from "lucide-react";
+import { motion } from "framer-motion";
 import { HeroTelemetryCanvas } from "./HeroTelemetryCanvas";
 
 interface HeroSectionProps {
@@ -10,11 +11,16 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
   return (
-    <section id="hero" className="w-full pt-3 pb-12 md:pt-5 md:pb-16 border-b border-oled-border">
+    <section id="hero" className="w-full pt-3 pb-12 md:pt-5 md:pb-16 border-b border-oled-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
         
         {/* Top Status & System Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs border-b border-oled-border/60 pb-3">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs border-b border-oled-border/60 pb-3"
+        >
           <div className="flex items-center space-x-3">
             <span className="flex items-center space-x-2 px-2.5 py-1 rounded bg-oled-surface border border-oled-border text-signal-green">
               <span className="w-2 h-2 rounded-full bg-signal-green animate-pulse" />
@@ -26,13 +32,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
             <ShieldCheck className="w-3.5 h-3.5 text-signal-cyan" />
             <span>FULL-STACK SOFTWARE ENGINEER // PATNA, IN</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Hero Headline & Intro Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Headline (Fluid Typographic Drama) */}
-          <div className="lg:col-span-7 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-7 space-y-6"
+          >
             <div className="space-y-2">
               <div className="text-xs font-mono text-signal-cyan uppercase tracking-widest flex items-center space-x-2">
                 <Terminal className="w-4 h-4" />
@@ -95,10 +106,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 <div className="text-lg font-bold text-signal-amber">MONOREPO / PERN</div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Signature Wow Moment (Telemetry Canvas) */}
-          <div className="lg:col-span-5 space-y-3">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-5 space-y-3"
+          >
             <div className="flex items-center justify-between text-xs font-mono text-oled-muted px-1">
               <span className="flex items-center space-x-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-signal-cyan" />
@@ -112,7 +128,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
             <div className="p-3 bg-oled-card border border-oled-border rounded text-[11px] font-mono text-oled-muted leading-relaxed">
               <span className="text-signal-green font-semibold">&gt; SYSTEM NOTE:</span> Hover over the canvas to register your local cursor into the multi-peer vector sync loop in real-time.
             </div>
-          </div>
+          </motion.div>
 
         </div>
 

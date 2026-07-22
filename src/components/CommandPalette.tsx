@@ -126,12 +126,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
     {
       id: "copy-email",
-      label: "exec: copy_email_to_clipboard() [ayushkumar93183@gmail.com]",
+      label: "exec: copy_email_to_clipboard() [ayushkumar9315983@gmail.com]",
       category: "Action",
       shortcut: "⌘ C",
       icon: <Copy className="w-4 h-4 text-signal-cyan" />,
       action: () => {
-        navigator.clipboard.writeText("ayushkumar93183@gmail.com");
+        navigator.clipboard.writeText("ayushkumar9315983@gmail.com");
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       },

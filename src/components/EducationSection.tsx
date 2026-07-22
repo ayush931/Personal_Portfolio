@@ -2,6 +2,8 @@
 
 import React from "react";
 import { GraduationCap, ShieldCheck, CheckCircle2, Building2, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
+import { TiltCard } from "./TiltCard";
 
 export const EducationSection: React.FC = () => {
   const credentials = [
@@ -47,11 +49,17 @@ export const EducationSection: React.FC = () => {
   ];
 
   return (
-    <section id="education" className="w-full py-16 md:py-24 border-b border-oled-border">
+    <section id="education" className="w-full py-16 md:py-24 border-b border-oled-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-oled-border/80 pb-6"
+        >
           <div>
             <div className="text-xs font-mono text-signal-cyan uppercase tracking-widest flex items-center space-x-2">
               <GraduationCap className="w-4 h-4" />
@@ -64,61 +72,68 @@ export const EducationSection: React.FC = () => {
           <p className="text-xs font-mono text-oled-muted max-w-md">
             // Highlighting university credentials at IIT Patna / IIIT Ranchi, AKU, and Patliputra University.
           </p>
-        </div>
+        </motion.div>
 
         {/* Credentials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {credentials.map((cred, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="p-6 bg-oled-card border border-oled-border rounded-lg space-y-6 flex flex-col justify-between hover:border-signal-cyan transition-all group shadow-sm hover:shadow-glow-cyan"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
             >
-              <div className="space-y-4">
-                {/* Header Status Badge */}
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className={`px-2.5 py-1 rounded border font-semibold flex items-center space-x-1.5 ${cred.highlightColor}`}>
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>{cred.status}</span>
-                  </span>
-                  <span className="text-oled-muted">{cred.period}</span>
-                </div>
-
-                {/* Highlighted Institution Box */}
-                <div className="p-3.5 rounded bg-oled-surface border border-oled-border/80 group-hover:border-signal-cyan/60 transition-colors space-y-1.5">
-                  <div className="text-[10px] font-mono text-oled-muted uppercase tracking-wider flex items-center space-x-1">
-                    <Building2 className="w-3 h-3 text-signal-cyan" />
-                    <span>INSTITUTION / UNIVERSITY</span>
-                  </div>
-                  <h3 className="text-lg font-extrabold text-signal-cyan font-sans tracking-tight leading-snug">
-                    {cred.institution}
-                  </h3>
-                  <div className="text-[11px] font-mono text-oled-muted flex items-center space-x-1">
-                    <MapPin className="w-3 h-3 text-signal-green" />
-                    <span>{cred.location}</span>
-                  </div>
-                </div>
-
-                {/* Degree & Program Info */}
-                <div className="space-y-1 pt-1">
-                  <div className="text-base font-bold text-oled-text font-sans">
-                    {cred.degree}
-                  </div>
-                  <div className="text-xs font-mono text-signal-amber">
-                    {cred.type}
-                  </div>
-                </div>
-
-                {/* Key Highlights */}
-                <div className="space-y-2 pt-3 border-t border-oled-border text-xs font-sans text-oled-muted leading-relaxed">
-                  {cred.highlights.map((h, hIdx) => (
-                    <div key={hIdx} className="flex items-start space-x-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-signal-cyan shrink-0 mt-0.5" />
-                      <span>{h}</span>
+              <TiltCard depth={12} className="h-full">
+                <div className="p-6 bg-oled-card border border-oled-border rounded-lg space-y-6 flex flex-col justify-between hover:border-signal-cyan transition-all group shadow-sm hover:shadow-glow-cyan h-full">
+                  <div className="space-y-4">
+                    {/* Header Status Badge */}
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className={`px-2.5 py-1 rounded border font-semibold flex items-center space-x-1.5 ${cred.highlightColor}`}>
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>{cred.status}</span>
+                      </span>
+                      <span className="text-oled-muted">{cred.period}</span>
                     </div>
-                  ))}
+
+                    {/* Highlighted Institution Box */}
+                    <div className="p-3.5 rounded bg-oled-surface border border-oled-border/80 group-hover:border-signal-cyan/60 transition-colors space-y-1.5">
+                      <div className="text-[10px] font-mono text-oled-muted uppercase tracking-wider flex items-center space-x-1">
+                        <Building2 className="w-3 h-3 text-signal-cyan" />
+                        <span>INSTITUTION / UNIVERSITY</span>
+                      </div>
+                      <h3 className="text-lg font-extrabold text-signal-cyan font-sans tracking-tight leading-snug">
+                        {cred.institution}
+                      </h3>
+                      <div className="text-[11px] font-mono text-oled-muted flex items-center space-x-1">
+                        <MapPin className="w-3 h-3 text-signal-green" />
+                        <span>{cred.location}</span>
+                      </div>
+                    </div>
+
+                    {/* Degree & Program Info */}
+                    <div className="space-y-1 pt-1">
+                      <div className="text-base font-bold text-oled-text font-sans">
+                        {cred.degree}
+                      </div>
+                      <div className="text-xs font-mono text-signal-amber">
+                        {cred.type}
+                      </div>
+                    </div>
+
+                    {/* Key Highlights */}
+                    <div className="space-y-2 pt-3 border-t border-oled-border text-xs font-sans text-oled-muted leading-relaxed">
+                      {cred.highlights.map((h, hIdx) => (
+                        <div key={hIdx} className="flex items-start space-x-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-signal-cyan shrink-0 mt-0.5" />
+                          <span>{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </TiltCard>
+            </motion.div>
           ))}
         </div>
 

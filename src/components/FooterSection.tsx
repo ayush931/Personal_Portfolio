@@ -29,7 +29,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
   };
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText("ayushkumar93183@gmail.com");
+    navigator.clipboard.writeText("ayushkumar9315983@gmail.com");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
@@ -79,7 +79,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
               <div className="flex items-center justify-between gap-2 pt-1">
                 {emailRevealed ? (
                   <span className="text-sm font-bold text-signal-cyan select-all">
-                    ayushkumar93183@gmail.com
+                    ayushkumar9315983@gmail.com
                   </span>
                 ) : (
                   <span className="text-sm text-oled-muted font-mono tracking-widest">

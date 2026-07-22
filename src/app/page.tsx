@@ -8,6 +8,7 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 import { InfrastructureSection } from "@/components/InfrastructureSection";
 import { EducationSection } from "@/components/EducationSection";
 import { FooterSection } from "@/components/FooterSection";
+import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("hero");
@@ -46,6 +47,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-oled-bg text-oled-text flex flex-col font-sans selection:bg-signal-cyan/20 selection:text-signal-cyan">
       
+      {/* Dynamic Telemetry Scroll Progress Bar */}
+      <ScrollProgressBar />
+
       {/* Header Diagnostic Bar */}
       <HeaderNav
         activeSection={activeSection}
