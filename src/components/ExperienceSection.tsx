@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Cpu, Server, GitBranch, ArrowRight, Zap, CheckCircle2, ChevronRight, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { TiltCard } from "./TiltCard";
+import { audioEngine } from "@/lib/audioEngine";
 
 interface ExperienceItem {
   id: string;
@@ -72,8 +73,13 @@ export const ExperienceSection: React.FC = () => {
     },
   ];
 
+  const handleSelectExperience = (id: string) => {
+    audioEngine.playHover();
+    setActiveTab(id);
+  };
+
   return (
-    <section id="experience" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid overflow-hidden">
+    <section id="experience" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid relative overflow-hidden select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Section Header */}
@@ -87,10 +93,10 @@ export const ExperienceSection: React.FC = () => {
           <div>
             <div className="text-xs font-mono text-signal-green uppercase tracking-widest flex items-center space-x-2">
               <Cpu className="w-4 h-4" />
-              <span>01 // METRICS-DRIVEN TIMELINE</span>
+              <span>01 // METRICS-DRIVEN PRODUCTION TIMELINE</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-oled-text font-sans mt-2">
-              Production Engineering & Microservices Experience
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-oled-text font-sans mt-2">
+              Production Engineering & Microservices
             </h2>
           </div>
 
@@ -100,7 +106,10 @@ export const ExperienceSection: React.FC = () => {
               download="Ayush_Kumar_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2.5 rounded bg-signal-green text-oled-bg font-mono font-bold text-xs hover:bg-signal-green/90 transition-all flex items-center space-x-2 shadow-glow-green"
+              onClick={() => audioEngine.playClick()}
+              onMouseEnter={() => audioEngine.playHover()}
+              data-cursor-text="RESUME"
+              className="px-5 py-3 rounded bg-signal-green text-oled-bg font-mono font-bold text-xs hover:bg-signal-green/90 transition-all flex items-center space-x-2 shadow-glow-green"
             >
               <Download className="w-4 h-4" />
               <span>DOWNLOAD_RESUME.PDF</span>
@@ -108,7 +117,7 @@ export const ExperienceSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Massive Typographic Metrics Overview Grid */}
+        {/* Massive Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {experiences.map((exp, index) => (
             <motion.div
@@ -117,20 +126,21 @@ export const ExperienceSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+              data-cursor-text="EXPLORE"
             >
               <TiltCard
-                onClick={() => setActiveTab(exp.id)}
+                onClick={() => handleSelectExperience(exp.id)}
                 depth={12}
-                className={`p-6 rounded-lg border transition-all cursor-pointer relative overflow-hidden group ${
+                className={`p-6 rounded-xl border transition-all cursor-pointer relative overflow-hidden group ${
                   activeTab === exp.id
                     ? "bg-oled-card border-signal-cyan shadow-glow-cyan"
-                    : "bg-oled-card/50 border-oled-border hover:border-oled-hover"
+                    : "bg-oled-card/50 border-oled-border hover:border-signal-cyan/50"
                 }`}
               >
                 {/* Top Meta */}
                 <div className="flex items-center justify-between text-xs font-mono text-oled-muted mb-3">
                   <span className="flex items-center space-x-2">
-                    <span className="w-2 h-2 rounded-full bg-signal-cyan" />
+                    <span className="w-2 h-2 rounded-full bg-signal-cyan animate-pulse" />
                     <span className="text-oled-text font-bold truncate max-w-[140px]">{exp.company}</span>
                   </span>
                   <span className="px-2 py-0.5 rounded bg-oled-surface border border-oled-border text-[10px]">
@@ -138,7 +148,7 @@ export const ExperienceSection: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Massive Metric Display with Scroll Glow */}
+                {/* Massive Metric Display */}
                 <div className="space-y-1 my-3">
                   <motion.div
                     whileInView={{ scale: [0.92, 1], opacity: [0, 1] }}
@@ -163,7 +173,7 @@ export const ExperienceSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Detailed Breakdown Panel for Active Experience */}
+        {/* Detailed Breakdown Panel */}
         {experiences
           .filter((e) => e.id === activeTab)
           .map((exp) => (
@@ -172,12 +182,12 @@ export const ExperienceSection: React.FC = () => {
               initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 0.4 }}
-              className="p-6 sm:p-8 rounded-lg border border-oled-border bg-oled-card space-y-6"
+              className="p-6 sm:p-8 rounded-xl border border-oled-border bg-oled-card space-y-6 shadow-2xl"
             >
               {/* Panel Header */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-oled-border pb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-oled-text font-sans">
+                  <h3 className="text-2xl font-bold text-oled-text font-sans">
                     {exp.role} @ <span className="text-signal-cyan">{exp.company}</span>
                   </h3>
                   <div className="text-xs font-mono text-signal-amber mt-1 flex items-center space-x-2">

@@ -55,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark`}>
       <body className="bg-oled-bg text-oled-text antialiased selection:bg-signal-cyan/20 selection:text-signal-cyan min-h-screen relative font-sans">
         <div className="noise-overlay" aria-hidden="true" />
         {children}

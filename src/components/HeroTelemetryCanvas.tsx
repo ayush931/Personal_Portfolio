@@ -18,7 +18,6 @@ export const HeroTelemetryCanvas: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [fps, setFps] = useState(60);
   const [packetCount, setPacketCount] = useState(14820);
-  const [activePeers, setActivePeers] = useState(3);
   const mousePosRef = useRef({ x: 150, y: 150, active: false });
 
   useEffect(() => {
@@ -32,41 +31,40 @@ export const HeroTelemetryCanvas: React.FC = () => {
     let frameCounter = 0;
     let fpsTimer = performance.now();
 
-    // Simulated peer cursors
+    // Simulated peer cursors with bounded targets
     const peers: PeerCursor[] = [
       {
         id: "p1",
         name: "node-mumbai.edge",
         color: "#5EEAD4",
-        x: 100,
-        y: 120,
-        targetX: 100,
-        targetY: 120,
+        x: 90,
+        y: 80,
+        targetX: 90,
+        targetY: 80,
         ping: 18,
       },
       {
         id: "p2",
         name: "node-singapore.edge",
         color: "#00FF9C",
-        x: 320,
-        y: 200,
-        targetX: 320,
-        targetY: 200,
+        x: 260,
+        y: 140,
+        targetX: 260,
+        targetY: 140,
         ping: 42,
       },
       {
         id: "p3",
         name: "node-frankfurt.edge",
         color: "#FFB020",
-        x: 220,
-        y: 310,
-        targetX: 220,
-        targetY: 310,
+        x: 180,
+        y: 220,
+        targetX: 180,
+        targetY: 220,
         ping: 98,
       },
     ];
 
-    // Grid layout points
     const resizeCanvas = () => {
       if (!containerRef.current || !canvas) return;
       const rect = containerRef.current.getBoundingClientRect();
@@ -100,7 +98,6 @@ export const HeroTelemetryCanvas: React.FC = () => {
       containerEl.addEventListener("mouseleave", handleMouseLeave);
     }
 
-    // Packet ticks animation
     let packetTimer = 0;
 
     const render = (time: number) => {
@@ -122,10 +119,10 @@ export const HeroTelemetryCanvas: React.FC = () => {
 
       ctx.clearRect(0, 0, width, height);
 
-      // Background subtle grid
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.03)";
+      // Clean tech background grid
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.035)";
       ctx.lineWidth = 1;
-      const gridSize = 40;
+      const gridSize = 36;
       for (let x = 0; x < width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -139,31 +136,31 @@ export const HeroTelemetryCanvas: React.FC = () => {
         ctx.stroke();
       }
 
-      // Update peer target locations periodically
+      // Periodically update peer positions inside bounds
       packetTimer += delta;
-      if (packetTimer > 0.8) {
+      if (packetTimer > 1.2) {
         packetTimer = 0;
         peers.forEach((peer) => {
-          peer.targetX = Math.random() * (width - 120) + 60;
-          peer.targetY = Math.random() * (height - 120) + 60;
+          peer.targetX = Math.random() * (width - 160) + 60;
+          peer.targetY = Math.random() * (height - 120) + 50;
         });
       }
 
-      // Move peers with spring interpolation
+      // Smooth lerp peers
       peers.forEach((peer) => {
-        peer.x += (peer.targetX - peer.x) * 0.05;
-        peer.y += (peer.targetY - peer.y) * 0.05;
+        peer.x += (peer.targetX - peer.x) * 0.04;
+        peer.y += (peer.targetY - peer.y) * 0.04;
       });
 
       // Local cursor position
       const localPos = mousePosRef.current.active
         ? mousePosRef.current
-        : { x: width * 0.65, y: height * 0.45, active: false };
+        : { x: width * 0.65, y: height * 0.48, active: false };
 
-      // Render vector connection lines & packet diffs
+      // Render vector connection lines
       const allNodes = [
         ...peers.map((p) => ({ x: p.x, y: p.y, color: p.color, label: p.name })),
-        { x: localPos.x, y: localPos.y, color: "#5EEAD4", label: "LOCAL_HOST (Ayush)" },
+        { x: localPos.x, y: localPos.y, color: "#5EEAD4", label: "LOCAL_HOST" },
       ];
 
       for (let i = 0; i < allNodes.length; i++) {
@@ -172,91 +169,84 @@ export const HeroTelemetryCanvas: React.FC = () => {
           const n2 = allNodes[j];
           const dist = Math.hypot(n2.x - n1.x, n2.y - n1.y);
 
-          if (dist < 320) {
+          if (dist < 280) {
             ctx.beginPath();
             ctx.moveTo(n1.x, n1.y);
             ctx.lineTo(n2.x, n2.y);
-            const alpha = (1 - dist / 320) * 0.25;
+            const alpha = (1 - dist / 280) * 0.3;
             ctx.strokeStyle = `rgba(94, 234, 212, ${alpha})`;
             ctx.setLineDash([4, 4]);
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Draw traveling packet tick
-            const tickPos = (time * 0.15 + i * 50) % 1;
+            // Traveling packet tick
+            const tickPos = (time * 0.2 + i * 40) % 1;
             const px = n1.x + (n2.x - n1.x) * tickPos;
             const py = n1.y + (n2.y - n1.y) * tickPos;
             ctx.fillStyle = n1.color;
             ctx.beginPath();
-            ctx.arc(px, py, 2, 0, Math.PI * 2);
+            ctx.arc(px, py, 2.5, 0, Math.PI * 2);
             ctx.fill();
           }
         }
       }
 
-      // Render Peers Cursors
+      // Render Peer Node Badges
       peers.forEach((peer) => {
-        // Cursor pointer SVG shape
         ctx.save();
         ctx.translate(peer.x, peer.y);
 
         // Radar ping ring
-        const ringRadius = (time * 0.05 + peer.ping) % 30;
+        const ringRadius = (time * 0.04 + peer.ping * 0.1) % 24;
         ctx.strokeStyle = peer.color;
-        ctx.globalAlpha = 1 - ringRadius / 30;
+        ctx.globalAlpha = 1 - ringRadius / 24;
         ctx.beginPath();
         ctx.arc(0, 0, ringRadius, 0, Math.PI * 2);
         ctx.stroke();
         ctx.globalAlpha = 1.0;
 
-        // Pointer triangle
+        // Node dot
         ctx.fillStyle = peer.color;
         ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(12, 10);
-        ctx.lineTo(5, 12);
-        ctx.closePath();
+        ctx.arc(0, 0, 4, 0, Math.PI * 2);
         ctx.fill();
 
-        // Label box
-        ctx.fillStyle = "#121215";
-        ctx.strokeStyle = "#24242C";
+        // Label tag box
+        ctx.fillStyle = "rgba(9, 9, 11, 0.9)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
         ctx.lineWidth = 1;
-        ctx.fillRect(14, 12, 140, 20);
-        ctx.strokeRect(14, 12, 140, 20);
+        ctx.fillRect(10, -12, 135, 20);
+        ctx.strokeRect(10, -12, 135, 20);
 
         ctx.fillStyle = peer.color;
-        ctx.font = "10px monospace";
-        ctx.fillText(`${peer.name}`, 20, 26);
+        ctx.font = "bold 9px monospace";
+        ctx.fillText(peer.name, 16, 2);
         ctx.fillStyle = "#A1A1AA";
-        ctx.fillText(`${peer.ping}ms`, 126, 26);
+        ctx.fillText(`${peer.ping}ms`, 116, 2);
 
         ctx.restore();
       });
 
-      // Render Local Host Cursor
+      // Render Local Host Node
       ctx.save();
       ctx.translate(localPos.x, localPos.y);
 
       ctx.fillStyle = "#5EEAD4";
       ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(12, 10);
-      ctx.lineTo(5, 12);
-      ctx.closePath();
+      ctx.arc(0, 0, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = "#09090B";
+      ctx.fillStyle = "rgba(9, 9, 11, 0.95)";
       ctx.strokeStyle = "#5EEAD4";
       ctx.lineWidth = 1;
-      ctx.fillRect(14, 12, 130, 22);
-      ctx.strokeRect(14, 12, 130, 22);
+      ctx.fillRect(12, -14, 125, 22);
+      ctx.strokeRect(12, -14, 125, 22);
 
       ctx.fillStyle = "#5EEAD4";
       ctx.font = "bold 10px monospace";
-      ctx.fillText("AYUSH_SYS", 20, 26);
+      ctx.fillText("AYUSH_SYS", 18, 1);
       ctx.fillStyle = "#00FF9C";
-      ctx.fillText("0ms SYNC", 90, 26);
+      ctx.fillText("0ms", 104, 1);
 
       ctx.restore();
 
@@ -278,22 +268,22 @@ export const HeroTelemetryCanvas: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[360px] sm:h-[420px] bg-oled-card border border-oled-border rounded-lg overflow-hidden select-none"
+      className="relative w-full h-[310px] sm:h-[350px] bg-oled-card border border-oled-border rounded-xl overflow-hidden select-none shadow-2xl"
     >
       {/* Real-time Telemetry Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
 
       {/* Hardware Telemetry Overlay Box Header */}
-      <div className="absolute top-3 left-3 right-3 flex items-center justify-between px-3 py-1.5 bg-oled-bg/80 backdrop-blur-md border border-oled-border rounded text-[11px] font-mono text-oled-muted pointer-events-none">
+      <div className="absolute top-3 left-3 right-3 flex items-center justify-between px-3 py-1.5 bg-oled-bg/85 backdrop-blur-md border border-oled-border rounded-lg text-[11px] font-mono text-oled-muted pointer-events-none">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1.5">
             <span className="w-2 h-2 rounded-full bg-signal-cyan animate-ping" />
             <span className="text-signal-cyan font-semibold">SYNC_ENGINE // VEC_DIFF</span>
           </div>
           <span className="hidden sm:inline text-oled-border">|</span>
-          <span className="hidden sm:inline">STATE: MULTIPLAYER_BROADCAST</span>
+          <span className="hidden sm:inline">STATE: BROADCAST</span>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <span>
             FPS: <strong className="text-signal-green font-mono">{fps}</strong>
           </span>
@@ -304,15 +294,15 @@ export const HeroTelemetryCanvas: React.FC = () => {
       </div>
 
       {/* Bottom Live Debugger Log Stream */}
-      <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between px-3 py-1.5 bg-oled-bg/90 backdrop-blur-md border border-oled-border rounded text-[10px] font-mono text-oled-muted pointer-events-none">
+      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between px-3 py-1.5 bg-oled-bg/90 backdrop-blur-md border border-oled-border rounded-lg text-[10px] font-mono text-oled-muted pointer-events-none">
         <div className="flex items-center space-x-2 truncate">
           <span className="text-signal-amber">&gt; websocket_channel[0]:</span>
           <span className="text-oled-text truncate">
-            CRDT state vector diff applied (32 bytes, ACK=0x9A)
+            CRDT state vector diff (ACK=0x9A)
           </span>
         </div>
-        <div className="hidden md:flex items-center space-x-2">
-          <span className="text-signal-green font-semibold">LATENCY BUDGET &lt; 100ms</span>
+        <div className="hidden sm:flex items-center space-x-2 shrink-0">
+          <span className="text-signal-green font-semibold">&lt; 100ms LATENCY</span>
         </div>
       </div>
     </div>

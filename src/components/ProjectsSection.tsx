@@ -1,34 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import { FolderGit2, ExternalLink, Github, Terminal, Code2, Layers, Cpu, Check, Activity, Gamepad2 } from "lucide-react";
+import { FolderGit2, ExternalLink, Terminal, Code2, Layers, Cpu, Check, Activity, Gamepad2, Maximize2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { TiltCard } from "./TiltCard";
-
-interface Project {
-  id: string;
-  title: string;
-  subtitle: string;
-  badge: string;
-  metric: string;
-  metricLabel: string;
-  description: string;
-  keyFeatures: string[];
-  tags: string[];
-  githubUrl: string;
-  demoUrl?: string;
-  codeSnippet: string;
-  architectureDiagram: string;
-}
+import { ProjectModal, ProjectData } from "./ProjectModal";
+import { audioEngine } from "@/lib/audioEngine";
+import { GithubIcon } from "./BrandIcons";
 
 export const ProjectsSection: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
   const [activeTabMap, setActiveTabMap] = useState<Record<string, "overview" | "code" | "arch">>({
     aetheria: "overview",
     excalidraw: "overview",
     ridesync: "overview",
   });
 
-  const projects: Project[] = [
+  const projects: ProjectData[] = [
     {
       id: "aetheria",
       title: "Aetheria",
@@ -123,11 +111,17 @@ LIMIT 5;`,
   ];
 
   const setTab = (projectId: string, tab: "overview" | "code" | "arch") => {
+    audioEngine.playHover();
     setActiveTabMap((prev) => ({ ...prev, [projectId]: tab }));
   };
 
+  const handleOpenInspector = (proj: ProjectData) => {
+    audioEngine.playClick();
+    setSelectedProject(proj);
+  };
+
   return (
-    <section id="projects" className="w-full py-16 md:py-24 border-b border-oled-border overflow-hidden">
+    <section id="projects" className="w-full py-16 md:py-24 border-b border-oled-border relative overflow-hidden select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Section Header */}
@@ -141,18 +135,18 @@ LIMIT 5;`,
           <div>
             <div className="text-xs font-mono text-signal-cyan uppercase tracking-widest flex items-center space-x-2">
               <FolderGit2 className="w-4 h-4" />
-              <span>02 // FEATURED PROJECTS & SYSTEMS</span>
+              <span>02 // FEATURED PROJECTS & ARCHITECTURES</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-oled-text font-sans mt-2">
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-oled-text font-sans mt-2">
               Production Architecture Deep Dives
             </h2>
           </div>
           <p className="text-xs font-mono text-oled-muted max-w-md">
-            // Multiplayer 2D engines, CRDT whiteboard sync, and low-latency dispatch systems.
+            // Click any project to launch the Active Theory full-screen HUD simulator & code inspector.
           </p>
         </motion.div>
 
-        {/* Vertical Breathing Room Project Cards */}
+        {/* Project Showcase Cards */}
         <div className="space-y-12">
           {projects.map((proj, idx) => {
             const currentTab = activeTabMap[proj.id] || "overview";
@@ -164,56 +158,69 @@ LIMIT 5;`,
                 whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                 viewport={{ once: false, amount: 0.15 }}
                 transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
+                data-cursor-text="INSPECT"
               >
-                <TiltCard depth={10} className="bg-oled-card border border-oled-border rounded-lg overflow-hidden transition-all hover:border-oled-hover">
+                <TiltCard depth={10} className="bg-oled-card border border-oled-border rounded-xl overflow-hidden transition-all hover:border-signal-cyan hover:shadow-glow-cyan">
                   {/* Card Header & Controls Bar */}
                   <div className="px-6 py-4 border-b border-oled-border bg-oled-bg flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
                     <div className="flex items-center space-x-3">
                       <span className="text-signal-cyan font-bold">0{idx + 1}.</span>
-                      <h3 className="text-base font-bold text-oled-text font-sans">{proj.title}</h3>
-                      <span className="px-2 py-0.5 rounded bg-oled-surface border border-oled-border text-signal-green text-[10px]">
+                      <h3 className="text-lg font-bold text-oled-text font-sans">{proj.title}</h3>
+                      <span className="px-2.5 py-0.5 rounded bg-oled-surface border border-oled-border text-signal-green text-[10px]">
                         {proj.badge}
                       </span>
                     </div>
 
-                    {/* Inspector View Mode Tabs */}
-                    <div className="flex items-center space-x-1 bg-oled-surface p-1 rounded border border-oled-border">
+                    {/* Inspector Tabs & Launch Modal Button */}
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1 bg-oled-surface p-1 rounded border border-oled-border">
+                        <button
+                          onClick={() => setTab(proj.id, "overview")}
+                          className={`px-3 py-1 rounded text-[11px] transition-colors ${
+                            currentTab === "overview"
+                              ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border shadow-glow-cyan"
+                              : "text-oled-muted hover:text-oled-text"
+                          }`}
+                        >
+                          SPECIFICATION
+                        </button>
+                        <button
+                          onClick={() => setTab(proj.id, "code")}
+                          className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
+                            currentTab === "code"
+                              ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border shadow-glow-cyan"
+                              : "text-oled-muted hover:text-oled-text"
+                          }`}
+                        >
+                          <Code2 className="w-3 h-3" />
+                          <span>CODE_DIFF</span>
+                        </button>
+                        <button
+                          onClick={() => setTab(proj.id, "arch")}
+                          className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
+                            currentTab === "arch"
+                              ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border shadow-glow-cyan"
+                              : "text-oled-muted hover:text-oled-text"
+                          }`}
+                        >
+                          <Layers className="w-3 h-3" />
+                          <span>PIPELINE</span>
+                        </button>
+                      </div>
+
                       <button
-                        onClick={() => setTab(proj.id, "overview")}
-                        className={`px-3 py-1 rounded text-[11px] transition-colors ${
-                          currentTab === "overview"
-                            ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
-                            : "text-oled-muted hover:text-oled-text"
-                        }`}
+                        onClick={() => handleOpenInspector(proj)}
+                        onMouseEnter={() => audioEngine.playHover()}
+                        className="px-3 py-1.5 rounded bg-signal-cyan/10 border border-signal-cyan text-signal-cyan hover:bg-signal-cyan hover:text-oled-bg font-bold transition-all text-[11px] flex items-center space-x-1 shadow-glow-cyan"
+                        title="Open Fullscreen Active Theory HUD Simulator"
                       >
-                        SPECIFICATION
-                      </button>
-                      <button
-                        onClick={() => setTab(proj.id, "code")}
-                        className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
-                          currentTab === "code"
-                            ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
-                            : "text-oled-muted hover:text-oled-text"
-                        }`}
-                      >
-                        <Code2 className="w-3 h-3" />
-                        <span>CODE_DIFF</span>
-                      </button>
-                      <button
-                        onClick={() => setTab(proj.id, "arch")}
-                        className={`px-3 py-1 rounded text-[11px] transition-colors flex items-center space-x-1 ${
-                          currentTab === "arch"
-                            ? "bg-oled-bg text-signal-cyan font-bold border border-oled-border"
-                            : "text-oled-muted hover:text-oled-text"
-                        }`}
-                      >
-                        <Layers className="w-3 h-3" />
-                        <span>PIPELINE</span>
+                        <Maximize2 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">HUD_SIMULATOR</span>
                       </button>
                     </div>
                   </div>
 
-                  {/* Card Content Body based on Tab */}
+                  {/* Card Content Body */}
                   <div className="p-6 sm:p-8">
                     {currentTab === "overview" && (
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -237,7 +244,7 @@ LIMIT 5;`,
                         </div>
 
                         {/* Right side metric box & links */}
-                        <div className="lg:col-span-4 p-6 bg-oled-surface rounded border border-oled-border space-y-6 text-center font-mono">
+                        <div className="lg:col-span-4 p-6 bg-oled-surface rounded-lg border border-oled-border space-y-6 text-center font-mono">
                           <div>
                             <div className="text-xs text-oled-muted">{proj.metricLabel}</div>
                             <div className="text-4xl font-extrabold text-signal-cyan mt-1">{proj.metric}</div>
@@ -248,11 +255,22 @@ LIMIT 5;`,
                               href={proj.githubUrl}
                               target="_blank"
                               rel="noopener noreferrer"
+                              onClick={() => audioEngine.playClick()}
+                              onMouseEnter={() => audioEngine.playHover()}
                               className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded bg-oled-bg border border-oled-border hover:border-signal-cyan text-oled-text hover:text-signal-cyan transition-all"
                             >
-                              <Github className="w-4 h-4" />
+                              <GithubIcon className="w-4 h-4" />
                               <span>VIEW_SOURCE_CODE</span>
                             </a>
+
+                            <button
+                              onClick={() => handleOpenInspector(proj)}
+                              onMouseEnter={() => audioEngine.playHover()}
+                              className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded bg-signal-cyan text-oled-bg font-bold hover:bg-signal-cyan/90 transition-all shadow-glow-cyan"
+                            >
+                              <Activity className="w-4 h-4" />
+                              <span>LAUNCH_SIMULATOR</span>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -308,6 +326,9 @@ LIMIT 5;`,
         </div>
 
       </div>
+
+      {/* Active Theory Inspector Modal */}
+      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
   );
 };

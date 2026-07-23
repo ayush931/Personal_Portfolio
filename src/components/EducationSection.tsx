@@ -4,6 +4,7 @@ import React from "react";
 import { GraduationCap, ShieldCheck, CheckCircle2, Building2, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { TiltCard } from "./TiltCard";
+import { audioEngine } from "@/lib/audioEngine";
 
 export const EducationSection: React.FC = () => {
   const credentials = [
@@ -49,7 +50,7 @@ export const EducationSection: React.FC = () => {
   ];
 
   return (
-    <section id="education" className="w-full py-16 md:py-24 border-b border-oled-border overflow-hidden">
+    <section id="education" className="w-full py-16 md:py-24 border-b border-oled-border relative overflow-hidden select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         
         {/* Section Header */}
@@ -65,12 +66,12 @@ export const EducationSection: React.FC = () => {
               <GraduationCap className="w-4 h-4" />
               <span>04 // ACADEMIC CREDENTIALS & INSTITUTIONS</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-oled-text font-sans mt-2">
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-oled-text font-sans mt-2">
               Institutions & Degrees
             </h2>
           </div>
           <p className="text-xs font-mono text-oled-muted max-w-md">
-            // Highlighting university credentials at IIT Patna / IIIT Ranchi, AKU, and Patliputra University.
+            // Academic credentials at IIT Patna / IIIT Ranchi, AKU, and Patliputra University.
           </p>
         </motion.div>
 
@@ -83,9 +84,13 @@ export const EducationSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
+              data-cursor-text="DEGREE"
             >
               <TiltCard depth={12} className="h-full">
-                <div className="p-6 bg-oled-card border border-oled-border rounded-lg space-y-6 flex flex-col justify-between hover:border-signal-cyan transition-all group shadow-sm hover:shadow-glow-cyan h-full">
+                <div
+                  onMouseEnter={() => audioEngine.playHover()}
+                  className="p-6 bg-oled-card border border-oled-border rounded-xl space-y-6 flex flex-col justify-between hover:border-signal-cyan transition-all group shadow-sm hover:shadow-glow-cyan h-full"
+                >
                   <div className="space-y-4">
                     {/* Header Status Badge */}
                     <div className="flex items-center justify-between text-xs font-mono">
@@ -97,12 +102,12 @@ export const EducationSection: React.FC = () => {
                     </div>
 
                     {/* Highlighted Institution Box */}
-                    <div className="p-3.5 rounded bg-oled-surface border border-oled-border/80 group-hover:border-signal-cyan/60 transition-colors space-y-1.5">
+                    <div className="p-4 rounded-lg bg-oled-surface border border-oled-border/80 group-hover:border-signal-cyan/60 transition-colors space-y-1.5">
                       <div className="text-[10px] font-mono text-oled-muted uppercase tracking-wider flex items-center space-x-1">
                         <Building2 className="w-3 h-3 text-signal-cyan" />
                         <span>INSTITUTION / UNIVERSITY</span>
                       </div>
-                      <h3 className="text-lg font-extrabold text-signal-cyan font-sans tracking-tight leading-snug">
+                      <h3 className="text-xl font-extrabold text-signal-cyan font-sans tracking-tight leading-snug">
                         {cred.institution}
                       </h3>
                       <div className="text-[11px] font-mono text-oled-muted flex items-center space-x-1">
@@ -113,7 +118,7 @@ export const EducationSection: React.FC = () => {
 
                     {/* Degree & Program Info */}
                     <div className="space-y-1 pt-1">
-                      <div className="text-base font-bold text-oled-text font-sans">
+                      <div className="text-lg font-bold text-oled-text font-sans">
                         {cred.degree}
                       </div>
                       <div className="text-xs font-mono text-signal-amber">

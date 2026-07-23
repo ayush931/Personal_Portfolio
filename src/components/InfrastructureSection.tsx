@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Terminal, Hash, Search, Shield, Cpu, Filter } from "lucide-react";
 import { motion } from "framer-motion";
+import { audioEngine } from "@/lib/audioEngine";
 
 interface SkillCategory {
   permissions: string;
@@ -117,8 +118,13 @@ export const InfrastructureSection: React.FC = () => {
     })
     .filter((cat) => cat.items.length > 0);
 
+  const handleFilterClick = (key: string) => {
+    audioEngine.playHover();
+    setActiveCategory(key);
+  };
+
   return (
-    <section id="infrastructure" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid overflow-hidden">
+    <section id="infrastructure" className="w-full py-16 md:py-24 border-b border-oled-border bg-tech-grid relative overflow-hidden select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
         
         {/* Section Header */}
@@ -134,12 +140,12 @@ export const InfrastructureSection: React.FC = () => {
               <Hash className="w-4 h-4" />
               <span>03 // TECHNICAL INFRASTRUCTURE MATRIX</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-oled-text font-sans mt-2">
-              Complete Skill & DevOps Matrix
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-oled-text font-sans mt-2">
+              Complete Stack & DevOps Matrix
             </h2>
           </div>
           <p className="text-xs font-mono text-oled-muted max-w-md">
-            // Styled like a POSIX terminal `ls -la /var/ayush/capabilities` output.
+            // POSIX terminal system output `ls -la /var/ayush/capabilities`.
           </p>
         </motion.div>
 
@@ -149,9 +155,8 @@ export const InfrastructureSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="p-4 bg-oled-card border border-oled-border rounded-lg flex flex-wrap items-center justify-between gap-4 font-mono text-xs"
+          className="p-4 bg-oled-card border border-oled-border rounded-xl flex flex-wrap items-center justify-between gap-4 font-mono text-xs"
         >
-          
           {/* Category Filters */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-oled-muted flex items-center space-x-1 mr-1">
@@ -159,10 +164,12 @@ export const InfrastructureSection: React.FC = () => {
               <span>FILTER:</span>
             </span>
             <button
-              onClick={() => setActiveCategory("all")}
+              onClick={() => handleFilterClick("all")}
+              onMouseEnter={() => audioEngine.playHover()}
+              data-cursor-text="ALL"
               className={`px-3 py-1 rounded transition-colors ${
                 activeCategory === "all"
-                  ? "bg-signal-cyan text-oled-bg font-bold"
+                  ? "bg-signal-cyan text-oled-bg font-bold shadow-glow-cyan"
                   : "bg-oled-surface text-oled-muted hover:text-oled-text border border-oled-border"
               }`}
             >
@@ -171,10 +178,12 @@ export const InfrastructureSection: React.FC = () => {
             {categories.map((c) => (
               <button
                 key={c.key}
-                onClick={() => setActiveCategory(c.key)}
+                onClick={() => handleFilterClick(c.key)}
+                onMouseEnter={() => audioEngine.playHover()}
+                data-cursor-text="FILTER"
                 className={`px-3 py-1 rounded transition-colors ${
                   activeCategory === c.key
-                    ? "bg-signal-cyan text-oled-bg font-bold"
+                    ? "bg-signal-cyan text-oled-bg font-bold shadow-glow-cyan"
                     : "bg-oled-surface text-oled-muted hover:text-oled-text border border-oled-border"
                 }`}
               >
@@ -196,26 +205,23 @@ export const InfrastructureSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* POSIX Terminal ls -la Output Box */}
+        {/* POSIX Terminal output */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.98, filter: "blur(4px)" }}
           whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
           viewport={{ once: false, amount: 0.15 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="bg-oled-card border border-oled-border rounded-lg overflow-hidden font-mono text-xs"
+          className="bg-oled-card border border-oled-border rounded-xl overflow-hidden font-mono text-xs shadow-2xl"
         >
-          
-          {/* Terminal Title Bar */}
-          <div className="px-4 py-2.5 bg-oled-bg border-b border-oled-border flex items-center justify-between text-oled-muted text-[11px]">
+          {/* Terminal Header */}
+          <div className="px-4 py-3 bg-oled-bg border-b border-oled-border flex items-center justify-between text-oled-muted text-[11px]">
             <div className="flex items-center space-x-2">
               <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
               <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
               <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
               <span className="ml-2 font-bold text-oled-text">ayush@patna-edge:~ /var/sys/stack</span>
             </div>
-            <div>
-              TOTAL {filteredCategories.length} DIRECTORIES
-            </div>
+            <div>TOTAL {filteredCategories.length} DIRECTORIES</div>
           </div>
 
           {/* Directory Content Listing */}
@@ -254,9 +260,11 @@ export const InfrastructureSection: React.FC = () => {
                     {cat.items.map((item) => (
                       <div
                         key={item}
-                        className="flex items-center space-x-2 p-2 rounded bg-oled-surface/60 border border-oled-border/60 hover:border-signal-cyan transition-colors"
+                        onMouseEnter={() => audioEngine.playHover()}
+                        className="flex items-center space-x-2 p-2.5 rounded bg-oled-surface/60 border border-oled-border/60 hover:border-signal-cyan hover:bg-oled-surface transition-colors cursor-pointer"
+                        data-cursor-text="STACK"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-signal-cyan" />
+                        <span className="w-2 h-2 rounded-full bg-signal-cyan animate-pulse" />
                         <span className="text-oled-text font-mono truncate">{item}</span>
                       </div>
                     ))}
@@ -267,7 +275,7 @@ export const InfrastructureSection: React.FC = () => {
           </div>
 
           {/* Terminal Footer */}
-          <div className="px-4 py-2 border-t border-oled-border bg-oled-bg text-[10px] text-oled-muted flex items-center justify-between">
+          <div className="px-4 py-2.5 border-t border-oled-border bg-oled-bg text-[10px] text-oled-muted flex items-center justify-between">
             <span className="text-signal-green">&gt; exit status 0 (system stack initialized)</span>
             <span>MEM_USAGE: 42MB</span>
           </div>
