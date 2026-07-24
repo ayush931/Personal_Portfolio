@@ -14,7 +14,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenCont
     const [activeTab, setActiveTab] = useState<"profile" | "systems" | "contact">("profile");
 
     return (
-        <section id="hero" className="relative min-h-screen pt-24 pb-16 overflow-hidden flex items-center">
+        <section id="hero" className="relative min-h-screen pt-[68px] pb-16 overflow-hidden flex items-center">
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-24 right-[10%] h-[560px] w-[560px] rounded-full bg-cyber-accent/10 blur-[180px]" />
                 <div className="absolute bottom-16 left-[8%] h-[420px] w-[420px] rounded-full bg-cyber-accent-dim/10 blur-[160px]" />
