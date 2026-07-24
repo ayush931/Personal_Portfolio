@@ -87,14 +87,10 @@ export default function Home() {
                     onOpenContact={() => setIsContactOpen(true)}
                 />
 
-                <motion.div
-                    className="relative z-10 flex-1"
-                >
-                    <motion.div
-                        ref={contentRef}
-                        style={{ opacity: heroOpacity }}
-                    >
+                <div className="relative z-10 flex-1">
+                    <div ref={contentRef}>
                         <motion.div
+                            style={{ opacity: heroOpacity }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 2 }}
@@ -121,8 +117,8 @@ export default function Home() {
                         <section id="contact">
                             <FooterSection onNavigate={handleNavigate} onOpenContact={() => setIsContactOpen(true)} />
                         </section>
-                    </motion.div>
-                </motion.div>
+                    </div>
+                </div>
 
                 <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
             </main>

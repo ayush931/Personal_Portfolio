@@ -229,8 +229,8 @@ export function Interactive3DWaveScene({ mousePos, activeSection }: { mousePos: 
         <div className="fixed inset-0 pointer-events-none z-0">
             <Canvas
                 camera={{ position: [0, 1.8, 8], fov: 50 }}
-                dpr={[1, 1]}
-                gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+                dpr={[1, 2]}
+                gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
             >
                 <CameraRig mouseRef={mouseRef} scrollRef={scrollRef} />
                 <ambientLight intensity={0.03} />
