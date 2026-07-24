@@ -1,170 +1,132 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Wifi, Download, Menu, X, Terminal } from "lucide-react";
+import React, { useState } from "react";
+import { Volume2, VolumeX, Menu, X, ChevronRight } from "lucide-react";
+import { useAudioFeedback } from "@/lib/useAudioFeedback";
 
 interface HeaderNavProps {
   activeSection: string;
   onNavigate: (sectionId: string) => void;
+  onOpenContact: () => void;
 }
 
-export const HeaderNav: React.FC<HeaderNavProps> = ({
-  activeSection,
-  onNavigate,
-}) => {
-  const [latency, setLatency] = useState<number>(14);
-  const [time, setTime] = useState<string>("");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+export const HeaderNav: React.FC<HeaderNavProps> = ({ activeSection, onNavigate, onOpenContact }) => {
+  const { isMuted, toggleMute, playHoverSound, playClickSound } = useAudioFeedback();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    // Update latency simulation
-    const interval = setInterval(() => {
-      setLatency(Math.floor(12 + Math.random() * 6));
-    }, 3000);
-
-    // Update clock
-    const updateTime = () => {
-      const now = new Date();
-      setTime(
-        now.toLocaleTimeString("en-US", {
-          hour12: false,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          timeZone: "Asia/Kolkata",
-        }) + " IST"
-      );
-    };
-    updateTime();
-    const clockInterval = setInterval(updateTime, 1000);
-
-    return () => {
-      clearInterval(interval);
-      clearInterval(clockInterval);
-    };
-  }, []);
-
-  const navLinks = [
-    { id: "hero", label: "00.SYSTEM" },
-    { id: "experience", label: "01.METRICS" },
-    { id: "projects", label: "02.ARCHITECTURES" },
-    { id: "infrastructure", label: "03.STACK" },
-    { id: "education", label: "04.CREDENTIALS" },
-    { id: "contact", label: "05.INIT" },
+  const navItems = [
+    { id: "hero", label: "Index" },
+    { id: "experience", label: "Experience" },
+    { id: "projects", label: "Work" },
+    { id: "infrastructure", label: "Stack" },
+    { id: "education", label: "Education" },
   ];
 
+  const handleNavClick = (id: string) => {
+    playClickSound();
+    onNavigate(id);
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-oled-bg/95 backdrop-blur-md border-b border-oled-border text-xs font-mono select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4">
+      <div className="absolute inset-x-4 sm:inset-x-8 top-3 h-[52px] rounded-2xl border border-cyber-border/45 bg-cyber-bg/65 backdrop-blur-2xl shadow-luxury" />
+      <div className="max-w-6xl mx-auto flex items-center justify-between font-sans text-xs">
         
-        {/* Left: Identity & Live Telemetry Badge */}
-        <div className="flex items-center space-x-3 shrink-0">
-          <button
-            onClick={() => onNavigate("hero")}
-            className="flex items-center space-x-2 text-oled-text hover:text-signal-cyan transition-colors"
-          >
-            <div className="w-2 h-2 rounded-full bg-signal-cyan animate-pulse" />
-            <span className="font-bold tracking-wider text-xs sm:text-sm">AYUSH_KUMAR</span>
-            <span className="hidden sm:inline text-oled-muted text-[10px] bg-oled-surface border border-oled-border px-1.5 py-0.5 rounded">
-              v2.5.0
-            </span>
-          </button>
-
-          <div className="hidden lg:flex items-center space-x-3 text-[11px] text-oled-muted pl-3 border-l border-oled-border">
-            <span className="flex items-center space-x-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-signal-green" />
-              <span className="text-oled-text">STATUS: ONLINE</span>
-            </span>
-            <span className="text-oled-border">|</span>
-            <span className="flex items-center space-x-1 text-oled-muted">
-              <Wifi className="w-3 h-3 text-signal-cyan" />
-              <span>{latency}ms EDGE</span>
-            </span>
-            <span className="text-oled-border">|</span>
-            <span className="text-oled-muted">{time || "12:00:00 IST"}</span>
+        <button
+          onClick={() => handleNavClick("hero")}
+          onMouseEnter={playHoverSound}
+          className="flex items-center space-x-2.5 text-left group focus:outline-none"
+        >
+          <div className="relative w-8 h-8 rounded-xl border border-cyber-accent/25 bg-cyber-surface text-cyber-accent-light font-mono text-xs font-bold flex items-center justify-center">
+            ak
           </div>
-        </div>
+          <span className="text-sm font-bold text-cyber-text tracking-tight group-hover:text-cyber-accent-light transition-colors">
+            ayush<span className="text-cyber-accent-light"> kumar</span>
+          </span>
+        </button>
 
-        {/* Center: Desktop Nav Links */}
-        <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
+        <nav className="hidden md:flex items-center space-x-7 text-xs font-medium">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id;
             return (
               <button
-                key={link.id}
-                onClick={() => onNavigate(link.id)}
-                className={`transition-colors py-1 relative text-[11px] lg:text-xs ${
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                onMouseEnter={playHoverSound}
+                className={`transition-all py-1 relative ${
                   isActive
-                    ? "text-signal-cyan font-semibold"
-                    : "text-oled-muted hover:text-oled-text"
+                    ? "text-cyber-accent-light font-bold"
+                    : "text-cyber-muted hover:text-cyber-text"
                 }`}
               >
-                {link.label}
+                {item.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-signal-cyan shadow-glow-cyan" />
+                  <span className="absolute -bottom-1 left-0 right-0 h-px bg-cyber-accent-light rounded-full" />
                 )}
               </button>
             );
           })}
         </nav>
 
-        {/* Right: Actions (Download Resume & Mobile Menu Toggle) */}
-        <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
+        <div className="flex items-center space-x-2.5 text-xs">
+          <button onClick={() => { toggleMute(); playClickSound(); }} onMouseEnter={playHoverSound} title={isMuted ? "Unmute Audio" : "Mute Audio"} className="p-2 rounded-xl border border-cyber-border/45 bg-cyber-surface/70 text-cyber-muted hover:text-cyber-text transition-all">
+            {!isMuted ? <Volume2 className="w-3.5 h-3.5 text-cyber-accent-light" /> : <VolumeX className="w-3.5 h-3.5" />}
+          </button>
+
+          <button
+            onClick={() => { playClickSound(); onOpenContact(); }}
+            onMouseEnter={playHoverSound}
+            className="hidden sm:inline-flex items-center text-cyber-text font-semibold hover:text-cyber-accent-light transition-colors px-4 py-2 rounded-xl border border-cyber-border/45 bg-cyber-surface/70 text-xs"
+          >
+            Contact
+          </button>
+
           <a
             href="/Ayush_Full_Stack_Developer_Resume.pdf"
             download="Ayush_Kumar_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded border border-signal-green/40 bg-signal-green/10 text-signal-green hover:bg-signal-green hover:text-oled-bg font-bold transition-all text-xs shadow-glow-green"
-            title="Download PDF Resume"
+            onMouseEnter={playHoverSound}
+            onClick={playClickSound}
+            className="flex items-center space-x-1 px-4 py-2 rounded-xl bg-cyber-text text-cyber-bg font-semibold hover:bg-cyber-accent-light transition-all text-xs"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>RESUME</span>
+            <span>Resume</span>
+            <ChevronRight className="w-3 h-3" />
           </a>
 
-          {/* Mobile Menu Toggle button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 rounded border border-oled-border bg-oled-card text-oled-muted hover:text-oled-text hover:border-signal-cyan"
-            aria-label="Toggle Navigation Menu"
+            className="md:hidden p-2 rounded-xl bg-cyber-surface/80 border border-cyber-border/50 text-cyber-text"
           >
-            {mobileMenuOpen ? <X className="w-4 h-4 text-signal-cyan" /> : <Menu className="w-4 h-4" />}
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
+
       </div>
 
-      {/* Mobile Drawer Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-oled-border bg-oled-card px-4 py-3 space-y-2 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="text-[10px] text-oled-muted flex items-center justify-between pb-2 border-b border-oled-border">
-            <span className="flex items-center space-x-1 text-signal-green">
-              <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse" />
-              <span>STATUS: ONLINE // PATNA, IN</span>
-            </span>
-            <span>{time}</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 pt-1">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
-              return (
-                <button
-                  key={link.id}
-                  onClick={() => {
-                    onNavigate(link.id);
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded text-left text-xs transition-colors font-mono ${
-                    isActive
-                      ? "bg-oled-surface text-signal-cyan font-bold border-l-2 border-signal-cyan"
-                      : "text-oled-muted hover:text-oled-text hover:bg-oled-surface/50"
-                  }`}
-                >
-                  <Terminal className="w-3 h-3 text-signal-cyan" />
-                  <span>{link.label}</span>
-                </button>
-              );
-            })}
+        <div className="md:hidden mt-2 glass-panel-3d rounded-2xl p-3 space-y-1.5 text-xs font-medium shadow-luxury">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              className={`w-full text-left px-4 py-2.5 rounded-xl transition-colors ${
+                activeSection === item.id
+                  ? "bg-cyber-accent/15 text-cyber-accent-light font-bold"
+                  : "text-cyber-muted hover:bg-cyber-surface/50"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+          <div className="pt-2 border-t border-cyber-border/30 flex flex-col space-y-1.5">
+            <button
+              onClick={() => { onOpenContact(); setMobileMenuOpen(false); }}
+              className="w-full py-2.5 text-center text-cyber-text font-bold bg-cyber-accent rounded-xl"
+            >
+              Contact
+            </button>
           </div>
         </div>
       )}

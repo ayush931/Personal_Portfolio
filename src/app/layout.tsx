@@ -31,9 +31,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Ayush Kumar", url: "https://github.com/ayush931" }],
   icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     shortcut: "/icon.svg",
     apple: "/icon.svg",
   },
@@ -56,7 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`}>
-      <body className="bg-oled-bg text-oled-text antialiased selection:bg-signal-cyan/20 selection:text-signal-cyan min-h-screen relative font-sans">
+      <body className="bg-[#050510] text-[#F1F5F9] antialiased selection:bg-cyber-accent/20 selection:text-cyber-accent-light min-h-screen relative font-sans">
         <div className="noise-overlay" aria-hidden="true" />
         {children}
       </body>

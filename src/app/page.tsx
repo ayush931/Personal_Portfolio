@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { LenisScrollProvider } from "@/components/LenisScrollProvider";
+import { CustomCursor } from "@/components/CustomCursor";
+import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { HeaderNav } from "@/components/HeaderNav";
 import { HeroSection } from "@/components/HeroSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
@@ -8,66 +13,119 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 import { InfrastructureSection } from "@/components/InfrastructureSection";
 import { EducationSection } from "@/components/EducationSection";
 import { FooterSection } from "@/components/FooterSection";
-import { ScrollProgressBar } from "@/components/ScrollProgressBar";
+import { ContactModal } from "@/components/ContactModal";
+
+const Interactive3DWaveScene = dynamic(
+    () => import("@/components/Interactive3DWaveScene").then((mod) => mod.Interactive3DWaveScene),
+    { ssr: false }
+);
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState("hero");
+    const [activeSection, setActiveSection] = useState("hero");
+    const [isContactOpen, setIsContactOpen] = useState(false);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [scrollY, setScrollY] = useState(0);
 
-  // Track active section on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["hero", "experience", "projects", "infrastructure", "education", "contact"];
-      const scrollPosition = window.scrollY + 200;
+    const { scrollYProgress } = useScroll();
+    const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.6]);
 
-      for (const sectionId of sections) {
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            setMousePos({
+                x: (e.clientX / window.innerWidth) * 2 - 1,
+                y: -(e.clientY / window.innerHeight) * 2 + 1,
+            });
+        };
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll();
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const sections = ["hero", "experience", "projects", "infrastructure", "education", "contact"];
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) setActiveSection(entry.target.id);
+                });
+            },
+            { threshold: 0.1 }
+        );
+        sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+        return () => observer.disconnect();
+    }, []);
+
+    const handleNavigate = (sectionId: string) => {
+        setActiveSection(sectionId);
         const el = document.getElementById(sectionId);
         if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
-            break;
-          }
+            const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({ top: y, behavior: "smooth" });
         }
-      }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return (
+        <LenisScrollProvider>
+            <ScrollProgressBar />
+            <main className="min-h-screen bg-cyber-bg text-cyber-text font-sans relative flex flex-col overflow-hidden">
+                <CustomCursor />
+                <Interactive3DWaveScene mousePos={mousePos} activeSection={activeSection} />
+                <HeaderNav
+                    activeSection={activeSection}
+                    onNavigate={handleNavigate}
+                    onOpenContact={() => setIsContactOpen(true)}
+                />
 
-  const handleNavigate = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+                <motion.div
+                    className="relative z-10 flex-1"
+                >
+                    <motion.div
+                        ref={contentRef}
+                        style={{ opacity: heroOpacity }}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 2 }}
+                        >
+                            <HeroSection onNavigate={handleNavigate} onOpenContact={() => setIsContactOpen(true)} />
+                        </motion.div>
 
-  return (
-    <main className="min-h-screen bg-oled-bg text-oled-text flex flex-col font-sans selection:bg-signal-cyan/20 selection:text-signal-cyan">
-      
-      {/* Dynamic Telemetry Scroll Progress Bar */}
-      <ScrollProgressBar />
+                        <section id="experience">
+                            <ExperienceSection />
+                        </section>
 
-      {/* Header Diagnostic Bar */}
-      <HeaderNav
-        activeSection={activeSection}
-        onNavigate={handleNavigate}
-      />
+                        <section id="projects">
+                            <ProjectsSection />
+                        </section>
 
-      {/* Main Sections Stream */}
-      <div className="flex-1">
-        <HeroSection onNavigate={handleNavigate} />
-        <ExperienceSection />
-        <ProjectsSection />
-        <InfrastructureSection />
-        <EducationSection />
-      </div>
+                        <section id="infrastructure">
+                            <InfrastructureSection />
+                        </section>
 
-      {/* Footer & Contact */}
-      <FooterSection onNavigate={handleNavigate} />
+                        <section id="education">
+                            <EducationSection />
+                        </section>
 
-    </main>
-  );
+                        <section id="contact">
+                            <FooterSection onNavigate={handleNavigate} onOpenContact={() => setIsContactOpen(true)} />
+                        </section>
+                    </motion.div>
+                </motion.div>
+
+                <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+            </main>
+        </LenisScrollProvider>
+    );
 }

@@ -37,7 +37,7 @@ export const HeroTelemetryCanvas: React.FC = () => {
       {
         id: "p1",
         name: "node-mumbai.edge",
-        color: "#5EEAD4",
+        color: "#D8C7A1",
         x: 100,
         y: 120,
         targetX: 100,
@@ -47,7 +47,7 @@ export const HeroTelemetryCanvas: React.FC = () => {
       {
         id: "p2",
         name: "node-singapore.edge",
-        color: "#00FF9C",
+        color: "#B7A176",
         x: 320,
         y: 200,
         targetX: 320,
@@ -57,7 +57,7 @@ export const HeroTelemetryCanvas: React.FC = () => {
       {
         id: "p3",
         name: "node-frankfurt.edge",
-        color: "#FFB020",
+        color: "#8B7A58",
         x: 220,
         y: 310,
         targetX: 220,
@@ -163,7 +163,7 @@ export const HeroTelemetryCanvas: React.FC = () => {
       // Render vector connection lines & packet diffs
       const allNodes = [
         ...peers.map((p) => ({ x: p.x, y: p.y, color: p.color, label: p.name })),
-        { x: localPos.x, y: localPos.y, color: "#5EEAD4", label: "LOCAL_HOST (Ayush)" },
+        { x: localPos.x, y: localPos.y, color: "#D8C7A1", label: "LOCAL_HOST (Ayush)" },
       ];
 
       for (let i = 0; i < allNodes.length; i++) {
@@ -238,7 +238,7 @@ export const HeroTelemetryCanvas: React.FC = () => {
       ctx.save();
       ctx.translate(localPos.x, localPos.y);
 
-      ctx.fillStyle = "#5EEAD4";
+      ctx.fillStyle = "#D8C7A1";
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(12, 10);
@@ -247,15 +247,15 @@ export const HeroTelemetryCanvas: React.FC = () => {
       ctx.fill();
 
       ctx.fillStyle = "#09090B";
-      ctx.strokeStyle = "#5EEAD4";
+      ctx.strokeStyle = "#D8C7A1";
       ctx.lineWidth = 1;
       ctx.fillRect(14, 12, 130, 22);
       ctx.strokeRect(14, 12, 130, 22);
 
-      ctx.fillStyle = "#5EEAD4";
+      ctx.fillStyle = "#D8C7A1";
       ctx.font = "bold 10px monospace";
       ctx.fillText("AYUSH_SYS", 20, 26);
-      ctx.fillStyle = "#00FF9C";
+      ctx.fillStyle = "#B7A176";
       ctx.fillText("0ms SYNC", 90, 26);
 
       ctx.restore();

@@ -1,0 +1,101 @@
+/* src/app/scroll.css */
+/* Modern 3D Portfolio Theme Styles inspired by Spur & MakeMePulse */
+
+:root {
+  --color-bg: #080808;
+  --color-surface: #181816;
+  --color-card: #111110;
+  --color-border: #2A2925;
+  --signal-cyan: #B7A176;
+  --signal-green: #B7A176;
+  --signal-amber: #D8C7A1;
+  --signal-purple: #8B7A58;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #080808;
+  color: #EEE9DF;
+}
+
+body {
+  overflow-x: hidden;
+  background: #080808;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(18, 18, 21, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(216, 199, 161, 0.1);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  background: rgba(24, 24, 28, 0.85);
+  border-color: rgba(216, 199, 161, 0.18);
+  box-shadow: 0 0 30px -14px rgba(216, 199, 161, 0.35);
+}
+
+/* Text Gradients */
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #EEE9DF 0%, #D8C7A1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #D8C7A1 0%, #8B7A58 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #EEE9DF 0%, #8B7A58 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glowing Border Effect */
+.glow-box-cyan {
+  box-shadow: 0 0 24px -14px rgba(216, 199, 161, 0.42);
+}
+
+.glow-box-green {
+  box-shadow: 0 0 24px -14px rgba(216, 199, 161, 0.42);
+}
+
+/* Smooth fade in animation utility */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pulse Keyframes */
+@keyframes ringPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+.animate-ring-pulse {
+  animation: ringPulse 4s ease-in-out infinite;
+}

@@ -69,7 +69,7 @@ export const TiltCard: React.FC<TiltCardProps> = ({
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10"
         style={{
-          background: `radial-gradient(400px circle at ${spotlightX} ${spotlightY}, rgba(94, 234, 212, 0.12), transparent 80%)`,
+          background: `radial-gradient(400px circle at ${spotlightX} ${spotlightY}, rgba(129, 140, 248, 0.15), transparent 80%)`,
         }}
       />
       <div style={{ transform: "translateZ(10px)", transformStyle: "preserve-3d" }}>

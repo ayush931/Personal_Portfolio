@@ -1,138 +1,144 @@
 "use client";
 
-import React from "react";
-import { Terminal, Github, Mail, ShieldCheck, Play, Download } from "lucide-react";
-import { motion } from "framer-motion";
-import { HeroTelemetryCanvas } from "./HeroTelemetryCanvas";
+import React, { useState } from "react";
+import { ArrowUpRight, Download, Github, Mail, MapPin, Play, ShieldCheck, Terminal } from "lucide-react";
+import { useAudioFeedback } from "@/lib/useAudioFeedback";
 
 interface HeroSectionProps {
-  onNavigate: (sectionId: string) => void;
+    onNavigate: (sectionId: string) => void;
+    onOpenContact: () => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
-  return (
-    <section id="hero" className="w-full pt-3 pb-12 md:pt-5 md:pb-16 border-b border-oled-border overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
-        
-        {/* Top Status & System Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs border-b border-oled-border/60 pb-3"
-        >
-          <div className="flex items-center space-x-3">
-            <span className="flex items-center space-x-2 px-2.5 py-1 rounded bg-oled-surface border border-oled-border text-signal-green">
-              <span className="w-2 h-2 rounded-full bg-signal-green animate-pulse" />
-              <span>STATUS: ONLINE</span>
-            </span>
-            <span className="text-oled-muted">DATE: DEC 2025</span>
-          </div>
-          <div className="flex items-center space-x-2 text-oled-muted text-[11px]">
-            <ShieldCheck className="w-3.5 h-3.5 text-signal-cyan" />
-            <span>FULL-STACK SOFTWARE ENGINEER // PATNA, IN</span>
-          </div>
-        </motion.div>
+export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenContact }) => {
+    const { playHoverSound, playClickSound } = useAudioFeedback();
+    const [activeTab, setActiveTab] = useState<"profile" | "systems" | "contact">("profile");
 
-        {/* Hero Headline & Intro Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Main Headline (Fluid Typographic Drama) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:col-span-7 space-y-6"
-          >
-            <div className="space-y-2">
-              <div className="text-xs font-mono text-signal-cyan uppercase tracking-widest flex items-center space-x-2">
-                <Terminal className="w-4 h-4" />
-                <span>Ayush Kumar — Full-Stack Software Engineer</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-oled-text font-sans leading-[1.08]">
-                I build the systems underneath <span className="text-transparent bg-clip-text bg-gradient-to-r from-signal-cyan via-signal-green to-signal-amber">real-time products</span>—sync engines, event pipelines, and architectures that refuse to lag.
-              </h1>
+    return (
+        <section id="hero" className="relative min-h-screen pt-24 pb-16 overflow-hidden flex items-center">
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-24 right-[10%] h-[560px] w-[560px] rounded-full bg-cyber-accent/10 blur-[180px]" />
+                <div className="absolute bottom-16 left-[8%] h-[420px] w-[420px] rounded-full bg-cyber-accent-dim/10 blur-[160px]" />
             </div>
 
-            <p className="text-base sm:text-lg text-oled-muted leading-relaxed font-sans max-w-2xl">
-              Specialized in PERN/MERN microservices, sub-100ms multi-user WebSocket state engines, Turborepo monorepos, and FastAPI document pipelines. Cutting processing time by 45% and boosting query speed by 25%.
-            </p>
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    <div className="lg:col-span-7 space-y-9">
+                        <div className="flex flex-wrap items-center gap-2.5 text-[10px] uppercase tracking-[0.22em] text-cyber-muted">
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-cyber-border/60 bg-cyber-bg/45 px-3 py-1.5 backdrop-blur-xl">
+                                <span className="h-1 w-1 rounded-full bg-cyber-accent-light" />
+                                Available for engineering roles
+                            </span>
+                            <span className="hidden sm:inline-flex items-center gap-1">
+                                <MapPin className="h-3 w-3 text-cyber-accent-light" />
+                                Patna, Bihar
+                            </span>
+                        </div>
 
-            {/* Terminal Action CTAs */}
-            <div className="pt-2 flex flex-wrap gap-4 font-mono text-xs">
-              <a
-                href="/Ayush_Full_Stack_Developer_Resume.pdf"
-                download="Ayush_Kumar_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 px-5 py-3 rounded bg-signal-green text-oled-bg font-bold hover:bg-signal-green/90 transition-all hover:scale-[1.02] shadow-glow-green"
-              >
-                <Download className="w-4 h-4" />
-                <span>&gt; download_resume.pdf()</span>
-              </a>
+                        <div className="space-y-4">
+                            <p className="text-xs uppercase tracking-[0.3em] text-cyber-accent-light">Ayush Kumar</p>
+                            <h1 className="max-w-4xl text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.1] tracking-[-0.04em] text-cyber-text">
+                                Building real-time systems with cinematic depth.
+                            </h1>
+                            <p className="max-w-2xl text-sm sm:text-base leading-relaxed text-cyber-muted">
+                                Full-Stack Engineer building scalable logistics and SaaS platforms with React.js, Next.js, Node.js, secure authentication, event-driven microservices, and CI/CD delivery.
+                            </p>
+                        </div>
 
-              <button
-                onClick={() => onNavigate("experience")}
-                className="flex items-center space-x-2 px-5 py-3 rounded bg-signal-cyan text-oled-bg font-bold hover:bg-signal-cyan/90 transition-all hover:scale-[1.02] shadow-glow-cyan"
-              >
-                <Play className="w-4 h-4 fill-current" />
-                <span>&gt; view_system_metrics()</span>
-              </button>
+                        <div className="grid grid-cols-3 gap-4 max-w-xl">
+                            {[
+                                ["45%", "Processing cut"],
+                                ["25%", "Query gain"],
+                                ["50+", "Realtime users"],
+                            ].map(([value, label]) => (
+                                <div key={label} className="rounded-xl border border-cyber-border/45 bg-cyber-bg/45 p-3 backdrop-blur-xl">
+                                    <div className="font-mono text-xl sm:text-2xl font-black text-gradient-warm">{value}</div>
+                                    <div className="mt-1 text-[10px] uppercase tracking-wider text-cyber-muted">{label}</div>
+                                </div>
+                            ))}
+                        </div>
 
-              <a
-                href="https://github.com/ayush931"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 px-5 py-3 rounded border border-oled-border bg-oled-card hover:bg-oled-surface hover:border-signal-cyan text-oled-text hover:text-signal-cyan transition-all"
-              >
-                <Github className="w-4 h-4" />
-                <span>&gt; github_repos()</span>
-              </a>
+                        <div className="flex flex-wrap gap-2 text-xs">
+                            <button onClick={() => { playClickSound(); onOpenContact(); }} onMouseEnter={playHoverSound} className="group inline-flex items-center gap-2 rounded-full bg-cyber-text px-5 py-2.5 font-semibold text-cyber-bg transition hover:bg-cyber-accent-light">
+                                <Mail className="h-3.5 w-3.5" />
+                                Contact Me
+                            </button>
+                            <a href="/Ayush_Full_Stack_Developer_Resume.pdf" download="Ayush_Kumar_Resume.pdf" target="_blank" rel="noopener noreferrer" onMouseEnter={playHoverSound} onClick={playClickSound} className="inline-flex items-center gap-2 rounded-full border border-cyber-border/60 bg-cyber-bg/50 px-5 py-2.5 font-semibold text-cyber-text backdrop-blur-xl transition hover:border-cyber-accent/35">
+                                <Download className="h-3.5 w-3.5 text-cyber-accent-light" />
+                                Resume
+                            </a>
+                            <a href="https://github.com/ayush931" target="_blank" rel="noopener noreferrer" onMouseEnter={playHoverSound} className="inline-flex items-center gap-2 rounded-full border border-cyber-border/60 bg-cyber-bg/35 px-4 py-2.5 font-semibold text-cyber-muted backdrop-blur-xl transition hover:text-cyber-text">
+                                <Github className="h-3.5 w-3.5" />
+                                GitHub
+                                <ArrowUpRight className="h-3 w-3" />
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="lg:col-span-5">
+                        <div className="glass-panel-3d rounded-2xl border border-cyber-border/50 p-5">
+                            <div className="relative z-10 space-y-5">
+                                <div className="flex items-center justify-between border-b border-cyber-border/35 pb-3">
+                                    <div className="flex items-center gap-2 text-xs font-bold text-cyber-text">
+                                        <Terminal className="h-3.5 w-3.5 text-cyber-accent-light" />
+                                        Systems Console
+                                    </div>
+                                    <span className="rounded-full border border-cyber-accent/20 bg-cyber-accent/10 px-2.5 py-0.5 text-[9px] uppercase tracking-wider text-cyber-accent-light">online</span>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-1 rounded-xl border border-cyber-border/35 bg-cyber-bg/40 p-1 text-[10px]">
+                                    {[
+                                        ["profile", "Profile"],
+                                        ["systems", "Systems"],
+                                        ["contact", "Contact"],
+                                    ].map(([id, label]) => (
+                                        <button key={id} onClick={() => setActiveTab(id as typeof activeTab)} className={`rounded-lg px-2 py-1.5 transition ${activeTab === id ? "bg-cyber-text text-cyber-bg font-bold" : "text-cyber-muted hover:text-cyber-text"}`}>
+                                            {label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {activeTab === "profile" && (
+                                    <div className="rounded-xl border border-cyber-border/35 bg-cyber-bg/45 p-4 font-mono text-[11px] leading-5 text-cyber-muted">
+                                        <div className="text-cyber-accent-light">const profile = &#123;</div>
+                                        <div className="pl-4">role: <span className="text-cyber-text">&quot;Full-Stack Software Engineer&quot;</span>,</div>
+                                        <div className="pl-4">focus: <span className="text-cyber-text">&quot;PERN / MERN / Microservices&quot;</span>,</div>
+                                        <div className="pl-4">education: <span className="text-cyber-text">&quot;MCA + MBA&quot;</span>,</div>
+                                        <div className="text-cyber-accent-light">&#125;</div>
+                                    </div>
+                                )}
+
+                                {activeTab === "systems" && (
+                                    <div className="space-y-2 text-xs text-cyber-muted">
+                                        {[
+                                            "Event-driven services with RabbitMQ and Docker",
+                                            "Sub-100ms collaborative WebSocket state sync",
+                                            "CI/CD delivery across AWS and Vercel platforms",
+                                        ].map((item) => (
+                                            <div key={item} className="flex items-start gap-2.5 rounded-xl border border-cyber-border/30 bg-cyber-bg/35 p-2.5">
+                                                <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyber-accent-light" />
+                                                <span>{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {activeTab === "contact" && (
+                                    <div className="rounded-xl border border-cyber-border/35 bg-cyber-bg/45 p-4 text-xs text-cyber-muted space-y-2">
+                                        <a className="block hover:text-cyber-accent-light" href="mailto:ayushkumar9315983@gmail.com">ayushkumar9315983@gmail.com</a>
+                                        <a className="block hover:text-cyber-accent-light" href="tel:+917070472634">+91 70704 72634</a>
+                                        <a className="block hover:text-cyber-accent-light" href="https://www.linkedin.com/in/ayush-kumar-94310522a/" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+                                    </div>
+                                )}
+
+                                <button onClick={() => { playClickSound(); onNavigate("experience"); }} onMouseEnter={playHoverSound} className="flex w-full items-center justify-center gap-2 rounded-full border border-cyber-border/45 bg-cyber-surface/70 py-2.5 text-[10px] font-bold uppercase tracking-[0.18em] text-cyber-text transition hover:border-cyber-accent/35">
+                                    <Play className="h-3 w-3 fill-current" />
+                                    View Experience
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            {/* Quick Metrics Bar */}
-            <div className="pt-4 grid grid-cols-3 gap-4 border-t border-oled-border/60 text-xs font-mono">
-              <div>
-                <div className="text-oled-muted text-[10px]">SYNC_LATENCY</div>
-                <div className="text-lg font-bold text-signal-cyan">&lt; 100ms</div>
-              </div>
-              <div>
-                <div className="text-oled-muted text-[10px]">WEBSOCKET_FPS</div>
-                <div className="text-lg font-bold text-signal-green">60 FPS</div>
-              </div>
-              <div>
-                <div className="text-oled-muted text-[10px]">ARCH_TYPE</div>
-                <div className="text-lg font-bold text-signal-amber">MONOREPO / PERN</div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column: Signature Wow Moment (Telemetry Canvas) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-5 space-y-3"
-          >
-            <div className="flex items-center justify-between text-xs font-mono text-oled-muted px-1">
-              <span className="flex items-center space-x-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-signal-cyan" />
-                <span>LIVE TELEMETRY CANVAS</span>
-              </span>
-              <span className="text-[10px] text-signal-cyan">&gt; INTERACTIVE_CANVAS</span>
-            </div>
-
-            <HeroTelemetryCanvas />
-
-            <div className="p-3 bg-oled-card border border-oled-border rounded text-[11px] font-mono text-oled-muted leading-relaxed">
-              <span className="text-signal-green font-semibold">&gt; SYSTEM NOTE:</span> Hover over the canvas to register your local cursor into the multi-peer vector sync loop in real-time.
-            </div>
-          </motion.div>
-
-        </div>
-
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
