@@ -25,7 +25,7 @@ export const InfrastructureSection: React.FC = () => {
     {
       name: "Frontend Architecture",
       key: "frontend",
-      items: ["React.js", "Next.js", "React Native (Expo)", "HTML5 / CSS3", "Tailwind CSS", "Redux Toolkit", "GraphQL"],
+      items: ["React.js", "Next.js", "React Native (Expo)", "HTML5", "CSS3", "Tailwind CSS", "Redux Toolkit", "GraphQL"],
     },
     {
       name: "Backend & Microservices",
@@ -33,9 +33,9 @@ export const InfrastructureSection: React.FC = () => {
       items: ["Node.js", "Express.js", "FastAPI", "RESTful APIs", "WebSockets", "Event-Driven Architecture"],
     },
     {
-      name: "Auth & Security",
+      name: "Authentication & Security",
       key: "security",
-      items: ["JWT", "OAuth 2.0", "RBAC"],
+      items: ["JSON Web Token (JWT)", "Open Authorization (OAuth 2.0)", "Role-Based Access Control (RBAC)"],
     },
     {
       name: "Databases & ORMs",
@@ -43,9 +43,9 @@ export const InfrastructureSection: React.FC = () => {
       items: ["PostgreSQL", "MongoDB", "MySQL", "Redis", "Prisma ORM", "Neon Serverless PostgreSQL"],
     },
     {
-      name: "DevOps & Cloud",
+      name: "DevOps & Cloud Operations",
       key: "devops",
-      items: ["Docker", "Kubernetes", "AWS (EC2, S3)", "CI/CD (GitHub Actions)", "Vercel"],
+      items: ["Docker", "Kubernetes", "Amazon Web Services (AWS) (EC2, S3)", "CI/CD (GitHub Actions)", "Vercel"],
     },
     {
       name: "Message Brokers",
@@ -53,9 +53,9 @@ export const InfrastructureSection: React.FC = () => {
       items: ["RabbitMQ", "Apache Kafka"],
     },
     {
-      name: "Tools & Practices",
+      name: "Developer Tools",
       key: "tools",
-      items: ["Git / GitHub", "Postman", "Turborepo (Monorepos)", "Linux", "Agile / Scrum", "System Design"],
+      items: ["Git", "GitHub", "Postman", "Turborepo", "Monorepo Architecture", "Linux", "Agile/Scrum", "System Design"],
     },
   ];
 

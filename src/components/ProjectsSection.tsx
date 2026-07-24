@@ -31,16 +31,16 @@ export const ProjectsSection: React.FC = () => {
   const projects: Project[] = [
     {
       id: "aetheria",
-      title: "Aetheria Sandbox Engine",
+      title: "Aetheria – Real-Time 2D Multiplayer Sandbox World",
       subtitle: "Real-Time 2D Multiplayer World Engine & WebRTC Voice Mesh",
-      badge: "60 FPS FOR 50+ PLAYERS",
+      badge: "60 FPS FOR 500+ PLAYERS",
       metric: "60 FPS",
       metricLabel: "Spatial vector sync & WebRTC voice mesh",
-      description: "Built a real-time sync pipeline (Socket.io, Phaser.js) sustaining 60 FPS for 50+ concurrent players with WebRTC proximity voice chat, multiplayer canvas interactions, and drag-and-drop customization.",
+      description: "Built a real-time sync pipeline (Socket.io, Phaser.js) sustaining 60 FPS for 500+ concurrent players with WebRTC proximity voice chat, multiplayer canvas interactions, and drag-and-drop customization.",
       keyFeatures: [
-        "Built a real-time spatial sync loop in Socket.io & Phaser.js broadcasting 60 FPS position deltas.",
-        "Integrated WebRTC spatial proximity voice chat dynamically scaling audio gain based on player distance.",
-        "Architected Neon Serverless PostgreSQL persistence with zero-config local fallback, cutting setup time by 90%.",
+        "Built a real-time sync pipeline (Socket.io, Phaser.js) sustaining 60 FPS for 500+ concurrent players.",
+        "Added WebRTC proximity voice chat, multiplayer canvas interactions, and drag-and-drop customization.",
+        "Built a zero-config Neon PostgreSQL layer with automated local fallback – cut developer onboarding time 90%.",
       ],
       tags: ["Phaser.js", "Socket.io", "WebRTC", "Neon PostgreSQL", "TypeScript", "HTML5 Canvas", "Node.js"],
       githubUrl: "https://github.com/ayush931/aetheria-sandbox",
@@ -57,19 +57,19 @@ export const ProjectsSection: React.FC = () => {
     mutePeerAudio(player2.peerId);
   }
 }`,
-      architectureDiagram: "Phaser.js Canvas &#8596; Socket.io State Loop &#8596; WebRTC P2P Voice &#8596; Neon Serverless DB",
+      architectureDiagram: "Phaser.js Canvas ↔ Socket.io State Loop ↔ WebRTC P2P Voice ↔ Neon Serverless DB",
     },
     {
       id: "excalidraw",
-      title: "Excalidraw CRDT Sync Engine",
+      title: "Excalidraw Clone – Real-Time Collaborative Whiteboard",
       subtitle: "Sub-100ms Collaborative Whiteboard & State Reconciliation",
       badge: "SUB-100MS MULTI-USER SYNC",
       metric: "< 100ms",
       metricLabel: "CRDT vector diff & memoization speedup",
       description: "Built a collaborative whiteboard (Next.js, WebSockets, Turborepo) with sub-100ms multi-user sync, optimized rendering via React memoization and state diffing, reducing re-renders by 60% and latency by 40%.",
       keyFeatures: [
-        "Optimized canvas rendering using React memoization & selective state diffing, reducing re-renders by 60% and latency by 40%.",
-        "WebSocket broadcast architecture with state reconciliation algorithms for conflict-free concurrent editing.",
+        "Built a collaborative whiteboard (Next.js, WebSockets, Turborepo) with sub-100ms multi-user sync.",
+        "Optimized rendering via React memoization and state diffing – cut re-renders 60%, latency 40%.",
         "Monorepo infrastructure powered by Turborepo & Bun for instant incremental builds.",
       ],
       tags: ["Next.js", "WebSockets", "Turborepo", "Bun", "TypeScript", "React Memoization", "CRDT"],
@@ -87,20 +87,20 @@ export const ProjectsSection: React.FC = () => {
   });
   return { ...prevState, elements: nextElements, lastACK: performance.now() };
 }`,
-      architectureDiagram: "Client Canvas &#8594; WebSocket Gateway &#8594; Redis Pub/Sub &#8594; Broadcast Delta to Peers",
+      architectureDiagram: "Client Canvas → WebSocket Gateway → Redis Pub/Sub → Broadcast Delta to Peers",
     },
     {
       id: "ridesync",
-      title: "RideSync Dispatch Platform",
+      title: "RideSync – Real-Time Ride Booking Application",
       subtitle: "Real-Time GPS Location Telemetry & Ride Dispatch Engine",
       badge: "SUB-200MS ROUTING TIME",
       metric: "< 200ms",
       metricLabel: "Driver proximity search & spatial DB routing",
       description: "Built a cross-platform ride-hailing app (React Native, Expo) with live GPS tracking, WebSocket messaging, and sub-200ms driver proximity spatial queries via Neon PostgreSQL.",
       keyFeatures: [
+        "Built a cross-platform ride-hailing app (React Native, Expo) with live GPS tracking and WebSocket messaging.",
+        "Added secure auth via Clerk and optimized Neon PostgreSQL queries – sub-200ms round-trip times.",
         "Bidirectional WebSocket messaging layer for high-frequency GPS position streaming.",
-        "Optimized Neon PostgreSQL spatial queries delivering sub-200ms driver proximity matches.",
-        "Cross-platform mobile architecture built with React Native, Expo, and Clerk Auth.",
       ],
       tags: ["React Native", "Expo", "WebSockets", "Neon PostgreSQL", "Clerk Auth", "Express.js"],
       githubUrl: "https://github.com/ayush931/ridesync",
@@ -110,7 +110,7 @@ FROM driver_telemetry
 WHERE is_available = true
   AND ST_DWithin(location, ST_MakePoint($1, $2)::geography, 5000)
 ORDER BY dist ASC LIMIT 5;`,
-      architectureDiagram: "Expo Mobile (GPS) &#8596; Clerk Auth &#8596; WebSocket Gateway &#8596; Neon PostgreSQL Query",
+      architectureDiagram: "Expo Mobile (GPS) ↔ Clerk Auth ↔ WebSocket Gateway ↔ Neon PostgreSQL Query",
     },
   ];
 

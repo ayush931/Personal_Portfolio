@@ -8,13 +8,15 @@ export const EducationSection: React.FC = () => {
   const degrees = [
     {
       degree: "Master of Computer Applications (MCA)",
-      institution: "IIT Patna & IIIT Ranchi",
+      institution: "IIT Patna and IIIT Ranchi",
+      location: "Patna and Ranchi, India",
       period: "2026 – Present",
       type: "Postgraduate",
     },
     {
       degree: "Master of Business Administration (MBA) – Marketing",
       institution: "Impact College, Aryabhatta Knowledge University",
+      location: "Patna, India",
       period: "2023 – 2025",
       type: "Postgraduate",
       cgpa: "8.61 / 10 CGPA",
@@ -22,6 +24,7 @@ export const EducationSection: React.FC = () => {
     {
       degree: "Bachelor of Science (Honours) – Chemistry",
       institution: "B.D. College, Patliputra University",
+      location: "Patna, India",
       period: "2020 – 2023",
       type: "Undergraduate",
       score: "60.4%",

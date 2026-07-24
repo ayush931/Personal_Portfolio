@@ -48,7 +48,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenCont
                             {[
                                 ["45%", "Processing cut"],
                                 ["25%", "Query gain"],
-                                ["50+", "Realtime users"],
+                                ["500+", "Realtime users"],
                             ].map(([value, label]) => (
                                 <div key={label} className="rounded-xl border border-cyber-border/45 bg-cyber-bg/45 p-3 backdrop-blur-xl">
                                     <div className="font-mono text-xl sm:text-2xl font-black text-gradient-warm">{value}</div>
