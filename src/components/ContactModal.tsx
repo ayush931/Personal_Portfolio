@@ -13,6 +13,7 @@ interface ContactModalProps {
 export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
   const { playClickSound, playHoverSound } = useAudioFeedback();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,14 +21,81 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     playClickSound();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 3000);
+    setIsSubmitting(true);
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+    };
+
+    try {
+      // 1. Submit to API endpoint
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to transmit message.");
+      }
+
+      // 2. Also update local storage for offline resilience
+      try {
+        const stored = localStorage.getItem("crm_local_messages");
+        const existing = stored ? JSON.parse(stored) : [];
+        const localMsg = {
+          id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+          ...payload,
+          createdAt: new Date().toISOString(),
+          read: false,
+          starred: false,
+          archived: false,
+        };
+        localStorage.setItem("crm_local_messages", JSON.stringify([localMsg, ...existing]));
+      } catch (e) {
+        console.warn("Could not save to localStorage", e);
+      }
+
+      setSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        subject: "Role Inquiry / Software Engineering",
+        message: "",
+      });
+    } catch (err) {
+      console.error("Failed to send message", err);
+      // Fallback: save to local storage if API failed, still provide local queueing
+      try {
+        const stored = localStorage.getItem("crm_local_messages");
+        const existing = stored ? JSON.parse(stored) : [];
+        const localMsg = {
+          id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+          ...payload,
+          createdAt: new Date().toISOString(),
+          read: false,
+          starred: false,
+          archived: false,
+        };
+        localStorage.setItem("crm_local_messages", JSON.stringify([localMsg, ...existing]));
+      } catch (e) {
+        console.warn("Could not save fallback to localStorage", e);
+      }
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 3000);
+    }
   };
 
   return (
@@ -138,11 +206,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   onMouseEnter={playHoverSound}
-                  className="w-full py-4 rounded-2xl bg-cyber-accent text-cyber-bg font-bold text-xs hover:bg-cyber-accent-light transition-all flex items-center justify-center space-x-2 shadow-luxury"
+                  className="w-full py-4 rounded-2xl bg-cyber-accent text-cyber-bg font-bold text-xs hover:bg-cyber-accent-light transition-all flex items-center justify-center space-x-2 shadow-luxury disabled:opacity-50"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>DISPATCH_MESSAGE()</span>
+                  <Send className={`w-4 h-4 ${isSubmitting ? "animate-spin" : ""}`} />
+                  <span>{isSubmitting ? "TRANSMITTING_PAYLOAD..." : "DISPATCH_MESSAGE()"}</span>
                 </button>
               </form>
             )}

@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Mail, Phone, Github, Linkedin, ArrowUp, Sparkles, Send, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Mail, Phone, Github, Linkedin, ArrowUp, Sparkles, Send, MapPin, Inbox } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAudioFeedback } from "@/lib/useAudioFeedback";
 
@@ -110,6 +110,15 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate, onOpen
                   <span>{item.label}</span>
                 </button>
               ))}
+              <Link
+                href="/crm"
+                onMouseEnter={playHoverSound}
+                onClick={playClickSound}
+                className="text-left text-cyber-accent-light font-medium hover:underline transition-colors flex items-center space-x-2.5 group font-mono text-xs pt-1"
+              >
+                <Inbox className="w-3.5 h-3.5" />
+                <span>CRM Dashboard</span>
+              </Link>
             </div>
           </div>
 

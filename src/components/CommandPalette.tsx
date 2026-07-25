@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Search, Terminal, ArrowUpRight, Copy, Check, Hash, Cpu, Mail, FolderGit2, Compass, X, Download } from "lucide-react";
+import { Terminal, ArrowUpRight, Copy, Check, Hash, Cpu, Mail, FolderGit2, Compass, X, Download, Inbox } from "lucide-react";
 
 interface CommandItem {
   id: string;
@@ -28,29 +28,32 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        if (isOpen) onClose();
-        else {
-          setQuery("");
-          setSelectedIndex(0);
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+    if (isOpen) {
+      setQuery("");
+      setSelectedIndex(0);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const commands: CommandItem[] = [
     {
+      id: "crm-dashboard",
+      label: "jump_to: crm_dashboard() [Inbox & Client Communications]",
+      category: "Navigation",
+      shortcut: "G M",
+      icon: <Inbox className="w-4 h-4 text-cyber-accent-light" />,
+      action: () => {
+        window.location.href = "/crm";
+        onClose();
+      },
+    },
+    {
       id: "download-resume",
       label: "exec: download_resume_pdf() [Ayush_Kumar_Resume.pdf]",
       category: "Action",
       shortcut: "⌘ R",
-      icon: <Download className="w-4 h-4 text-signal-green" />,
+      icon: <Download className="w-4 h-4 text-emerald-400" />,
       action: () => {
         const link = document.createElement("a");
         link.href = "/Ayush_Full_Stack_Developer_Resume.pdf";
@@ -64,7 +67,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       label: "jump_to: hero_positioning()",
       category: "Navigation",
       shortcut: "G H",
-      icon: <Terminal className="w-4 h-4 text-signal-cyan" />,
+      icon: <Terminal className="w-4 h-4 text-cyber-accent-light" />,
       action: () => {
         onNavigate("hero");
         onClose();
@@ -75,7 +78,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       label: "jump_to: metrics_timeline() [NexoGrafix / ShipU / Shabra]",
       category: "Navigation",
       shortcut: "G E",
-      icon: <Cpu className="w-4 h-4 text-signal-green" />,
+      icon: <Cpu className="w-4 h-4 text-emerald-400" />,
       action: () => {
         onNavigate("experience");
         onClose();
@@ -86,7 +89,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       label: "jump_to: architecture_deep_dives() [Aetheria / Excalidraw / RideSync]",
       category: "Navigation",
       shortcut: "G P",
-      icon: <FolderGit2 className="w-4 h-4 text-signal-cyan" />,
+      icon: <FolderGit2 className="w-4 h-4 text-cyber-accent-light" />,
       action: () => {
         onNavigate("projects");
         onClose();
@@ -97,7 +100,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       label: "jump_to: system_capabilities() [ls -la]",
       category: "Navigation",
       shortcut: "G I",
-      icon: <Hash className="w-4 h-4 text-signal-amber" />,
+      icon: <Hash className="w-4 h-4 text-amber-400" />,
       action: () => {
         onNavigate("infrastructure");
         onClose();
@@ -107,7 +110,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       id: "education",
       label: "jump_to: credentials() [IIT Patna & IIIT Ranchi MCA / AKU MBA / PPU B.Sc]",
       category: "Navigation",
-      icon: <Compass className="w-4 h-4 text-signal-cyan" />,
+      icon: <Compass className="w-4 h-4 text-cyber-accent-light" />,
       action: () => {
         onNavigate("education");
         onClose();
@@ -118,7 +121,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       label: "jump_to: init_contact()",
       category: "Navigation",
       shortcut: "G C",
-      icon: <Mail className="w-4 h-4 text-signal-green" />,
+      icon: <Mail className="w-4 h-4 text-emerald-400" />,
       action: () => {
         onNavigate("contact");
         onClose();
@@ -129,7 +132,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       label: "exec: copy_email_to_clipboard() [ayushkumar9315983@gmail.com]",
       category: "Action",
       shortcut: "⌘ C",
-      icon: <Copy className="w-4 h-4 text-signal-cyan" />,
+      icon: <Copy className="w-4 h-4 text-cyber-accent-light" />,
       action: () => {
         navigator.clipboard.writeText("ayushkumar9315983@gmail.com");
         setCopied(true);
@@ -140,7 +143,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       id: "github",
       label: "open_external: github_profile() [ayush931]",
       category: "Action",
-      icon: <ArrowUpRight className="w-4 h-4 text-signal-amber" />,
+      icon: <ArrowUpRight className="w-4 h-4 text-amber-400" />,
       action: () => {
         window.open("https://github.com/ayush931", "_blank");
         onClose();
@@ -173,22 +176,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 bg-black/80 backdrop-blur-md px-4"
+      className="fixed inset-0 z-[10000] flex items-start justify-center pt-16 sm:pt-24 bg-black/80 backdrop-blur-md px-4"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-oled-card border border-oled-border rounded-lg shadow-2xl overflow-hidden text-oled-text font-mono animate-in fade-in zoom-in-95 duration-150"
+        className="w-full max-w-2xl bg-cyber-card border border-cyber-border rounded-2xl shadow-luxury overflow-hidden text-cyber-text font-mono animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
         {/* Command Input Header */}
-        <div className="flex items-center px-4 py-3 border-b border-oled-border bg-oled-bg/80">
-          <Terminal className="w-5 h-5 text-signal-cyan mr-3 shrink-0" />
-          <span className="text-signal-cyan font-semibold mr-2">$</span>
+        <div className="flex items-center px-4 py-3.5 border-b border-cyber-border/40 bg-cyber-surface/80">
+          <Terminal className="w-5 h-5 text-cyber-accent-light mr-3 shrink-0" />
+          <span className="text-cyber-accent-light font-semibold mr-2">$</span>
           <input
             type="text"
             placeholder="Type a command or search sections..."
-            className="w-full bg-transparent text-sm text-oled-text placeholder-oled-muted focus:outline-none font-mono"
+            className="w-full bg-transparent text-sm text-cyber-text placeholder-cyber-muted focus:outline-none font-mono"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -198,7 +201,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           />
           <button
             onClick={onClose}
-            className="p-1 hover:bg-oled-border rounded text-oled-muted hover:text-oled-text transition-colors ml-2"
+            className="p-1 hover:bg-cyber-surface rounded text-cyber-muted hover:text-cyber-text transition-colors ml-2"
             aria-label="Close Command Palette"
           >
             <X className="w-4 h-4" />
@@ -206,10 +209,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Command List */}
-        <div className="max-h-[340px] overflow-y-auto p-2 divide-y divide-oled-border/30">
+        <div className="max-h-[340px] overflow-y-auto p-2 divide-y divide-cyber-border/20">
           {filteredCommands.length === 0 ? (
-            <div className="px-4 py-8 text-center text-xs text-oled-muted">
-              No matching system commands found for <span className="text-signal-amber">&quot;{query}&quot;</span>
+            <div className="px-4 py-8 text-center text-xs text-cyber-muted">
+              No matching system commands found for <span className="text-amber-400">&quot;{query}&quot;</span>
             </div>
           ) : (
             filteredCommands.map((cmd, idx) => {
@@ -219,10 +222,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   key={cmd.id}
                   onClick={() => cmd.action()}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded text-xs transition-colors ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-colors ${
                     isSelected
-                      ? "bg-oled-surface text-signal-cyan border-l-2 border-signal-cyan pl-2.5"
-                      : "text-oled-muted hover:text-oled-text hover:bg-oled-surface/50"
+                      ? "bg-cyber-surface text-cyber-accent-light border-l-2 border-cyber-accent-light pl-2.5"
+                      : "text-cyber-muted hover:text-cyber-text hover:bg-cyber-surface/50"
                   }`}
                 >
                   <div className="flex items-center space-x-3">
@@ -231,13 +234,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   </div>
                   <div className="flex items-center space-x-2 shrink-0">
                     {cmd.id === "copy-email" && copied && (
-                      <span className="text-[10px] text-signal-green flex items-center space-x-1">
+                      <span className="text-[10px] text-emerald-400 flex items-center space-x-1">
                         <Check className="w-3 h-3" />
                         <span>COPIED</span>
                       </span>
                     )}
                     {cmd.shortcut && (
-                      <span className="px-1.5 py-0.5 text-[10px] bg-oled-bg border border-oled-border text-oled-muted rounded">
+                      <span className="px-1.5 py-0.5 text-[10px] bg-cyber-bg border border-cyber-border/40 text-cyber-muted rounded-md">
                         {cmd.shortcut}
                       </span>
                     )}
@@ -249,19 +252,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Footer info bar */}
-        <div className="px-4 py-2 border-t border-oled-border bg-oled-bg flex items-center justify-between text-[11px] text-oled-muted">
+        <div className="px-4 py-2.5 border-t border-cyber-border/30 bg-cyber-bg/80 flex items-center justify-between text-[11px] text-cyber-muted">
           <div className="flex items-center space-x-3">
             <span>
-              <kbd className="px-1 py-0.5 bg-oled-surface border border-oled-border rounded text-[10px]">↑↓</kbd> navigate
+              <kbd className="px-1 py-0.5 bg-cyber-surface border border-cyber-border/40 rounded text-[10px]">↑↓</kbd> navigate
             </span>
             <span>
-              <kbd className="px-1 py-0.5 bg-oled-surface border border-oled-border rounded text-[10px]">↵</kbd> select
+              <kbd className="px-1 py-0.5 bg-cyber-surface border border-cyber-border/40 rounded text-[10px]">↵</kbd> select
             </span>
             <span>
-              <kbd className="px-1 py-0.5 bg-oled-surface border border-oled-border rounded text-[10px]">esc</kbd> close
+              <kbd className="px-1 py-0.5 bg-cyber-surface border border-cyber-border/40 rounded text-[10px]">esc</kbd> close
             </span>
           </div>
-          <div className="text-signal-green text-[10px]">
+          <div className="text-emerald-400 text-[10px]">
             SYS_BUS: OK
           </div>
         </div>

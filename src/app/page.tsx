@@ -14,15 +14,17 @@ import { InfrastructureSection } from "@/components/InfrastructureSection";
 import { EducationSection } from "@/components/EducationSection";
 import { FooterSection } from "@/components/FooterSection";
 import { ContactModal } from "@/components/ContactModal";
+import { CommandPalette } from "@/components/CommandPalette";
 
 const Interactive3DWaveScene = dynamic(
     () => import("@/components/Interactive3DWaveScene").then((mod) => mod.Interactive3DWaveScene),
-    { ssr: false }
+    { ssr: false, loading: () => <div className="fixed inset-0 pointer-events-none z-0 bg-[#050607]" /> }
 );
 
 export default function Home() {
     const [activeSection, setActiveSection] = useState("hero");
     const [isContactOpen, setIsContactOpen] = useState(false);
+    const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [scrollY, setScrollY] = useState(0);
 
@@ -40,6 +42,17 @@ export default function Home() {
         };
         window.addEventListener("mousemove", handleMouseMove);
         return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+                e.preventDefault();
+                setIsCommandPaletteOpen((prev) => !prev);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
     useEffect(() => {
@@ -85,6 +98,7 @@ export default function Home() {
                     activeSection={activeSection}
                     onNavigate={handleNavigate}
                     onOpenContact={() => setIsContactOpen(true)}
+                    onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
                 />
 
                 <div className="relative z-10 flex-1">
@@ -121,6 +135,11 @@ export default function Home() {
                 </div>
 
                 <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+                <CommandPalette
+                    isOpen={isCommandPaletteOpen}
+                    onClose={() => setIsCommandPaletteOpen(false)}
+                    onNavigate={handleNavigate}
+                />
             </main>
         </LenisScrollProvider>
     );

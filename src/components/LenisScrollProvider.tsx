@@ -18,17 +18,21 @@ export const LenisScrollProvider: React.FC<{ children: React.ReactNode }> = ({ c
       touchMultiplier: 1.5,
     });
 
+    let rafId: number;
+
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
 
   return <>{children}</>;
 };
+
