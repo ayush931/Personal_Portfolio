@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --canvas: #f5f3ee;
+  --canvas-raised: #fffdf8;
+  --ink: #151515;
+  --ink-muted: #67635f;
+  --line: rgb(21 21 21 / 12%);
+  --cobalt: #2146f3;
+  --vermilion: #ef4d2f;
+  --chrome: #c4c4c1;
+  --acid: #d9ff45;
+  --background: var(--canvas);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-canvas: var(--canvas);
+  --color-canvas-raised: var(--canvas-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-cobalt: var(--cobalt);
+  --color-vermilion: var(--vermilion);
+  --color-chrome: var(--chrome);
+  --color-acid: var(--acid);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --text-display: clamp(3.75rem, 10vw, 10.5rem);
+  --text-title: clamp(2.5rem, 5vw, 5.5rem);
+  --text-kicker: 0.6875rem;
+  --tracking-display: -0.075em;
+  --tracking-kicker: 0.12em;
+  --spacing-gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --spacing-section: clamp(6rem, 14vw, 12rem);
+  --radius-panel: 1.5rem;
+  --radius-pill: 999px;
+  --ease-chrome: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    background: var(--canvas);
+    scroll-behavior: auto;
+  }
+
+  body {
+    min-width: 320px;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--cobalt);
+    color: var(--canvas);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--cobalt);
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  .hero-poster {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: min(76vw, 42rem);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 46% 54% 51% 49% / 44% 45% 55% 56%;
+    background: radial-gradient(circle at 28% 30%, rgb(255 255 255 / 82%), transparent 17%), radial-gradient(circle at 68% 73%, rgb(239 77 47 / 90%), transparent 34%), radial-gradient(circle at 30% 66%, rgb(33 70 243 / 90%), transparent 48%), var(--chrome);
+    box-shadow: 0 2rem 7rem rgb(33 70 243 / 15%);
+    filter: saturate(1.08) contrast(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
