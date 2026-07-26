@@ -1,41 +1,4 @@
 {
   "messages": [],
-  "visitors": [
-    {
-      "ip": "::1",
-      "path": "/#work",
-      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
-      "device": "Desktop",
-      "referrer": "http://localhost:3000/",
-      "id": "vis-1785061724604",
-      "timestamp": "2026-07-26T10:28:44.604Z"
-    },
-    {
-      "id": "vis-1",
-      "timestamp": "2026-07-26T10:21:26.735Z",
-      "ip": "157.240.22.18",
-      "path": "/",
-      "userAgent": "Chrome 122.0 / macOS",
-      "device": "Desktop",
-      "referrer": "https://linkedin.com"
-    },
-    {
-      "id": "vis-2",
-      "timestamp": "2026-07-26T10:11:26.735Z",
-      "ip": "103.21.244.11",
-      "path": "/#work",
-      "userAgent": "Edge 122.0 / Windows",
-      "device": "Desktop",
-      "referrer": "https://github.com/ayush931"
-    },
-    {
-      "id": "vis-3",
-      "timestamp": "2026-07-26T09:56:26.735Z",
-      "ip": "49.37.18.90",
-      "path": "/",
-      "userAgent": "Safari 17.2 / iPhone",
-      "device": "Mobile",
-      "referrer": "Direct"
-    }
-  ]
+  "visitors": []
 }

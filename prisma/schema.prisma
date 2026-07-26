@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model CrmMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  timestamp DateTime @default(now())
+  ip        String   @default("127.0.0.1")
+  userAgent String   @default("")
+  status    String   @default("unread")
+
+  @@index([status])
+  @@index([timestamp])
+}
+
+model VisitorLog {
+  id        String   @id @default(cuid())
+  timestamp DateTime @default(now())
+  ip        String
+  path      String
+  userAgent String   @db.Text
+  device    String   @default("Desktop")
+  referrer  String   @default("Direct")
+
+  @@index([ip])
+  @@index([timestamp])
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String   @db.Text
+  content     String   @db.Text
+  category    String   @default("System Design")
+  tags        String[] @default([])
+  readTime    String   @default("5 min read")
+  publishedAt DateTime @default(now())
+  status      String   @default("published")
+  coverColor  String   @default("#2563eb")
+  authorName  String   @default("Ayush Kumar")
+  authorRole  String   @default("Full-Stack & Systems Engineer")
+
+  @@index([slug])
+  @@index([status])
+  @@index([category])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  tagline     String
+  description String   @db.Text
+  category    String   @default("Full-Stack")
+  impact      String   @default("")
+  tech        String[] @default([])
+  featured    Boolean  @default(true)
+  year        String   @default("2026")
+  github      String   @default("")
+  demo        String   @default("")
+  accentColor String   @default("#2563eb")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([slug])
+  @@index([featured])
+}

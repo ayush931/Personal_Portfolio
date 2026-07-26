@@ -24,7 +24,7 @@ export function ScrollSection({
     {
       ref: sectionRef,
       id,
-      className: `${minHeight ? "min-h-svh" : ""} w-full snap-start relative isolate ${className}`,
+      className: `${minHeight ? "min-h-svh" : ""} w-full relative isolate ${className}`,
     },
     children
   );

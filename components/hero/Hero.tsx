@@ -6,6 +6,8 @@ import { ArrowRight, Download, Terminal } from "lucide-react";
 import { useRef } from "react";
 import { MOTION } from "@/lib/constants";
 import { Preloader } from "./Preloader";
+import { Magnetic } from "@/components/common/Magnetic";
+import { LiveStatusLine } from "@/components/navigation/LiveStatusLine";
 
 const firstNameCharacters = Array.from("AYUSH");
 const lastNameCharacters = Array.from("KUMAR");
@@ -40,9 +42,12 @@ export function Hero() {
               <span>·</span>
               <span>PATNA, BIHAR, INDIA</span>
             </div>
-            <div className="font-mono text-xs text-cobalt font-medium flex items-center gap-1.5">
-              <Terminal size={13} />
-              <span>SYS_VER: 2026.4</span>
+            <div className="flex items-center gap-6">
+              <LiveStatusLine />
+              <div className="font-mono text-xs text-cobalt font-medium flex items-center gap-1.5 hidden sm:flex">
+                <Terminal size={13} />
+                <span>SYS_VER: 2026.4</span>
+              </div>
             </div>
           </header>
 
@@ -76,25 +81,29 @@ export function Hero() {
                 &quot;I build real-time multiplayer systems, document processing pipelines, and the tools in between.&quot;
               </p>
 
-              {/* Two CTA Buttons */}
+              {/* Two CTA Buttons wrapped in Magnetic */}
               <div data-hero-reveal className="flex flex-wrap items-center gap-4 pt-2">
-                <a
-                  className="group inline-flex items-center gap-2.5 rounded-md bg-ink px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-canvas transition-colors duration-200 hover:bg-cobalt shadow-sm"
-                  href="#work"
-                >
-                  <span>VIEW WORK</span>
-                  <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
-                </a>
+                <Magnetic>
+                  <a
+                    className="group inline-flex items-center gap-2.5 rounded-md bg-ink px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-canvas transition-colors duration-200 hover:bg-cobalt shadow-sm"
+                    href="#work"
+                  >
+                    <span>VIEW WORK</span>
+                    <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
+                  </a>
+                </Magnetic>
 
-                <a
-                  className="group inline-flex items-center gap-2.5 rounded-md border border-line bg-canvas-raised px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-ink transition-colors duration-200 hover:border-cobalt hover:text-cobalt shadow-sm"
-                  href="/resume.pdf"
-                  target="_blank"
-                  download="Ayush_Full_Stack_Developer_Resume.pdf"
-                >
-                  <Download size={14} />
-                  <span>DOWNLOAD RESUME ↓</span>
-                </a>
+                <Magnetic>
+                  <a
+                    className="group inline-flex items-center gap-2.5 rounded-md border border-line bg-canvas-raised px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-ink transition-colors duration-200 hover:border-cobalt hover:text-cobalt shadow-sm"
+                    href="/resume.pdf"
+                    target="_blank"
+                    download="Ayush_Full_Stack_Developer_Resume.pdf"
+                  >
+                    <Download size={14} />
+                    <span>DOWNLOAD RESUME ↓</span>
+                  </a>
+                </Magnetic>
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
-import { ArrowUpRight, CheckCircle, AlertCircle, Loader2, Send } from "lucide-react";
+import { ArrowUpRight, AlertCircle, Loader2, Send } from "lucide-react";
 import { SITE } from "@/lib/constants";
 
 const contactSchema = z.object({
@@ -63,7 +63,7 @@ export function Contact() {
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
           <div>
             <div className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted">
-              06 / Contact & Inquiries
+              06 / Contact &amp; Inquiries
             </div>
             <h2 className="font-sans text-title font-medium leading-[0.92] tracking-display text-ink">
               Let&apos;s Build Something Intentional.
@@ -122,7 +122,15 @@ export function Contact() {
           <form onSubmit={handleSubmit(onSubmit)} className="rounded-panel border border-line bg-canvas-raised p-8 md:p-12 space-y-6">
             {status === "success" && (
               <div className="flex items-center gap-3 rounded-xl border border-cobalt/30 bg-cobalt/10 p-4 text-ink font-mono text-xs">
-                <CheckCircle size={18} className="text-cobalt shrink-0" />
+                <svg className="h-5 w-5 stroke-cobalt" viewBox="0 0 24 24" fill="none" strokeWidth="2.5">
+                  <path
+                    d="M 5 12 L 10 17 L 19 7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="animate-[drawCheck_0.4s_ease-out_forwards]"
+                    style={{ strokeDasharray: 30, strokeDashoffset: 0 }}
+                  />
+                </svg>
                 <span>{serverMessage}</span>
               </div>
             )}
@@ -135,51 +143,63 @@ export function Contact() {
             )}
 
             <div className="grid gap-6 md:grid-cols-2">
-              {/* Name */}
-              <div>
-                <label className="font-mono text-xs uppercase tracking-wider text-ink block mb-2">Your Name</label>
+              {/* Name with Focus Underline */}
+              <div className="group relative border-b border-line pb-2 focus-within:border-cobalt">
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors group-focus-within:text-cobalt mb-1">
+                  Your Name
+                </label>
                 <input
                   {...register("name", { required: "Name is required" })}
                   placeholder="Ayush Kumar"
-                  className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-cobalt"
+                  className="w-full bg-transparent font-mono text-sm text-ink outline-none"
                 />
-                {errors.name && <p className="font-mono text-[0.6875rem] text-vermilion mt-1.5">{errors.name.message}</p>}
+                <span className="absolute bottom-0 left-0 h-[2px] w-full origin-center scale-x-0 bg-cobalt transition-transform duration-300 ease-out group-focus-within:scale-x-100" />
+                {errors.name && <p className="font-mono text-[0.6875rem] text-vermilion mt-1">{errors.name.message}</p>}
               </div>
 
-              {/* Email */}
-              <div>
-                <label className="font-mono text-xs uppercase tracking-wider text-ink block mb-2">Email Address</label>
+              {/* Email with Focus Underline */}
+              <div className="group relative border-b border-line pb-2 focus-within:border-cobalt">
+                <label className="block font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors group-focus-within:text-cobalt mb-1">
+                  Email Address
+                </label>
                 <input
                   {...register("email", { required: "Email is required" })}
                   type="email"
                   placeholder="ayush@example.com"
-                  className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-cobalt"
+                  className="w-full bg-transparent font-mono text-sm text-ink outline-none"
                 />
-                {errors.email && <p className="font-mono text-[0.6875rem] text-vermilion mt-1.5">{errors.email.message}</p>}
+                <span className="absolute bottom-0 left-0 h-[2px] w-full origin-center scale-x-0 bg-cobalt transition-transform duration-300 ease-out group-focus-within:scale-x-100" />
+                {errors.email && <p className="font-mono text-[0.6875rem] text-vermilion mt-1">{errors.email.message}</p>}
               </div>
             </div>
 
-            {/* Subject */}
-            <div>
-              <label className="font-mono text-xs uppercase tracking-wider text-ink block mb-2">Subject</label>
+            {/* Subject with Focus Underline */}
+            <div className="group relative border-b border-line pb-2 focus-within:border-cobalt">
+              <label className="block font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors group-focus-within:text-cobalt mb-1">
+                Subject
+              </label>
               <input
                 {...register("subject", { required: "Subject is required" })}
                 placeholder="Pipeline Engineering / Frontend Role"
-                className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-cobalt"
+                className="w-full bg-transparent font-mono text-sm text-ink outline-none"
               />
-              {errors.subject && <p className="font-mono text-[0.6875rem] text-vermilion mt-1.5">{errors.subject.message}</p>}
+              <span className="absolute bottom-0 left-0 h-[2px] w-full origin-center scale-x-0 bg-cobalt transition-transform duration-300 ease-out group-focus-within:scale-x-100" />
+              {errors.subject && <p className="font-mono text-[0.6875rem] text-vermilion mt-1">{errors.subject.message}</p>}
             </div>
 
-            {/* Message */}
-            <div>
-              <label className="font-mono text-xs uppercase tracking-wider text-ink block mb-2">Message</label>
+            {/* Message with Focus Underline */}
+            <div className="group relative border-b border-line pb-2 focus-within:border-cobalt">
+              <label className="block font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors group-focus-within:text-cobalt mb-1">
+                Message
+              </label>
               <textarea
                 {...register("message", { required: "Message is required" })}
-                rows={5}
+                rows={4}
                 placeholder="Tell me about your project scope, technical requirements, or role overview..."
-                className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-cobalt resize-none"
+                className="w-full bg-transparent font-mono text-sm text-ink outline-none resize-none"
               />
-              {errors.message && <p className="font-mono text-[0.6875rem] text-vermilion mt-1.5">{errors.message.message}</p>}
+              <span className="absolute bottom-0 left-0 h-[2px] w-full origin-center scale-x-0 bg-cobalt transition-transform duration-300 ease-out group-focus-within:scale-x-100" />
+              {errors.message && <p className="font-mono text-[0.6875rem] text-vermilion mt-1">{errors.message.message}</p>}
             </div>
 
             {/* Submit Button */}
@@ -193,6 +213,17 @@ export function Contact() {
                   <Loader2 size={16} className="animate-spin" />
                   <span>Transmitting...</span>
                 </>
+              ) : status === "success" ? (
+                <span className="flex items-center gap-2 text-acid">
+                  <svg className="h-5 w-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="2.5">
+                    <path
+                      d="M 5 12 L 10 17 L 19 7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Message Sent
+                </span>
               ) : (
                 <>
                   <Send size={14} />

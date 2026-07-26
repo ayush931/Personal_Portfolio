@@ -1,51 +1,44 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-
-const emptySubscribe = () => () => {};
 
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const followerRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-
-  const isClient = useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
+  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
-    if (!isClient || !window.matchMedia("(pointer: fine)").matches) return;
+    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
+    const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const cursor = cursorRef.current;
-    const follower = followerRef.current;
-    if (!cursor || !follower) return;
+    if (isFinePointer && !isReducedMotion) {
+      setIsEnabled(true);
+    }
+  }, []);
 
-    const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power2.out" });
-    const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power2.out" });
-    const followerXTo = gsap.quickTo(follower, "x", { duration: 0.35, ease: "power3.out" });
-    const followerYTo = gsap.quickTo(follower, "y", { duration: 0.35, ease: "power3.out" });
+  useEffect(() => {
+    if (!isEnabled || !cursorRef.current || !ringRef.current) return;
+
+    const xDotTo = gsap.quickTo(cursorRef.current, "x", { duration: 0.08, ease: "power2.out" });
+    const yDotTo = gsap.quickTo(cursorRef.current, "y", { duration: 0.08, ease: "power2.out" });
+    const xRingTo = gsap.quickTo(ringRef.current, "x", { duration: 0.22, ease: "power3.out" });
+    const yRingTo = gsap.quickTo(ringRef.current, "y", { duration: 0.22, ease: "power3.out" });
 
     const handleMouseMove = (e: MouseEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
-      followerXTo(e.clientX);
-      followerYTo(e.clientY);
+      xDotTo(e.clientX);
+      yDotTo(e.clientY);
+      xRingTo(e.clientX);
+      yRingTo(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
-      if (
-        target?.closest("a, button, input, textarea, select, [data-interactive]") ||
-        target?.tagName === "A" ||
-        target?.tagName === "BUTTON"
-      ) {
-        setIsHovered(true);
-      } else {
-        setIsHovered(false);
-      }
+      const isInteractive = Boolean(
+        target?.closest("a, button, input, textarea, select, [data-interactive]")
+      );
+      setIsHovered(isInteractive);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -55,24 +48,23 @@ export function CustomCursor() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, [isClient]);
+  }, [isEnabled]);
 
-  if (!isClient) return null;
+  if (!isEnabled) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
-      {/* Precision Dot */}
+    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden mix-blend-difference">
+      {/* Precision Core Dot */}
       <div
         ref={cursorRef}
-        className={`fixed top-0 left-0 h-2 w-2 -ml-1 -mt-1 rounded-full bg-cobalt transition-transform duration-150 ease-out ${
-          isHovered ? "scale-150 bg-cobalt" : "scale-100"
-        }`}
+        className="fixed top-0 left-0 h-2.5 w-2.5 -ml-1.25 -mt-1.25 rounded-full bg-white transition-transform duration-100 ease-out"
+        style={{ transform: `scale(${isHovered ? 0.5 : 1})` }}
       />
-      {/* Lagging Ring Follower */}
+      {/* Trailing Spring Ring */}
       <div
-        ref={followerRef}
-        className={`fixed top-0 left-0 h-8 w-8 -ml-4 -mt-4 rounded-full border border-cobalt/40 transition-all duration-200 ease-out ${
-          isHovered ? "scale-150 border-cobalt bg-cobalt/10" : "scale-100 opacity-60"
+        ref={ringRef}
+        className={`fixed top-0 left-0 h-9 w-9 -ml-4.5 -mt-4.5 rounded-full border border-white transition-all duration-200 ease-out ${
+          isHovered ? "scale-175 bg-white/20 border-white" : "scale-100 opacity-70"
         }`}
       />
     </div>

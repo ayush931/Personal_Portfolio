@@ -47,10 +47,10 @@ export function Work() {
         <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
           <div>
             <div className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted">
-              03 / Featured Projects & Engineering
+              03 / Featured Projects &amp; Engineering
             </div>
             <h2 className="font-sans text-title font-medium leading-[0.92] tracking-display text-ink">
-              Real-World Systems & Case Studies.
+              Real-World Systems &amp; Case Studies.
             </h2>
           </div>
           <p className="max-w-md font-mono text-xs text-ink-muted leading-relaxed">
@@ -58,7 +58,7 @@ export function Work() {
           </p>
         </div>
 
-        {/* Project Cards */}
+        {/* Project Cards from Resume */}
         <div className="space-y-12 md:space-y-16">
           {RESUME_PROJECTS.map((project, index) => (
             <WorkCard key={project.id} project={project} index={index} />

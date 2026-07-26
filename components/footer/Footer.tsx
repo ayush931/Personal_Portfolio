@@ -3,6 +3,7 @@
 import { ArrowUp, Terminal, Phone, MapPin, Download, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SITE } from "@/lib/constants";
+import { Magnetic } from "@/components/common/Magnetic";
 
 export function Footer() {
   const [time, setTime] = useState<string>("");
@@ -78,10 +79,10 @@ export function Footer() {
             </span>
             <ul className="space-y-2.5 font-mono text-xs text-ink-muted">
               <li>
-                <a href="#hero" className="hover:text-cobalt transition-colors">01 / Overview & Bio</a>
+                <a href="#hero" className="hover:text-cobalt transition-colors">01 / Overview &amp; Bio</a>
               </li>
               <li>
-                <a href="#about" className="hover:text-cobalt transition-colors">02 / Experience & Education</a>
+                <a href="#about" className="hover:text-cobalt transition-colors">02 / Experience &amp; Education</a>
               </li>
               <li>
                 <a href="#work" className="hover:text-cobalt transition-colors">03 / Featured Case Studies</a>
@@ -90,16 +91,13 @@ export function Footer() {
                 <a href="#craft" className="hover:text-cobalt transition-colors">04 / GLSL Shader Laboratory</a>
               </li>
               <li>
-                <a href="#skills" className="hover:text-cobalt transition-colors">05 / Core Competencies</a>
+                <a href="#blogs" className="hover:text-cobalt transition-colors">05 / Technical Writings &amp; Articles</a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-cobalt transition-colors">06 / Direct Inquiries</a>
+                <a href="#skills" className="hover:text-cobalt transition-colors">06 / Core Competencies</a>
               </li>
-              <li className="pt-2 border-t border-line/60">
-                <a href="/crm" className="hover:text-cobalt transition-colors font-bold text-cobalt flex items-center gap-1.5">
-                  <Terminal size={12} />
-                  <span>07 / System CRM Dashboard</span>
-                </a>
+              <li>
+                <a href="#contact" className="hover:text-cobalt transition-colors">07 / Direct Inquiries</a>
               </li>
             </ul>
           </div>
@@ -137,15 +135,17 @@ export function Footer() {
             <p className="text-xs text-ink-muted leading-relaxed font-mono">
               Complete resume extracted directly from professional experience. Available for immediate evaluation.
             </p>
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              download="Ayush_Full_Stack_Developer_Resume.pdf"
-              className="inline-flex items-center justify-center gap-2 w-full rounded-full border border-line bg-canvas-raised px-4 py-3 font-mono text-xs uppercase tracking-wider text-ink hover:border-cobalt hover:text-cobalt transition-colors font-semibold shadow-sm"
-            >
-              <Download size={14} />
-              <span>Download Resume PDF</span>
-            </a>
+            <Magnetic>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                download="Ayush_Full_Stack_Developer_Resume.pdf"
+                className="inline-flex items-center justify-center gap-2 w-full rounded-full border border-line bg-canvas-raised px-4 py-3 font-mono text-xs uppercase tracking-wider text-ink hover:border-cobalt hover:text-cobalt transition-colors font-semibold shadow-sm"
+              >
+                <Download size={14} />
+                <span>Download Resume PDF</span>
+              </a>
+            </Magnetic>
           </div>
         </div>
 
@@ -165,16 +165,18 @@ export function Footer() {
           <div className="flex flex-wrap items-center gap-4">
             <span className="font-semibold text-ink">© {new Date().getFullYear()} Ayush Kumar. All rights reserved.</span>
             <span>•</span>
-            <span>Built with Next.js 16, R3F, GSAP & Tailwind CSS</span>
+            <span>Built with Next.js 16, R3F, GSAP &amp; Tailwind CSS</span>
           </div>
 
-          <button
-            onClick={scrollToTop}
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-canvas-raised px-4 py-2 text-ink hover:border-cobalt hover:text-cobalt transition-colors self-start sm:self-auto cursor-pointer font-semibold shadow-sm"
-          >
-            <span>Back to top</span>
-            <ArrowUp size={14} />
-          </button>
+          <Magnetic>
+            <button
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-2 rounded-full border border-line bg-canvas-raised px-4 py-2 text-ink hover:-translate-y-1 hover:border-cobalt hover:text-cobalt transition-all duration-200 self-start sm:self-auto cursor-pointer font-semibold shadow-sm"
+            >
+              <span>Back to top</span>
+              <ArrowUp size={14} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
+            </button>
+          </Magnetic>
         </div>
       </div>
     </footer>

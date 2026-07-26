@@ -76,10 +76,16 @@ function LiveCraftMesh({
   uniforms.uSecondary.value.set(secondaryColor);
 
   useFrame((state, delta) => {
+    const isReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const idleBreathing = isReducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.8) * 0.06;
+
     uniforms.uTime.value = state.clock.elapsedTime;
+    uniforms.uDisplacement.value = displacement + idleBreathing;
+
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.3 * speed;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.4) * 0.15;
+      const rotationMultiplier = isReducedMotion ? 0 : 1;
+      meshRef.current.rotation.y += delta * 0.3 * speed * rotationMultiplier;
+      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.4) * 0.15 * rotationMultiplier;
     }
   });
 
@@ -109,7 +115,7 @@ export default function CraftShaderCanvas({
 }) {
   return (
     <div className="relative h-[280px] w-full overflow-hidden rounded-lg bg-black/40 border border-line/40 flex items-center justify-center">
-      <Canvas camera={{ position: [0, 0, 3.5], fov: 45 }}>
+      <Canvas dpr={[1, 1.5]} gl={{ powerPreference: "high-performance", antialias: true }} camera={{ position: [0, 0, 3.5], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <LiveCraftMesh
           speed={speed}

@@ -3,7 +3,7 @@ import { readCrmStore, updateMessageStatus, deleteCrmMessage } from "@/lib/crm-s
 
 export async function GET() {
   try {
-    const data = readCrmStore();
+    const data = await readCrmStore();
     const unreadCount = data.messages.filter((m) => m.status === "unread").length;
     const uniqueVisitorsCount = new Set(data.visitors.map((v) => v.ip)).size;
 
@@ -29,12 +29,12 @@ export async function POST(request: Request) {
     const { action, id, status } = body;
 
     if (action === "update_status" && id && status) {
-      const ok = updateMessageStatus(id, status);
+      const ok = await updateMessageStatus(id, status);
       return NextResponse.json({ success: ok });
     }
 
     if (action === "delete_message" && id) {
-      const ok = deleteCrmMessage(id);
+      const ok = await deleteCrmMessage(id);
       return NextResponse.json({ success: ok });
     }
 

@@ -5,6 +5,7 @@ import { Hero } from "@/components/hero/Hero";
 import { About } from "@/components/about/About";
 import { Work } from "@/components/work/Work";
 import { Craft } from "@/components/craft/Craft";
+import { BlogsSection } from "@/components/blogs/BlogsSection";
 import { Skills } from "@/components/skills/Skills";
 import { Contact } from "@/components/contact/Contact";
 import { Footer } from "@/components/footer/Footer";
@@ -15,7 +16,7 @@ export default function Home() {
     <SmoothScroll>
       <VisitorTracker />
       <Header />
-      <main className="min-h-svh w-full overflow-y-auto scroll-smooth">
+      <main className="min-h-svh w-full relative">
         <ScrollSection id="hero">
           <Hero />
         </ScrollSection>
@@ -27,6 +28,9 @@ export default function Home() {
         </ScrollSection>
         <ScrollSection id="craft">
           <Craft />
+        </ScrollSection>
+        <ScrollSection id="blogs">
+          <BlogsSection />
         </ScrollSection>
         <ScrollSection id="skills">
           <Skills />

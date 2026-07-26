@@ -4,6 +4,10 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { BlueprintGridGlow } from "@/components/common/BlueprintGridGlow";
+import { NoiseOverlay } from "@/components/common/NoiseOverlay";
+import { SectionWipeOverlay } from "@/components/navigation/SectionWipeOverlay";
+import { ScrollProgressReadout } from "@/components/navigation/ScrollProgressReadout";
+import { TabFocusHandler } from "@/components/common/TabFocusHandler";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -57,6 +61,16 @@ export const metadata: Metadata = {
       "Full Stack Engineer at NexoGrafix building distributed document processing, React/Next.js apps, and interactive 3D WebGL experiences.",
     creator: "@ayush931",
   },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: "/icon.svg",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
@@ -97,6 +111,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
@@ -105,9 +120,13 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-canvas text-ink">
+      <body className="min-h-full flex flex-col bg-canvas text-ink" suppressHydrationWarning>
+        <TabFocusHandler />
         <BlueprintGridGlow />
+        <NoiseOverlay />
         <CustomCursor />
+        <SectionWipeOverlay />
+        <ScrollProgressReadout />
         {children}
         <Analytics />
         <SpeedInsights />
