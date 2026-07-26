@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Download, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
