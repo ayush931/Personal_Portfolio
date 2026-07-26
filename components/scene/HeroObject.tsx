@@ -66,7 +66,7 @@ export function HeroObject() {
 
   useFrame((state, delta) => {
     const hover = useExperienceStore.getState().hoverTarget === "hero-object" ? 1 : 0;
-    uniforms.uTime.value = state.clock.elapsedTime;
+    uniforms.uTime.value += delta;
     uniforms.uHover.value += (hover - uniforms.uHover.value) * Math.min(delta * 5, 1);
 
     if (mesh.current) {

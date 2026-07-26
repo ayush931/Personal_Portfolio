@@ -77,15 +77,15 @@ function LiveCraftMesh({
 
   useFrame((state, delta) => {
     const isReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const idleBreathing = isReducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.8) * 0.06;
+    uniforms.uTime.value += delta;
+    const idleBreathing = isReducedMotion ? 0 : Math.sin(uniforms.uTime.value * 0.8) * 0.06;
 
-    uniforms.uTime.value = state.clock.elapsedTime;
     uniforms.uDisplacement.value = displacement + idleBreathing;
 
     if (meshRef.current) {
       const rotationMultiplier = isReducedMotion ? 0 : 1;
       meshRef.current.rotation.y += delta * 0.3 * speed * rotationMultiplier;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.4) * 0.15 * rotationMultiplier;
+      meshRef.current.rotation.x = Math.sin(uniforms.uTime.value * 0.4) * 0.15 * rotationMultiplier;
     }
   });
 

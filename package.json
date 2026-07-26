@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -33,7 +34,7 @@
     "react-hook-form": "^7.83.0",
     "resend": "^6.18.0",
     "tailwind-merge": "^3.6.0",
-    "three": "^0.185.1",
+    "three": "^0.174.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -42,7 +43,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.185.1",
+    "@types/three": "^0.174.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "gltfjsx": "^6.5.3",
