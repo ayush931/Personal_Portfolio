@@ -8,6 +8,7 @@ import { NoiseOverlay } from "@/components/common/NoiseOverlay";
 import { SectionWipeOverlay } from "@/components/navigation/SectionWipeOverlay";
 import { ScrollProgressReadout } from "@/components/navigation/ScrollProgressReadout";
 import { TabFocusHandler } from "@/components/common/TabFocusHandler";
+import { ToastProvider } from "@/components/common/ToastProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -87,7 +88,7 @@ const jsonLd = {
     name: "NexoGrafix",
   },
   url: "https://github.com/ayush931",
-  sameAs: ["https://github.com/ayush931"],
+  sameAs: ["https://github.com/ayush931", "https://www.linkedin.com/in/ayush-kumar-94310522a"],
   knowsAbout: [
     "Software Engineering",
     "FastAPI",
@@ -121,15 +122,17 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-canvas text-ink" suppressHydrationWarning>
-        <TabFocusHandler />
-        <BlueprintGridGlow />
-        <NoiseOverlay />
-        <CustomCursor />
-        <SectionWipeOverlay />
-        <ScrollProgressReadout />
-        {children}
-        <Analytics />
-        <SpeedInsights />
+        <ToastProvider>
+          <TabFocusHandler />
+          <BlueprintGridGlow />
+          <NoiseOverlay />
+          <CustomCursor />
+          <SectionWipeOverlay />
+          <ScrollProgressReadout />
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </ToastProvider>
       </body>
     </html>
   );

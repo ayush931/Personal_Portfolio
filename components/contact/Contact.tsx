@@ -5,12 +5,13 @@ import { useState } from "react";
 import { z } from "zod";
 import { ArrowUpRight, AlertCircle, Loader2, Send } from "lucide-react";
 import { SITE } from "@/lib/constants";
+import { useToast } from "@/components/common/ToastProvider";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   email: z.string().email("Please enter a valid email address."),
   subject: z.string().min(3, "Subject must be at least 3 characters."),
-  message: z.string().min(10, "Message must be at least 10 characters long."),
+  message: z.string().min(1, "Message is required."),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -18,6 +19,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 export function Contact() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string>("");
+  const { toast } = useToast();
 
   const {
     register,
@@ -28,7 +30,13 @@ export function Contact() {
 
   const onSubmit = async (data: ContactFormData) => {
     const parseResult = contactSchema.safeParse(data);
-    if (!parseResult.success) return;
+    if (!parseResult.success) {
+      const err = parseResult.error.issues[0]?.message || "Please check your form inputs.";
+      setStatus("error");
+      setServerMessage(err);
+      toast.error(err, "Validation Error");
+      return;
+    }
 
     setStatus("submitting");
     setServerMessage("");
@@ -44,15 +52,21 @@ export function Contact() {
 
       if (response.ok && result.success) {
         setStatus("success");
-        setServerMessage(result.message || "Message sent successfully!");
+        const msg = result.message || "Message sent successfully!";
+        setServerMessage(msg);
+        toast.success(msg, "Message Sent");
         reset();
       } else {
         setStatus("error");
-        setServerMessage(result.message || "Something went wrong. Please try again.");
+        const msg = result.message || "Something went wrong. Please try again.";
+        setServerMessage(msg);
+        toast.error(msg, "Transmission Error");
       }
     } catch {
       setStatus("error");
-      setServerMessage("Network error. Please check your connection and try again.");
+      const msg = "Network error. Please check your connection and try again.";
+      setServerMessage(msg);
+      toast.error(msg, "Network Error");
     }
   };
 
@@ -104,6 +118,12 @@ export function Contact() {
                   </a>
                 </div>
                 <div>
+                  <span className="text-ink-muted block uppercase tracking-wider mb-1">LinkedIn Profile</span>
+                  <a href={SITE.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cobalt hover:underline font-medium">
+                    linkedin.com/in/ayush-kumar-94310522a <ArrowUpRight size={12} />
+                  </a>
+                </div>
+                <div>
                   <span className="text-ink-muted block uppercase tracking-wider mb-1">Resume File</span>
                   <a href="/resume.pdf" target="_blank" download="Ayush_Full_Stack_Developer_Resume.pdf" className="inline-flex items-center gap-1 text-cobalt hover:underline font-semibold">
                     Ayush_Full_Stack_Developer_Resume.pdf <ArrowUpRight size={12} />
@@ -149,7 +169,10 @@ export function Contact() {
                   Your Name
                 </label>
                 <input
-                  {...register("name", { required: "Name is required" })}
+                  {...register("name", {
+                    required: "Name is required",
+                    minLength: { value: 2, message: "Name must be at least 2 characters." },
+                  })}
                   placeholder="Ayush Kumar"
                   className="w-full bg-transparent font-mono text-sm text-ink outline-none"
                 />
@@ -163,7 +186,13 @@ export function Contact() {
                   Email Address
                 </label>
                 <input
-                  {...register("email", { required: "Email is required" })}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Please enter a valid email address.",
+                    },
+                  })}
                   type="email"
                   placeholder="ayush@example.com"
                   className="w-full bg-transparent font-mono text-sm text-ink outline-none"
@@ -179,7 +208,10 @@ export function Contact() {
                 Subject
               </label>
               <input
-                {...register("subject", { required: "Subject is required" })}
+                {...register("subject", {
+                  required: "Subject is required",
+                  minLength: { value: 3, message: "Subject must be at least 3 characters." },
+                })}
                 placeholder="Pipeline Engineering / Frontend Role"
                 className="w-full bg-transparent font-mono text-sm text-ink outline-none"
               />
@@ -193,7 +225,9 @@ export function Contact() {
                 Message
               </label>
               <textarea
-                {...register("message", { required: "Message is required" })}
+                {...register("message", {
+                  required: "Message is required",
+                })}
                 rows={4}
                 placeholder="Tell me about your project scope, technical requirements, or role overview..."
                 className="w-full bg-transparent font-mono text-sm text-ink outline-none resize-none"

@@ -5,7 +5,7 @@ export const SITE = {
   phone: "+91 7070472634",
   email: "ayush931.dev@gmail.com",
   github: "https://github.com/ayush931",
-  linkedin: "https://linkedin.com",
+  linkedin: "https://www.linkedin.com/in/ayush-kumar-94310522a",
   resumePdf: "/resume.pdf",
 } as const;
 

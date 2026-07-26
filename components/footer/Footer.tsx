@@ -124,6 +124,12 @@ export function Footer() {
                   github.com/ayush931 <ArrowUpRight size={12} />
                 </a>
               </div>
+              <div>
+                <span className="text-ink-muted block text-[0.6875rem] uppercase">LinkedIn Profile</span>
+                <a href={SITE.linkedin} target="_blank" rel="noreferrer" className="text-cobalt font-semibold hover:underline inline-flex items-center gap-1 mt-0.5">
+                  linkedin.com/in/ayush-kumar-94310522a <ArrowUpRight size={12} />
+                </a>
+              </div>
             </div>
           </div>
 
