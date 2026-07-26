@@ -3,6 +3,8 @@ import { Geist, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CustomCursor } from "@/components/common/CustomCursor";
+import { GridBackground } from "@/components/common/GridBackground";
+import { ScrollAnimations } from "@/components/common/ScrollAnimations";
 import { BlueprintGridGlow } from "@/components/common/BlueprintGridGlow";
 import { NoiseOverlay } from "@/components/common/NoiseOverlay";
 import { SectionWipeOverlay } from "@/components/navigation/SectionWipeOverlay";
@@ -124,6 +126,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-canvas text-ink" suppressHydrationWarning>
         <ToastProvider>
           <TabFocusHandler />
+          <GridBackground />
+          <ScrollAnimations />
           <BlueprintGridGlow />
           <NoiseOverlay />
           <CustomCursor />

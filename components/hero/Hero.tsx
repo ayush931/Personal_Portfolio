@@ -15,6 +15,7 @@ const lastNameCharacters = Array.from("KUMAR");
 export function Hero() {
   const root = useRef<HTMLDivElement>(null);
 
+
   useGSAP(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       gsap.set("[data-hero-reveal]", { autoAlpha: 1, y: 0 });
