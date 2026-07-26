@@ -4,7 +4,7 @@ import { Header } from "@/components/navigation/Header";
 import { Hero } from "@/components/hero/Hero";
 import { About } from "@/components/about/About";
 import { Work } from "@/components/work/Work";
-import { Craft } from "@/components/craft/Craft";
+import { Education } from "@/components/education/Education";
 import { BlogsSection } from "@/components/blogs/BlogsSection";
 import { Skills } from "@/components/skills/Skills";
 import { Contact } from "@/components/contact/Contact";
@@ -26,8 +26,8 @@ export default function Home() {
         <ScrollSection id="work">
           <Work />
         </ScrollSection>
-        <ScrollSection id="craft">
-          <Craft />
+        <ScrollSection id="education">
+          <Education />
         </ScrollSection>
         <ScrollSection id="blogs">
           <BlogsSection />

@@ -18,11 +18,13 @@ export const EXPERIENCES = [
     role: "Junior Software Engineer",
     location: "Patna, India",
     period: "Apr 2026 - Present",
+    type: "Full-Time",
     bullets: [
       "Built a Word add-in (TypeScript, Office.js) to automate style enforcement – cut manual formatting effort 60% for a 15-person editorial team.",
       "Architected a 4-microservice document conversion platform (FastAPI, React), reducing processing turnaround 45%.",
       "Automated TOC generation for XML/EPUB pipelines (JATS, DocBook schemas), cutting QA review time 35%.",
     ],
+    skills: ["TypeScript", "Office.js", "FastAPI", "React.js", "XML / EPUB", "JATS", "DocBook"],
     highlight: "4-Microservice Document Platform",
     metric: "45% Faster Turnaround",
   },
@@ -31,12 +33,14 @@ export const EXPERIENCES = [
     role: "Software Engineer Intern",
     location: "Patna, India",
     period: "Sep 2025 - Mar 2026",
+    type: "Internship",
     bullets: [
       "Built a real-time logistics platform (PERN) with shipment tracking, delivery workflows, and RBAC – improved database query performance 25%.",
       "Deployed event-driven microservices (RabbitMQ, Docker) across 3 AWS environments, accelerating deployment velocity 30%.",
       "Migrated the codebase to a Turborepo monorepo, sharing utility packages across 6 services – cut duplicate code 35%.",
     ],
-    highlight: "Real-Time PERN Logistics",
+    skills: ["PERN Stack", "PostgreSQL", "Express.js", "React.js", "Node.js", "RabbitMQ", "Docker", "AWS", "Turborepo", "RBAC"],
+    highlight: "Real-Time PERN Logistics Platform",
     metric: "+25% Query Speed",
   },
   {
@@ -44,12 +48,14 @@ export const EXPERIENCES = [
     role: "Software Engineer Intern",
     location: "Patna, India",
     period: "Feb 2025 - Aug 2025",
+    type: "Internship",
     bullets: [
       "Migrated a legacy MERN monolith to a Turborepo monorepo, boosting code reuse across platforms 40%.",
       "Shipped Next.js web apps and React Native mobile apps for 1,000+ active users, built on shared component libraries.",
       "Secured access with JWT, OAuth 2.0, and RBAC – cut login-related support tickets 50%.",
     ],
-    highlight: "MERN & React Native",
+    skills: ["Next.js", "React Native", "MERN Stack", "Turborepo", "JWT", "OAuth 2.0", "RBAC"],
+    highlight: "MERN Monolith to Monorepo",
     metric: "1,000+ Active Users",
   },
 ] as const;
@@ -153,6 +159,12 @@ export const RESUME_EDUCATION = [
     location: "Patna and Ranchi, India",
     period: "2026 - Present",
     score: "Enrolled",
+    description: "Advanced Computer Science, Software Engineering & Systems Architecture.",
+    highlights: [
+      "Joint/Collaborative Advanced Degree Program",
+      "Specialization in Event-Driven Architecture & Distributed Systems",
+      "Focus on Full-Stack Engineering, Microservices & Cloud Infrastructure",
+    ],
   },
   {
     degree: "Master of Business Administration (MBA) – Marketing",
@@ -160,6 +172,12 @@ export const RESUME_EDUCATION = [
     location: "Patna, India",
     period: "2023 - 2025",
     score: "CGPA: 8.61/10",
+    description: "Strategic Management, Business Analytics, Product Growth & Marketing.",
+    highlights: [
+      "Graduated with High Distinction (CGPA: 8.61/10)",
+      "Focus on Tech Product Marketing, Consumer Psychology & Business Operations",
+      "Led cross-functional team projects & market research initiatives",
+    ],
   },
   {
     degree: "Bachelor of Science (Honours) – Chemistry",
@@ -167,6 +185,12 @@ export const RESUME_EDUCATION = [
     location: "Patna, India",
     period: "2020 - 2023",
     score: "60.4%",
+    description: "Analytical Chemistry, Physical Science & Problem-Solving Methodologies.",
+    highlights: [
+      "Graduated with Chemistry Honours (60.4%)",
+      "Strong foundation in analytical reasoning, quantitative research & scientific methodology",
+      "Applied systematic data analysis & experimental lab modeling",
+    ],
   },
 ] as const;
 

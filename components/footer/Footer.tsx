@@ -82,13 +82,13 @@ export function Footer() {
                 <a href="#hero" className="hover:text-cobalt transition-colors">01 / Overview &amp; Bio</a>
               </li>
               <li>
-                <a href="#about" className="hover:text-cobalt transition-colors">02 / Experience &amp; Education</a>
+                <a href="#about" className="hover:text-cobalt transition-colors">02 / Professional Experience</a>
               </li>
               <li>
                 <a href="#work" className="hover:text-cobalt transition-colors">03 / Featured Case Studies</a>
               </li>
               <li>
-                <a href="#craft" className="hover:text-cobalt transition-colors">04 / GLSL Shader Laboratory</a>
+                <a href="#education" className="hover:text-cobalt transition-colors">04 / Education &amp; Qualifications</a>
               </li>
               <li>
                 <a href="#blogs" className="hover:text-cobalt transition-colors">05 / Technical Writings &amp; Articles</a>

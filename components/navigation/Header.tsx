@@ -9,7 +9,7 @@ import { SITE } from "@/lib/constants";
 const navItems = [
   { label: "Experience", href: "#about" },
   { label: "Projects", href: "#work" },
-  { label: "Lab", href: "#craft" },
+  { label: "Education", href: "#education" },
   { label: "Blogs", href: "#blogs" },
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
