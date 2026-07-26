@@ -54,7 +54,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative isolate bg-canvas px-gutter pt-16 pb-12 border-t border-line w-full">
+    <footer className="relative isolate bg-canvas blueprint-grid px-gutter pt-16 pb-12 border-t border-line w-full">
       <div className="mx-auto max-w-[1600px] w-full space-y-12">
         {/* Main Footer Grid */}
         <div className="grid gap-12 lg:grid-cols-4 pb-12 border-b border-line">
@@ -94,6 +94,12 @@ export function Footer() {
               </li>
               <li>
                 <a href="#contact" className="hover:text-cobalt transition-colors">06 / Direct Inquiries</a>
+              </li>
+              <li className="pt-2 border-t border-line/60">
+                <a href="/crm" className="hover:text-cobalt transition-colors font-bold text-cobalt flex items-center gap-1.5">
+                  <Terminal size={12} />
+                  <span>07 / System CRM Dashboard</span>
+                </a>
               </li>
             </ul>
           </div>

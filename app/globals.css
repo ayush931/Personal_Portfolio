@@ -55,10 +55,14 @@
 
   body {
     min-width: 320px;
-    background: var(--background);
+    background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-jetbrains-mono), monospace;
     text-rendering: optimizeLegibility;
+    background-image: 
+      linear-gradient(to right, rgba(37, 99, 235, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
   }
 
   ::selection {
@@ -88,12 +92,22 @@
 }
 
 @layer components {
-  /* Deliberate technical blueprint grid overlay */
+  @keyframes grid-drift {
+    0%, 100% {
+      background-position: 0px 0px;
+    }
+    50% {
+      background-position: 12px 12px;
+    }
+  }
+
+  /* Deliberate technical blueprint grid overlay with subtle ambient drift */
   .blueprint-grid {
     background-image: 
       linear-gradient(to right, rgba(37, 99, 235, 0.08) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
     background-size: 2.5rem 2.5rem;
+    animation: grid-drift 24s ease-in-out infinite;
   }
 
   @keyframes cursor-blink {

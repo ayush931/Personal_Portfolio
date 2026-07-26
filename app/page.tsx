@@ -8,10 +8,12 @@ import { Craft } from "@/components/craft/Craft";
 import { Skills } from "@/components/skills/Skills";
 import { Contact } from "@/components/contact/Contact";
 import { Footer } from "@/components/footer/Footer";
+import { VisitorTracker } from "@/components/common/VisitorTracker";
 
 export default function Home() {
   return (
     <SmoothScroll>
+      <VisitorTracker />
       <Header />
       <main className="min-h-svh w-full overflow-y-auto scroll-smooth">
         <ScrollSection id="hero">

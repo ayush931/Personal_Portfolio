@@ -31,24 +31,44 @@ export function About() {
     elements.forEach((el) => {
       gsap.fromTo(
         el,
-        { autoAlpha: 1, y: 16 },
+        { autoAlpha: 0, y: 24 },
         {
           autoAlpha: 1,
           y: 0,
-          duration: 0.35,
+          duration: 0.5,
           ease: "power2.out",
           scrollTrigger: {
             trigger: el,
-            start: "top 95%",
+            start: "top 90%",
             once: true,
           },
         }
       );
     });
+
+    // GSAP Metric Number Count-up Animation
+    const numElements = gsap.utils.toArray<HTMLElement>("[data-metric-num]");
+    numElements.forEach((numEl) => {
+      const targetVal = parseFloat(numEl.dataset.metricNum || "0");
+      const obj = { val: 0 };
+      gsap.to(obj, {
+        val: targetVal,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: numEl,
+          start: "top 90%",
+          once: true,
+        },
+        onUpdate: () => {
+          numEl.textContent = `${Math.round(obj.val)}%`;
+        },
+      });
+    });
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} className="relative isolate bg-canvas px-gutter py-12 md:py-20 border-t border-line min-h-full flex flex-col justify-center">
+    <div ref={containerRef} className="relative isolate bg-canvas blueprint-grid px-gutter py-12 md:py-20 border-t border-line min-h-full flex flex-col justify-center">
       <div className="mx-auto max-w-[1600px] w-full">
         {/* Section Kicker */}
         <div data-about-reveal className="mb-12 flex items-center justify-between font-mono text-kicker uppercase tracking-kicker text-ink-muted border-b border-line pb-4">
@@ -72,9 +92,11 @@ export function About() {
             {/* Key Metrics */}
             <div data-about-reveal className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
               {keyImpactMetrics.map((stat) => (
-                <div key={stat.label} className="rounded-panel border border-line bg-canvas-raised p-5">
-                  <p className="font-sans text-2xl md:text-3xl font-semibold text-cobalt tracking-tight">{stat.value}</p>
-                  <p className="font-mono text-[0.6875rem] uppercase tracking-wider text-ink font-medium mt-1">{stat.label}</p>
+                <div key={stat.label} className="rounded-panel border border-line bg-canvas-raised p-5 transition-transform duration-300 hover:-translate-y-1 hover:border-cobalt/60 shadow-xs">
+                  <p className="font-mono text-2xl md:text-3xl font-bold text-cobalt tracking-tight">
+                    <span data-metric-num={parseInt(stat.value)}>{stat.value}</span>
+                  </p>
+                  <p className="font-mono text-[0.6875rem] uppercase tracking-wider text-ink font-semibold mt-1">{stat.label}</p>
                   <p className="text-xs text-ink-muted mt-1 leading-snug">{stat.desc}</p>
                 </div>
               ))}

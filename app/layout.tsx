@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { CustomCursor } from "@/components/common/CustomCursor";
+import { BlueprintGridGlow } from "@/components/common/BlueprintGridGlow";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -104,6 +106,8 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-canvas text-ink">
+        <BlueprintGridGlow />
+        <CustomCursor />
         {children}
         <Analytics />
         <SpeedInsights />

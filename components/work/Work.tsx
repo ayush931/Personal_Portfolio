@@ -41,7 +41,7 @@ export function Work() {
   }, { scope: sectionRef });
 
   return (
-    <div ref={sectionRef} className="relative isolate bg-canvas px-gutter py-12 md:py-20 border-t border-line min-h-full flex flex-col justify-center">
+    <div ref={sectionRef} className="relative isolate bg-canvas blueprint-grid px-gutter py-12 md:py-20 border-t border-line min-h-full flex flex-col justify-center">
       <div className="mx-auto max-w-[1600px] w-full">
         {/* Section Header */}
         <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
