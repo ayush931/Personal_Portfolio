@@ -27,7 +27,6 @@ export function Contact() {
   } = useForm<ContactFormData>();
 
   const onSubmit = async (data: ContactFormData) => {
-    // Validate with Zod before submitting
     const parseResult = contactSchema.safeParse(data);
     if (!parseResult.success) return;
 
@@ -51,15 +50,15 @@ export function Contact() {
         setStatus("error");
         setServerMessage(result.message || "Something went wrong. Please try again.");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
       setServerMessage("Network error. Please check your connection and try again.");
     }
   };
 
   return (
-    <section id="contact" className="relative isolate bg-canvas px-gutter py-section border-t border-line">
-      <div className="mx-auto max-w-[1600px]">
+    <div className="relative isolate bg-canvas px-gutter py-12 md:py-16 border-t border-line min-h-full flex flex-col justify-center">
+      <div className="mx-auto max-w-[1600px] w-full">
         {/* Header */}
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
           <div>
@@ -67,7 +66,7 @@ export function Contact() {
               06 / Contact & Inquiries
             </div>
             <h2 className="font-sans text-title font-medium leading-[0.92] tracking-display text-ink">
-              Let's Build Something Intentional.
+              Let&apos;s Build Something Intentional.
             </h2>
           </div>
           <p className="max-w-md font-mono text-xs text-ink-muted leading-relaxed">
@@ -89,20 +88,33 @@ export function Contact() {
 
               <div className="space-y-4 font-mono text-xs text-ink border-t border-line pt-6">
                 <div>
+                  <span className="text-ink-muted block uppercase tracking-wider mb-1">Phone Contact</span>
+                  <a href={`tel:${SITE.phone}`} className="text-ink font-medium hover:text-cobalt transition-colors">
+                    {SITE.phone}
+                  </a>
+                </div>
+                <div>
+                  <span className="text-ink-muted block uppercase tracking-wider mb-1">Location</span>
+                  <span className="text-ink font-medium">{SITE.location}</span>
+                </div>
+                <div>
                   <span className="text-ink-muted block uppercase tracking-wider mb-1">GitHub Profile</span>
-                  <a href={SITE.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cobalt hover:underline">
+                  <a href={SITE.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cobalt hover:underline font-medium">
                     github.com/ayush931 <ArrowUpRight size={12} />
                   </a>
                 </div>
                 <div>
-                  <span className="text-ink-muted block uppercase tracking-wider mb-1">Availability</span>
-                  <span className="text-ink">Selective Engineering Contracts / Full-Time Roles</span>
+                  <span className="text-ink-muted block uppercase tracking-wider mb-1">Resume File</span>
+                  <a href="/resume.pdf" target="_blank" download="Ayush_Full_Stack_Developer_Resume.pdf" className="inline-flex items-center gap-1 text-cobalt hover:underline font-semibold">
+                    Ayush_Full_Stack_Developer_Resume.pdf <ArrowUpRight size={12} />
+                  </a>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-line font-mono text-[0.6875rem] text-ink-muted">
-              <span>IST Timezone (UTC+5:30) • Response within 24 hours</span>
+            <div className="mt-8 pt-6 border-t border-line font-mono text-[0.6875rem] text-ink-muted flex items-center justify-between">
+              <span>IST Timezone (UTC+5:30) • Patna, Bihar</span>
+              <span>Available 2026</span>
             </div>
           </div>
 
@@ -128,7 +140,7 @@ export function Contact() {
                 <label className="font-mono text-xs uppercase tracking-wider text-ink block mb-2">Your Name</label>
                 <input
                   {...register("name", { required: "Name is required" })}
-                  placeholder="Ayush Sharma"
+                  placeholder="Ayush Kumar"
                   className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-cobalt"
                 />
                 {errors.name && <p className="font-mono text-[0.6875rem] text-vermilion mt-1.5">{errors.name.message}</p>}
@@ -191,6 +203,6 @@ export function Contact() {
           </form>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

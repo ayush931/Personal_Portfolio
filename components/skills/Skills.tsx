@@ -1,144 +1,118 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Server, Layout, ShieldCheck, Wrench, CheckCircle2 } from "lucide-react";
+import { Server, Layout, ShieldCheck, Wrench, CheckCircle2, Code2, Database, Cloud, MessageSquare } from "lucide-react";
 import { useState } from "react";
+import { RESUME_SKILLS } from "@/lib/constants";
 
-type SkillCategory = {
-  id: string;
-  name: string;
-  icon: any;
-  description: string;
-  skills: { name: string; level: string; tag: string }[];
+const categoryIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+  "Languages": Code2,
+  "Frontend Architecture": Layout,
+  "Backend & Microservices": Server,
+  "Authentication & Security": ShieldCheck,
+  "Databases & ORMs": Database,
+  "DevOps & Cloud Operations": Cloud,
+  "Message Brokers": MessageSquare,
+  "Developer Tools": Wrench,
 };
 
-const skillCategories: SkillCategory[] = [
-  {
-    id: "backend",
-    name: "Backend Architecture",
-    icon: Server,
-    description: "High-throughput APIs, distributed task queues, and real-time geospatial/caching engines.",
-    skills: [
-      { name: "Python / FastAPI", level: "Production", tag: "Primary" },
-      { name: "Celery & RabbitMQ", level: "Production", tag: "Distributed Tasks" },
-      { name: "PostgreSQL", level: "Production", tag: "Relational DB" },
-      { name: "Redis", level: "Production", tag: "Caching & Geospatial" },
-      { name: "Node.js & WebSockets", level: "Production", tag: "Real-time" },
-    ],
-  },
-  {
-    id: "frontend",
-    name: "Frontend & 3D Engineering",
-    icon: Layout,
-    description: "Componentized React/Next.js apps with smooth GSAP timelines, R3F shaders & WebGL experiences.",
-    skills: [
-      { name: "React 19 & Next.js 15", level: "Production", tag: "App Router" },
-      { name: "TypeScript", level: "Production", tag: "Strict Mode" },
-      { name: "Three.js / R3F / Drei", level: "Advanced", tag: "3D & Shaders" },
-      { name: "GSAP & ScrollTrigger", level: "Advanced", tag: "Timeline Motion" },
-      { name: "Tailwind CSS", level: "Production", tag: "Design Systems" },
-    ],
-  },
-  {
-    id: "infra",
-    name: "Infrastructure & DevOps",
-    icon: ShieldCheck,
-    description: "Containerized deployment pipelines, reverse proxy configs, and production monitoring.",
-    skills: [
-      { name: "Docker & Compose", level: "Production", tag: "Containerization" },
-      { name: "GitHub Actions", level: "Production", tag: "CI/CD Automations" },
-      { name: "Nginx", level: "Production", tag: "Reverse Proxy" },
-      { name: "PM2 & Linux Sysadmin", level: "Production", tag: "Process Mgmt" },
-    ],
-  },
-  {
-    id: "tools",
-    name: "Developer Tools & Workflow",
-    icon: Wrench,
-    description: "Modal editing setups, high-performance terminal environments, and version control.",
-    skills: [
-      { name: "Neovim & Zed", level: "Daily Driver", tag: "Modal Editors" },
-      { name: "Ghostty / WezTerm", level: "Daily Driver", tag: "GPU Terminals" },
-      { name: "Git & GitHub", level: "Daily Driver", tag: "Version Control" },
-      { name: "Linux (Debian/Arch)", level: "Daily Driver", tag: "Environment" },
-    ],
-  },
-];
-
 export function Skills() {
-  const [activeTab, setActiveTab] = useState<string>("backend");
+  const [activeCategory, setActiveCategory] = useState<string>("All");
 
-  const currentCategory = skillCategories.find((c) => c.id === activeTab) || skillCategories[0];
+  const filteredSkills = activeCategory === "All"
+    ? RESUME_SKILLS
+    : RESUME_SKILLS.filter((cat) => cat.category === activeCategory);
 
   return (
-    <section id="skills" className="relative isolate bg-canvas px-gutter py-section border-t border-line">
-      <div className="mx-auto max-w-[1600px]">
+    <div className="relative isolate bg-canvas px-gutter py-12 md:py-20 border-t border-line min-h-full flex flex-col justify-center">
+      <div className="mx-auto max-w-[1600px] w-full">
         {/* Section Header */}
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
           <div>
             <div className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted">
-              05 / Technical Stack
+              05 / Technical Skills & Architecture
             </div>
             <h2 className="font-sans text-title font-medium leading-[0.92] tracking-display text-ink">
-              Core Technologies & Ecosystem.
+              Core Technical Competencies.
             </h2>
           </div>
           <p className="max-w-md font-mono text-xs text-ink-muted leading-relaxed">
-            Battle-tested technologies utilized across production systems at NexoGrafix, personal case studies, and engineering workflows.
+            Every technical skill, library, database, and cloud tool directly extracted from professional experience and production systems.
           </p>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap gap-3 mb-10">
-          {skillCategories.map((cat) => {
-            const Icon = cat.icon;
-            const isActive = activeTab === cat.id;
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap gap-2.5 mb-10">
+          <button
+            onClick={() => setActiveCategory("All")}
+            className={`group inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              activeCategory === "All"
+                ? "border-cobalt bg-cobalt text-canvas shadow-sm font-semibold"
+                : "border-line bg-canvas-raised text-ink-muted hover:border-ink hover:text-ink"
+            }`}
+          >
+            <span>All Categories ({RESUME_SKILLS.length})</span>
+          </button>
+          {RESUME_SKILLS.map((cat) => {
+            const Icon = categoryIcons[cat.category] || Code2;
+            const isActive = activeCategory === cat.category;
             return (
               <button
-                key={cat.id}
-                onClick={() => setActiveTab(cat.id)}
-                className={`group inline-flex items-center gap-2.5 rounded-full border px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition-all ${
+                key={cat.category}
+                onClick={() => setActiveCategory(cat.category)}
+                className={`group inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all cursor-pointer ${
                   isActive
-                    ? "border-cobalt bg-cobalt text-canvas shadow-sm"
+                    ? "border-cobalt bg-cobalt text-canvas shadow-sm font-semibold"
                     : "border-line bg-canvas-raised text-ink-muted hover:border-ink hover:text-ink"
                 }`}
               >
-                <Icon size={16} />
-                <span>{cat.name}</span>
+                <Icon size={14} />
+                <span>{cat.category}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Category Content Grid */}
-        <div className="rounded-panel border border-line bg-canvas-raised p-8 md:p-12">
-          <div className="mb-8 border-b border-line pb-6">
-            <h3 className="font-sans text-2xl font-semibold text-ink">{currentCategory.name}</h3>
-            <p className="font-mono text-xs text-ink-muted mt-1">{currentCategory.description}</p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {currentCategory.skills.map((skill, index) => (
+        {/* Skills Grid */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {filteredSkills.map((cat, catIdx) => {
+            const Icon = categoryIcons[cat.category] || Code2;
+            return (
               <motion.div
-                key={skill.name}
-                initial={{ opacity: 0, y: 12 }}
+                key={cat.category}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25, delay: index * 0.05 }}
-                className="flex items-center justify-between rounded-xl border border-line bg-canvas p-5 transition-colors hover:border-cobalt"
+                transition={{ duration: 0.3, delay: catIdx * 0.05 }}
+                className="flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 hover:border-cobalt transition-colors"
               >
                 <div>
-                  <h4 className="font-sans font-semibold text-ink">{skill.name}</h4>
-                  <span className="font-mono text-[0.6875rem] text-cobalt block mt-1">{skill.tag}</span>
-                </div>
-                <div className="flex items-center gap-1 font-mono text-xs text-ink-muted">
-                  <CheckCircle2 size={14} className="text-cobalt" />
-                  <span>{skill.level}</span>
+                  <div className="flex items-center justify-between border-b border-line/60 pb-4 mb-4">
+                    <div className="flex items-center gap-2 text-cobalt font-medium">
+                      <Icon size={18} />
+                      <h3 className="font-sans text-base font-semibold text-ink">{cat.category}</h3>
+                    </div>
+                    <span className="font-mono text-xs px-2 py-0.5 rounded-full border border-line bg-canvas text-ink-muted">
+                      {cat.skills.length}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {cat.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-line bg-canvas px-3 py-1.5 font-mono text-xs text-ink font-medium hover:border-cobalt/40 transition-colors"
+                      >
+                        <CheckCircle2 size={12} className="text-cobalt shrink-0" />
+                        <span>{skill}</span>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 function GithubIcon({ size = 14 }: { size?: number }) {
   return (
@@ -25,14 +25,12 @@ export type Project = {
   title: string;
   subtitle: string;
   category: string;
-  problem: string;
-  role: string;
-  stack: string[];
-  outcome: string;
+  bullets: readonly string[];
+  stack: readonly string[];
   githubUrl?: string;
   liveUrl?: string;
   accentColor: string;
-  stats: { label: string; value: string }[];
+  stats: readonly { label: string; value: string }[];
 };
 
 export function WorkCard({ project, index }: { project: Project; index: number }) {
@@ -41,7 +39,7 @@ export function WorkCard({ project, index }: { project: Project; index: number }
       data-work-card
       className="group relative rounded-panel border border-line bg-canvas-raised p-8 md:p-12 transition-all duration-300 hover:border-cobalt shadow-sm"
     >
-      <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
+      <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         {/* Left Info Column */}
         <div className="flex flex-col justify-between">
           <div>
@@ -50,33 +48,24 @@ export function WorkCard({ project, index }: { project: Project; index: number }
               <span>/</span>
               <span>{project.category}</span>
             </div>
-            <h3 className="font-sans text-3xl md:text-4xl font-semibold text-ink tracking-tight mb-3">
+            <h3 className="font-sans text-2xl md:text-3xl font-semibold text-ink tracking-tight mb-2">
               {project.title}
             </h3>
-            <p className="font-mono text-sm text-ink-muted mb-6">{project.subtitle}</p>
+            <p className="font-mono text-xs text-cobalt mb-6 font-medium">{project.subtitle}</p>
 
-            {/* Problem & Role */}
-            <div className="space-y-4 border-t border-b border-line py-6 my-6 text-sm">
-              <div>
-                <span className="font-mono text-xs uppercase tracking-wider text-ink font-semibold block mb-1">
-                  Problem & Challenge
-                </span>
-                <p className="text-ink-muted leading-relaxed">{project.problem}</p>
-              </div>
-
-              <div>
-                <span className="font-mono text-xs uppercase tracking-wider text-ink font-semibold block mb-1">
-                  My Role & Architecture
-                </span>
-                <p className="text-ink-muted leading-relaxed">{project.role}</p>
-              </div>
-
-              <div>
-                <span className="font-mono text-xs uppercase tracking-wider text-ink font-semibold block mb-1">
-                  Key Outcome & Performance
-                </span>
-                <p className="text-ink-muted leading-relaxed">{project.outcome}</p>
-              </div>
+            {/* Resume Bullet Points */}
+            <div className="border-t border-b border-line py-6 my-6 space-y-3">
+              <span className="font-mono text-xs uppercase tracking-wider text-ink font-semibold block mb-3">
+                Key Accomplishments & Architecture
+              </span>
+              <ul className="space-y-3 text-sm text-ink-muted leading-relaxed">
+                {project.bullets.map((bullet, bIdx) => (
+                  <li key={bIdx} className="flex items-start gap-2.5">
+                    <CheckCircle2 size={16} className="text-cobalt shrink-0 mt-0.5" />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -90,37 +79,26 @@ export function WorkCard({ project, index }: { project: Project; index: number }
                 className="inline-flex items-center gap-2 rounded-full border border-line bg-canvas px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-ink hover:text-canvas"
               >
                 <GithubIcon size={14} />
-                <span>Source Code</span>
-              </a>
-            )}
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-cobalt px-4 py-2 font-mono text-xs uppercase tracking-wider text-canvas transition-colors hover:bg-ink"
-              >
-                <ExternalLink size={14} />
-                <span>Live Demo</span>
+                <span>GitHub Repository</span>
               </a>
             )}
           </div>
         </div>
 
-        {/* Right Preview & Stack Column */}
-        <div className="flex flex-col justify-between rounded-panel border border-line bg-canvas p-6 md:p-8">
+        {/* Right Stack & Metrics Column */}
+        <div className="flex flex-col justify-between rounded-panel border border-line bg-canvas p-6 md:p-8 space-y-6">
           <div>
             <div className="flex items-center justify-between border-b border-line pb-4 mb-6">
-              <span className="font-mono text-xs uppercase tracking-wider text-ink-muted">Tech Stack</span>
-              <span className="font-mono text-xs text-cobalt font-semibold">{project.stack.length} Core Modules</span>
+              <span className="font-mono text-xs uppercase tracking-wider text-ink-muted">Technologies & Libraries</span>
+              <span className="font-mono text-xs text-cobalt font-semibold">{project.stack.length} Modules</span>
             </div>
 
             {/* Stack Tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
+            <div className="flex flex-wrap gap-2 mb-6">
               {project.stack.map((tech) => (
                 <span
                   key={tech}
-                  className="rounded-md border border-line bg-canvas-raised px-3 py-1 font-mono text-xs text-ink transition-colors group-hover:border-ink/20"
+                  className="rounded-md border border-line bg-canvas-raised px-3 py-1 font-mono text-xs text-ink font-medium transition-colors group-hover:border-cobalt/30"
                 >
                   {tech}
                 </span>
@@ -129,10 +107,10 @@ export function WorkCard({ project, index }: { project: Project; index: number }
           </div>
 
           {/* Key Metrics / Highlights */}
-          <div className="grid grid-cols-2 gap-4 rounded-xl border border-line bg-canvas-raised p-5">
+          <div className={`grid grid-cols-${project.stats.length > 2 ? '3' : '2'} gap-3 rounded-xl border border-line bg-canvas-raised p-5`}>
             {project.stats.map((stat) => (
               <div key={stat.label}>
-                <p className="font-sans text-xl md:text-2xl font-bold text-ink">{stat.value}</p>
+                <p className="font-sans text-xl font-bold text-cobalt">{stat.value}</p>
                 <p className="font-mono text-[0.65rem] uppercase tracking-wider text-ink-muted mt-0.5">{stat.label}</p>
               </div>
             ))}

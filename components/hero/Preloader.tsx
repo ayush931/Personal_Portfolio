@@ -2,30 +2,43 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useExperienceStore } from "@/store/experience-store";
 
 export function Preloader() {
   const root = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
-  const assetProgress = useExperienceStore((state) => state.assetProgress);
   const isSceneReady = useExperienceStore((state) => state.isSceneReady);
+
+  // Auto-dismiss safety timer (max 300ms) so user is never stuck waiting for 3D assets
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useGSAP(() => {
     if (!isSceneReady) return;
     gsap.timeline({ onComplete: () => setIsVisible(false) })
-      .to("[data-preloader-progress]", { scaleX: 1, duration: 0.35, ease: "power2.out" })
-      .to(root.current, { yPercent: -102, duration: 0.85, ease: "power4.inOut" }, "+=0.12");
+      .to(root.current, { opacity: 0, duration: 0.25, ease: "power2.out" });
   }, { dependencies: [isSceneReady], scope: root });
 
   if (!isVisible) return null;
-  const progressStyle = { transform: `scaleX(${Math.min(assetProgress, 100) / 100})` };
 
   return (
-    <div ref={root} className="fixed inset-0 z-50 grid place-items-center bg-canvas" role="status" aria-live="polite">
-      <div className="w-[min(17rem,70vw)]">
-        <p className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted">Preparing material study / {Math.round(assetProgress).toString().padStart(3, "0")}</p>
-        <div className="h-px overflow-hidden bg-line"><span data-preloader-progress className="block h-full origin-left bg-cobalt" style={progressStyle} /></div>
+    <div
+      ref={root}
+      className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center bg-canvas transition-opacity duration-300"
+      role="status"
+      aria-live="polite"
+    >
+      <div className="w-[min(17rem,70vw)] text-center">
+        <p className="font-mono text-kicker uppercase tracking-kicker text-ink-muted">Loading Ayush&apos;s Portfolio...</p>
+        <div className="h-0.5 overflow-hidden bg-line mt-2">
+          <span className="block h-full w-full origin-left bg-cobalt animate-pulse" />
+        </div>
       </div>
     </div>
   );

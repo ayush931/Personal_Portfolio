@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, message: "Thank you! Your message has been sent successfully." });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ success: false, errors: error.issues }, { status: 400 });
     }
