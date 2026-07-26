@@ -78,20 +78,7 @@
     outline-offset: 4px;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--canvas);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--chrome);
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--cobalt);
-  }
+  /* Hide browser scrollbar but keep scroll functionality */
 }
 
 @layer components {
@@ -141,6 +128,15 @@
     border-radius: 50%;
     background: rgba(37, 99, 235, 0.04);
   }
+}
+
+/* Hide browser scrollbar but keep scroll functionality */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

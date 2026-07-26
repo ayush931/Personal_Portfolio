@@ -1,23 +1,46 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Download, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SITE } from "@/lib/constants";
 
 const navItems = [
-  { label: "Experience", href: "#about" },
-  { label: "Projects", href: "#work" },
-  { label: "Education", href: "#education" },
-  { label: "Blogs", href: "#blogs" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
+  { label: "Experience", href: "#about", section: "about" },
+  { label: "Projects", href: "#work", section: "work" },
+  { label: "Education", href: "#education", section: "education" },
+  { label: "Blogs", href: "#blogs", section: "blogs" },
+  { label: "Skills", href: "#skills", section: "skills" },
+  { label: "Contact", href: "#contact", section: "contact" },
 ];
 
 export function Header() {
-  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState("hero");
+  const [hoverItem, setHoverItem] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const sectionIds = navItems.map((item) => item.section);
+    const observers = sectionIds.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" }
+      );
+      observer.observe(el);
+      return observer;
+    });
+
+    return () => observers.forEach((o) => o?.disconnect());
+  }, []);
+
+  const currentPill = hoverItem || `#${activeSection}`;
 
   return (
     <>
@@ -43,20 +66,17 @@ export function Header() {
               <a
                 key={item.href}
                 href={item.href}
-                onMouseEnter={() => setActiveItem(item.href)}
-                onMouseLeave={() => setActiveItem(null)}
+                onMouseEnter={() => setHoverItem(item.href)}
+                onMouseLeave={() => setHoverItem(null)}
                 className="relative px-3.5 py-1.5 font-mono text-kicker uppercase tracking-kicker text-ink-muted transition-colors hover:text-ink group"
               >
-                {activeItem === item.href && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 z-[-1] rounded-full bg-line"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
                 <span className="relative">
                   {item.label}
-                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-cobalt transition-all duration-300 group-hover:w-full" />
+                  <span
+                    className={`absolute -bottom-0.5 left-0 h-px bg-cobalt transition-all duration-300 ${
+                      currentPill === item.href ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
                 </span>
               </a>
             ))}
@@ -108,16 +128,21 @@ export function Header() {
               <div className="text-[0.65rem] uppercase tracking-widest text-ink-muted border-b border-line pb-2 font-bold">
                 NAVIGATION MENU
               </div>
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm uppercase tracking-wider text-ink font-semibold hover:text-cobalt transition-colors py-1"
-                >
-                  {item.label}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const isActive = `#${activeSection}` === item.href;
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`text-sm uppercase tracking-wider font-semibold transition-colors py-1 ${
+                      isActive ? "text-cobalt" : "text-ink hover:text-cobalt"
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
               <div className="pt-4 border-t border-line flex flex-col gap-3">
                 <a
                   href="/resume.pdf"

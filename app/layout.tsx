@@ -6,6 +6,7 @@ import { CustomCursor } from "@/components/common/CustomCursor";
 import { BlueprintGridGlow } from "@/components/common/BlueprintGridGlow";
 import { NoiseOverlay } from "@/components/common/NoiseOverlay";
 import { SectionWipeOverlay } from "@/components/navigation/SectionWipeOverlay";
+import { ScrollProgressBar } from "@/components/navigation/ScrollProgressBar";
 import { TabFocusHandler } from "@/components/common/TabFocusHandler";
 import { ToastProvider } from "@/components/common/ToastProvider";
 import "./globals.css";
@@ -127,6 +128,7 @@ export default function RootLayout({
           <NoiseOverlay />
           <CustomCursor />
           <SectionWipeOverlay />
+          <ScrollProgressBar />
           {children}
           <Analytics />
           <SpeedInsights />
