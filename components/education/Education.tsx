@@ -51,11 +51,11 @@ export function Education() {
         {/* Section Header */}
         <div
           data-edu-reveal
-          className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8"
+          className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8"
         >
           <div>
-            <div className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted flex items-center gap-2">
-              <span>04 / Education &amp; Academic Credentials</span>
+            <div className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted">
+              04 / Education &amp; Academic Credentials
             </div>
             <h2 className="font-sans text-title font-medium leading-[0.92] tracking-display text-ink">
               Formal Education &amp; Higher Qualifications.
@@ -76,7 +76,7 @@ export function Education() {
               <div
                 key={idx}
                 data-edu-reveal
-                className="group flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 md:p-8 transition-all duration-300 hover:border-cobalt hover:shadow-md"
+                className="group flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 md:p-8 transition-all duration-300 hover:border-cobalt hover:-translate-y-1 hover:shadow-md"
               >
                 <div>
                   {/* Top Badge & Icon */}

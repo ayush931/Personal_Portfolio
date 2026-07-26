@@ -45,7 +45,7 @@ export function Header() {
                 href={item.href}
                 onMouseEnter={() => setActiveItem(item.href)}
                 onMouseLeave={() => setActiveItem(null)}
-                className="relative px-3.5 py-1.5 font-mono text-kicker uppercase tracking-kicker text-ink-muted transition-colors hover:text-ink"
+                className="relative px-3.5 py-1.5 font-mono text-kicker uppercase tracking-kicker text-ink-muted transition-colors hover:text-ink group"
               >
                 {activeItem === item.href && (
                   <motion.span
@@ -54,7 +54,10 @@ export function Header() {
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                {item.label}
+                <span className="relative">
+                  {item.label}
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-cobalt transition-all duration-300 group-hover:w-full" />
+                </span>
               </a>
             ))}
           </nav>

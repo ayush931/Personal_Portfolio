@@ -99,7 +99,7 @@ export function About() {
             <div
               key={idx}
               data-about-reveal
-              className="group flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 md:p-8 transition-all duration-300 hover:border-cobalt hover:shadow-md"
+              className="group flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 md:p-8 transition-all duration-300 hover:border-cobalt hover:-translate-y-1 hover:shadow-md"
             >
               <div>
                 {/* Top Metadata */}

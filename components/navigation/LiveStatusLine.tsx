@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export function LiveStatusLine() {
+export function LiveStatusLine({ showScroll = false }: { showScroll?: boolean }) {
   const [timeStr, setTimeStr] = useState("");
   const [seconds, setSeconds] = useState("00");
+  const scrollRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const updateTime = () => {
@@ -27,6 +28,22 @@ export function LiveStatusLine() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (!showScroll || !scrollRef.current) return;
+
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll <= 0 || !scrollRef.current) return;
+      const progress = Math.min(Math.max(window.scrollY / totalScroll, 0), 1);
+      const pct = Math.round(progress * 100).toString().padStart(3, "0");
+      scrollRef.current.textContent = `SYS_SCROLL: ${pct}%`;
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [showScroll]);
+
   return (
     <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-wider text-ink-muted">
       <div className="flex items-center gap-1">
@@ -43,6 +60,13 @@ export function LiveStatusLine() {
         </span>
         <span>WebGL Active</span>
       </div>
+
+      {showScroll && (
+        <>
+          <span className="text-ink-muted/30">|</span>
+          <span ref={scrollRef} className="text-ink font-semibold">SYS_SCROLL: 000%</span>
+        </>
+      )}
     </div>
   );
 }

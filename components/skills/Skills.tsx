@@ -27,10 +27,10 @@ export function Skills() {
     <div className="relative isolate bg-canvas blueprint-grid px-gutter py-12 md:py-20 border-t border-line min-h-full flex flex-col justify-center">
       <div className="mx-auto max-w-[1600px] w-full">
         {/* Section Header */}
-        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
+        <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end border-b border-line pb-8">
           <div>
             <div className="mb-3 font-mono text-kicker uppercase tracking-kicker text-ink-muted">
-              05 / Technical Skills & Architecture
+              06 / Technical Skills & Architecture
             </div>
             <h2 className="font-sans text-title font-medium leading-[0.92] tracking-display text-ink">
               Core Technical Competencies.
@@ -83,7 +83,7 @@ export function Skills() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: catIdx * 0.05 }}
-                className="flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 hover:border-cobalt transition-colors"
+                className="flex flex-col justify-between rounded-panel border border-line bg-canvas-raised p-6 transition-all duration-300 hover:border-cobalt hover:-translate-y-1 hover:shadow-md"
               >
                 <div>
                   <div className="flex items-center justify-between border-b border-line/60 pb-4 mb-4">
