@@ -3,54 +3,84 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useExperienceStore } from "@/store/experience-store";
-import { Terminal, Sparkles, CornerDownLeft, Copy, Check, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Terminal, Sparkles, CornerDownLeft, Copy, Check, Trash2 } from "lucide-react";
+import { SITE } from "@/lib/constants";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const COMMANDS = {
+const COMMANDS: Record<string, string[]> = {
   help: [
     "Available terminal commands:",
     "  whoami       - Display developer identity & background",
     "  cat about.md - Read origin story & career pivot path",
     "  ls projects  - List featured production repositories",
     "  skills       - View full-stack tech stack & tools",
+    "  experience   - View career history & company impact",
+    "  contact      - Display direct phone, email & location",
     "  open resume  - Launch resume PDF in a new tab",
     "  clear        - Clear console buffer logs",
   ],
   whoami: [
-    "User: Ayush Kumar",
-    "Identity: Full-Stack & Systems Engineer",
-    "Origin: Chemistry Honours -> MBA Marketing -> Software Engineering",
-    "Current: Junior Software Engineer at NexoGrafix",
+    `User: ${SITE.name}`,
+    `Role: ${SITE.role}`,
+    `Location: ${SITE.location}`,
     "Degree: MCA (IIIT Ranchi / IIT Patna Joint Advanced Program)",
-    "Focus: Event-driven microservices, document pipelines, real-time WebSockets.",
+    "Experience: 3 Verified Engineering Roles (NexoGrafix, ShipU Logistics, Shabra Softech)",
+    "Focus: Event-driven microservices, document automation, real-time WebSockets.",
   ],
   "cat about.md": [
-    "# Origin & Career Pivot Path",
-    "Chemistry taught me first-principles scientific debugging.",
-    "MBA Marketing gave me customer empathy and business alignment.",
-    "MCA & NexoGrafix is where I build production document automation and scalable microservices.",
+    "# ABOUT AYUSH KUMAR — FULL-STACK ENGINEER & SYSTEMS BUILDER",
+    "─────────────────────────────────────────────────────────────",
+    "• Origin: B.Sc Chemistry (Patliputra Univ) → First-principles analytical problem solving.",
+    "• Business: MBA Marketing (AKU, CGPA 8.61/10) → Product strategy, user empathy & business ROI.",
+    "• Engineering: MCA (IIIT Ranchi / IIT Patna Joint Advanced Program) → High-performance backend & web apps.",
+    "",
+    "Current Role: Junior Software Engineer at NexoGrafix Pvt Ltd (Patna)",
+    "Key Impact: Built Word add-in (TypeScript/Office.js) + FastAPI microservices pipeline cutting formatting turnaround by 60%.",
+    "",
+    "Core Technical Focus:",
+    "  - Microservices & Document Automation (FastAPI, Python, React, TypeScript)",
+    "  - Real-Time Synchronization Engines (WebSockets, Socket.IO, Phaser.js)",
+    "  - High-Throughput Event Architecture (RabbitMQ, Node.js, Express, Docker)",
+    "  - Database Performance Optimization (PostgreSQL, Prisma ORM, Turborepo)",
+    "─────────────────────────────────────────────────────────────",
   ],
   "ls projects": [
-    "drwxr-xr-x  aetheria          Phaser.js multiplayer 2D sandbox engine",
-    "drwxr-xr-x  infinite-canvas   Next.js whiteboard WebSockets sync",
-    "drwxr-xr-x  ridesync          React Native real-time GPS ride booking app",
-    "drwxr-xr-x  trackflow         RabbitMQ Node.js event-driven logistics pipeline",
+    "drwxr-xr-x  aetheria          Phaser.js 60FPS multiplayer 2D sandbox world",
+    "drwxr-xr-x  infinite-canvas   Next.js sub-100ms real-time collaborative whiteboard",
+    "drwxr-xr-x  ridesync          React Native Expo live GPS ride booking platform",
+    "drwxr-xr-x  trackflow         RabbitMQ Node.js event-driven logistics architecture",
   ],
   skills: [
-    "Languages:           TypeScript, Python, SQL, C++, Go",
-    "Backend & Services:  Node.js, Express, FastAPI, WebSockets, REST APIs",
-    "Pipelines/Brokers:   RabbitMQ, Celery, Redis, Docker, AWS",
-    "Frontend Frameworks: React, Next.js (App Router), React Native (Expo)",
-    "Databases:           PostgreSQL, MongoDB, Prisma ORM, Neon DB",
+    "Languages:           TypeScript, Python, SQL, C++, JavaScript (ES6+)",
+    "Backend Architecture: Node.js, Express, FastAPI, WebSockets, REST APIs",
+    "Message Brokers:     RabbitMQ, Apache Kafka",
+    "Databases & ORMs:    PostgreSQL, Neon DB, MongoDB, Redis, Prisma ORM",
+    "DevOps & Cloud:      Docker, Kubernetes, AWS (EC2, S3), GitHub Actions",
+  ],
+  experience: [
+    "1. NexoGrafix Pvt Ltd (Apr 2026 - Present) — Junior Software Engineer",
+    "   - Built Word add-in (TypeScript, Office.js) cutting editorial effort 60%",
+    "   - Architected 4-microservice document conversion platform (FastAPI, React)",
+    "2. ShipU Logistics (Sep 2025 - Mar 2026) — Software Engineer Intern",
+    "   - Built real-time PERN logistics engine (+25% query speedup)",
+    "3. Shabra Softech (Feb 2025 - Aug 2025) — Software Engineer Intern",
+    "   - Migrated legacy MERN monolith to Turborepo monorepo (40% code reuse)",
+  ],
+  contact: [
+    `Email:    ${SITE.email}`,
+    `Phone:    ${SITE.phone}`,
+    `Location: ${SITE.location}`,
+    `GitHub:   ${SITE.github}`,
+    `LinkedIn: ${SITE.linkedin}`,
   ],
 };
 
-const QUICK_COMMANDS = ["help", "whoami", "cat about.md", "ls projects", "skills", "open resume", "clear"];
+const QUICK_COMMANDS = ["help", "whoami", "cat about.md", "ls projects", "skills", "experience", "open resume", "clear"];
 
 interface TerminalSectionProps {
   isInline?: boolean;
@@ -85,38 +115,6 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
     });
   }, { scope: containerRef });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = terminalCardRef.current;
-    if (!card || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-
-    const tiltX = (y / (rect.height / 2)) * -4;
-    const tiltY = (x / (rect.width / 2)) * 4;
-
-    gsap.to(card, {
-      rotateX: tiltX,
-      rotateY: tiltY,
-      transformPerspective: 1000,
-      ease: "power2.out",
-      duration: 0.4,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    const card = terminalCardRef.current;
-    if (!card) return;
-
-    gsap.to(card, {
-      rotateX: 0,
-      rotateY: 0,
-      ease: "power2.out",
-      duration: 0.6,
-    });
-  };
-
   const executeCommand = (cmdInput: string) => {
     const cmd = cmdInput.trim().toLowerCase();
     if (!cmd) return;
@@ -136,7 +134,7 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
         window.open("/resume.pdf", "_blank");
       }
     } else if (cmd in COMMANDS) {
-      response = COMMANDS[cmd as keyof typeof COMMANDS];
+      response = COMMANDS[cmd];
     } else {
       response = [`bash: command not found: ${cmdInput}`, "Type 'help' to view available console commands."];
     }
@@ -191,17 +189,22 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
     setHistory([]);
   };
 
+  const handleCardClick = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.toString().trim().length === 0) {
+      inputRef.current?.focus();
+    }
+  };
+
   const terminalCard = (
     <div
       ref={terminalCardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={() => inputRef.current?.focus()}
-      className="w-full max-w-3xl rounded-2xl border border-line/80 bg-canvas-raised p-4 sm:p-6 backdrop-blur-xl cursor-text transition-all duration-300 hover:border-cobalt/40 font-mono text-ink"
+      onClick={handleCardClick}
+      className="w-full max-w-3xl rounded-2xl border border-line bg-canvas-raised p-4 sm:p-6 backdrop-blur-xl cursor-text transition-all duration-300 hover:border-cobalt/40 font-mono text-ink select-text"
     >
-      {/* Header Bar */}
+      {/* Mac-style Window Header Bar */}
       <div className="flex items-center justify-between border-b border-line/60 pb-3 mb-4 select-none">
-        {/* Left Mac Window Dots */}
+        {/* Window Dots & Hostname */}
         <div className="flex items-center gap-2">
           <div className="group/dot relative flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f56] cursor-pointer">
             <span className="opacity-0 group-hover/dot:opacity-100 text-[8px] text-black font-bold">×</span>
@@ -214,19 +217,19 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
           </div>
           <div className="flex items-center gap-2 ml-2 text-xs text-ink-muted font-semibold">
             <Terminal size={13} className="text-cobalt" />
-            <span className="truncate max-w-[140px] sm:max-w-none">ayush@portfolio:~ (zsh)</span>
+            <span className="truncate max-w-[150px] sm:max-w-none">ayush@portfolio:~ (zsh)</span>
           </div>
         </div>
 
-        {/* Right Action Tools & Badge */}
-        <div className="flex items-center gap-3">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={handleCopyHistory}
             className="flex items-center gap-1 text-[0.7rem] text-ink-muted hover:text-cobalt transition-colors p-1 rounded hover:bg-canvas border border-transparent hover:border-line"
             title="Copy Terminal Logs"
           >
-            {copied ? <Check size={13} className="text-acid" /> : <Copy size={13} />}
+            {copied ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
             <span className="hidden sm:inline font-medium">{copied ? "Copied" : "Copy"}</span>
           </button>
           
@@ -242,15 +245,15 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
 
           <div className="hidden sm:flex items-center gap-1.5 rounded-full border border-cobalt/20 bg-cobalt/5 px-2.5 py-0.5 text-[0.65rem] text-cobalt font-bold">
             <span className="h-1.5 w-1.5 rounded-full bg-cobalt animate-pulse" />
-            <span>TTY READY</span>
+            <span>TTY ACTIVE</span>
           </div>
         </div>
       </div>
 
-      {/* Terminal Output Logs */}
+      {/* Output Stream */}
       <div
         id="terminal-body"
-        className="font-mono text-xs md:text-sm text-ink-muted space-y-2 h-[220px] sm:h-[260px] md:h-[280px] overflow-y-auto pr-2 scrollbar-none"
+        className="font-mono text-xs md:text-sm text-ink-muted space-y-2 h-[220px] sm:h-[260px] md:h-[280px] overflow-y-auto pr-2 scrollbar-none select-text cursor-text"
       >
         {history.map((line, idx) => {
           if (line.startsWith("$ ")) {
@@ -288,7 +291,7 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
           return <div key={idx} className="leading-relaxed text-ink-muted">{line}</div>;
         })}
 
-        {/* Input Form Prompt */}
+        {/* Input Line Form */}
         <form onSubmit={handleCommandSubmit} className="flex items-center gap-2 pt-3 border-t border-line/40">
           <span className="text-cobalt font-extrabold select-none">➜</span>
           <span className="text-ink-muted/70 text-xs font-normal select-none hidden sm:inline">~/portfolio</span>
@@ -356,4 +359,3 @@ export function TerminalSection({ isInline = false }: TerminalSectionProps) {
     </div>
   );
 }
-

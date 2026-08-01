@@ -58,20 +58,21 @@ export function Header() {
     <>
       <header className="fixed top-0 left-0 right-0 z-40 px-3 sm:px-gutter pt-3 sm:pt-4 md:pt-6 pointer-events-none">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-2 sm:gap-4">
-          {/* Brand Logo / Home Button (Leftmost) */}
+          
+          {/* Brand Logo / Home Button (Leftmost - h-10 sm:h-11) */}
           <Link
             href={isHome ? "#hero" : "/#hero"}
             title="Return to Home"
-            className="pointer-events-auto shrink-0 group flex items-center gap-1.5 sm:gap-2 rounded-full border border-line bg-canvas-raised/90 px-3 py-1.5 sm:px-4 sm:py-2 font-mono text-[0.6875rem] sm:text-kicker uppercase tracking-kicker backdrop-blur-md transition-all hover:border-cobalt hover:shadow-sm"
+            className="pointer-events-auto shrink-0 group h-10 sm:h-11 px-3.5 sm:px-4 flex items-center gap-2 rounded-full border border-line bg-canvas-raised/90 font-mono text-xs uppercase tracking-wider backdrop-blur-md transition-all hover:border-cobalt hover:shadow-xs whitespace-nowrap"
           >
             <span className="h-2 w-2 rounded-full bg-cobalt animate-pulse shrink-0" />
             <span className="font-semibold text-ink group-hover:text-cobalt transition-colors whitespace-nowrap">{SITE.name}</span>
             <span className="hidden xl:inline text-ink-muted whitespace-nowrap">/ {SITE.role}</span>
           </Link>
 
-          {/* Center Navbar (Desktop & Large Laptop) */}
+          {/* Center Navbar (Desktop - h-10 sm:h-11) */}
           <nav
-            className="pointer-events-auto hidden lg:flex items-center gap-1 rounded-full border border-line bg-canvas-raised/90 px-3 py-1.5 backdrop-blur-md shrink-0"
+            className="pointer-events-auto hidden lg:flex h-10 sm:h-11 items-center gap-1 rounded-full border border-line bg-canvas-raised/90 px-2 sm:px-3 backdrop-blur-md shrink-0"
             aria-label="Main Navigation"
           >
             {navItems.map((item) => {
@@ -80,19 +81,20 @@ export function Header() {
                 : item.section === "blogs"
                 ? "/blogs"
                 : `/${item.href}`;
+              const isActive = activeSection === item.section;
               return (
                 <Link
                   key={item.href}
                   href={href}
                   onMouseEnter={() => setHoverItem(item.href)}
                   onMouseLeave={() => setHoverItem(null)}
-                  className="relative px-3 py-1.5 xl:px-3.5 font-mono text-kicker uppercase tracking-kicker text-ink-muted transition-colors hover:text-ink group whitespace-nowrap"
+                  className="relative px-3 py-1 font-mono text-xs uppercase tracking-wider text-ink-muted transition-colors hover:text-ink group whitespace-nowrap flex items-center"
                 >
-                  <span className="relative">
+                  <span className="relative font-medium">
                     {item.label}
                     <span
-                      className={`absolute -bottom-0.5 left-0 h-px bg-cobalt transition-all duration-300 ${
-                        currentPill === item.href ? "w-full" : "w-0 group-hover:w-full"
+                      className={`absolute -bottom-0.5 left-0 h-0.5 bg-cobalt rounded-full transition-all duration-300 ${
+                        currentPill === item.href || isActive ? "w-full" : "w-0 group-hover:w-full"
                       }`}
                     />
                   </span>
@@ -101,33 +103,33 @@ export function Header() {
             })}
           </nav>
 
-          {/* Desktop & Mobile CTAs (Rightmost) */}
-          <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* Resume PDF Download Button */}
+          {/* Desktop & Mobile CTAs (Rightmost - h-10 sm:h-11) */}
+          <div className="pointer-events-auto flex items-center gap-2 shrink-0">
+            {/* Resume PDF Download Button (h-10 sm:h-11) */}
             <a
               href="/resume.pdf"
               target="_blank"
               download="Ayush_Full_Stack_Developer_Resume.pdf"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-line bg-canvas-raised/90 px-3 py-1.5 sm:px-3.5 sm:py-2 font-mono text-[0.6875rem] sm:text-kicker uppercase tracking-kicker text-ink backdrop-blur-md transition-colors hover:border-cobalt hover:text-cobalt shrink-0 whitespace-nowrap"
+              className="hidden sm:flex h-10 sm:h-11 px-3.5 sm:px-4 items-center gap-1.5 rounded-full border border-line bg-canvas-raised/90 font-mono text-xs uppercase tracking-wider text-ink backdrop-blur-md transition-colors hover:border-cobalt hover:text-cobalt shrink-0 whitespace-nowrap font-medium"
             >
-              <Download size={13} className="shrink-0" />
+              <Download size={14} className="shrink-0" />
               <span className="hidden md:inline">Resume PDF</span>
               <span className="md:hidden">CV</span>
             </a>
 
-            {/* Get in Touch Button */}
+            {/* Get in Touch Button (h-10 sm:h-11) */}
             <Link
               href={isHome ? "#contact" : "/#contact"}
-              className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-ink px-3 py-1.5 sm:px-4 sm:py-2 font-mono text-[0.6875rem] sm:text-kicker uppercase tracking-kicker text-canvas transition-colors hover:bg-cobalt shrink-0 whitespace-nowrap"
+              className="group flex h-10 sm:h-11 px-3.5 sm:px-4 items-center gap-1.5 sm:gap-2 rounded-full bg-ink font-mono text-xs uppercase tracking-wider text-canvas transition-colors hover:bg-cobalt shrink-0 whitespace-nowrap font-semibold"
             >
               <span>Get in touch</span>
-              <ArrowUpRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
+              <ArrowUpRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
             </Link>
 
-            {/* Mobile / Tablet Hamburger Toggle */}
+            {/* Mobile / Tablet Hamburger Toggle (Square Capsule h-10 w-10 sm:h-11 sm:w-11) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden flex items-center justify-center rounded-full border border-line bg-canvas-raised/90 p-2 sm:p-2.5 text-ink backdrop-blur-md hover:border-cobalt transition-colors shrink-0 cursor-pointer"
+              className="lg:hidden flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-line bg-canvas-raised/90 text-ink backdrop-blur-md hover:border-cobalt transition-colors shrink-0 cursor-pointer"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
