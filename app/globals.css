@@ -51,14 +51,19 @@
     color: var(--ink);
     scroll-behavior: auto;
     font-family: var(--font-jetbrains-mono), monospace;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   body {
     min-width: 320px;
+    max-width: 100vw;
+    overflow-x: hidden;
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-jetbrains-mono), monospace;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
     background-image: linear-gradient(
         to right,
         rgba(37, 99, 235, 0.08) 1px,

@@ -108,10 +108,10 @@ export function WorkCard({ project, index }: { project: Project; index: number }
           </div>
 
           {/* Key Metrics / Odometer Highlights */}
-          <div className={`grid grid-cols-${project.stats.length > 2 ? '3' : '2'} gap-3 rounded-xl border border-line bg-canvas-raised p-5`}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 rounded-xl border border-line bg-canvas-raised p-4 sm:p-5">
             {project.stats.map((stat) => (
               <div key={stat.label}>
-                <div className="font-sans text-xl font-bold text-cobalt">
+                <div className="font-sans text-lg sm:text-xl font-bold text-cobalt">
                   <OdometerCounter value={stat.value} />
                 </div>
                 <p className="font-mono text-[0.65rem] uppercase tracking-wider text-ink-muted mt-0.5">{stat.label}</p>

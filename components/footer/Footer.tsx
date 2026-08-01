@@ -58,7 +58,7 @@ export function Footer() {
     <footer className="relative isolate bg-canvas blueprint-grid px-gutter pt-16 pb-12 border-t border-line w-full">
       <div className="mx-auto max-w-[1600px] w-full space-y-12">
         {/* Main Footer Grid */}
-        <div className="grid gap-12 lg:grid-cols-4 pb-12 border-b border-line">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 pb-12 border-b border-line">
           {/* Column 1: Brand & Slogan */}
           <div className="lg:col-span-1 space-y-4">
             <span className="font-mono text-3xl font-semibold text-ink tracking-tight block">{SITE.name}</span>

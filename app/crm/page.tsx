@@ -415,29 +415,31 @@ export default function CrmDashboard() {
   return (
     <div className="min-h-svh bg-canvas blueprint-grid text-ink font-mono flex flex-col justify-between">
       {/* Top Header Navigation */}
-      <header className="border-b border-line bg-canvas-raised/90 backdrop-blur-md sticky top-0 z-40 px-4 md:px-gutter py-4">
-        <div className="mx-auto max-w-[1600px] flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+      <header className="border-b border-line bg-canvas-raised/90 backdrop-blur-md sticky top-0 z-40 px-3 sm:px-4 md:px-gutter py-3 sm:py-4">
+        <div className="mx-auto max-w-[1600px] flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-canvas px-3 py-1.5 text-xs text-ink-muted hover:text-ink hover:border-cobalt transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-canvas px-2.5 py-1 sm:px-3 sm:py-1.5 text-[0.6875rem] sm:text-xs text-ink-muted hover:text-ink hover:border-cobalt transition-colors shrink-0 whitespace-nowrap"
             >
-              <ArrowLeft size={14} />
+              <ArrowLeft size={13} className="shrink-0" />
               <span className="hidden sm:inline">Back to Site</span>
+              <span className="sm:hidden">Exit</span>
             </Link>
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-cobalt animate-pulse" />
-              <span className="font-bold text-ink text-xs sm:text-sm">AYUSH // CRM TELEMETRY</span>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="h-2 w-2 rounded-full bg-cobalt animate-pulse shrink-0" />
+              <span className="font-bold text-ink text-[0.6875rem] sm:text-xs md:text-sm whitespace-nowrap">AYUSH // CRM TELEMETRY</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={fetchCrmData}
-              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-canvas px-3 py-1.5 text-xs text-ink-muted hover:text-ink hover:border-cobalt transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-canvas px-2.5 py-1 sm:px-3 sm:py-1.5 text-[0.6875rem] sm:text-xs text-ink-muted hover:text-ink hover:border-cobalt transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
-              <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+              <RefreshCw size={13} className={`shrink-0 ${loading ? "animate-spin" : ""}`} />
               <span className="hidden sm:inline">Sync DB Telemetry</span>
+              <span className="sm:hidden">Sync</span>
             </button>
           </div>
         </div>

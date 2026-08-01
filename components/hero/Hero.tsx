@@ -32,20 +32,20 @@ export function Hero() {
   return (
     <>
       <Preloader />
-      <div ref={root} className="relative isolate flex h-svh min-h-svh w-full flex-col justify-between overflow-hidden bg-canvas blueprint-grid px-gutter py-4 md:py-6">
+      <div ref={root} className="relative isolate flex min-h-svh w-full flex-col justify-between overflow-y-auto sm:overflow-hidden bg-canvas blueprint-grid px-gutter py-4 md:py-6">
         <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between h-full pt-16 md:pt-20">
 
           {/* Consolidated Status Bar */}
-          <header data-hero-status className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs uppercase tracking-wider text-ink-muted border-b border-line pb-4">
-            <div className="flex items-center gap-2">
+          <header data-hero-status className="flex flex-wrap items-center justify-between gap-3 font-mono text-[0.6875rem] sm:text-xs uppercase tracking-wider text-ink-muted border-b border-line pb-3 sm:pb-4">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="h-2 w-2 rounded-full bg-cobalt animate-pulse" />
               <span className="font-semibold text-ink">AVAILABLE FOR FULL-TIME &amp; SENIOR ROLES</span>
-              <span>·</span>
-              <span>PATNA, BIHAR, INDIA</span>
+              <span className="hidden sm:inline">·</span>
+              <span className="text-ink-muted">PATNA, BIHAR, INDIA</span>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 sm:gap-6">
               <LiveStatusLine showScroll />
-              <div className="font-mono text-xs text-cobalt font-medium flex items-center gap-1.5 hidden sm:flex">
+              <div className="font-mono text-xs text-cobalt font-medium items-center gap-1.5 hidden sm:flex">
                 <Terminal size={13} />
                 <span>SYS_VER: 2026.4</span>
               </div>
@@ -53,16 +53,16 @@ export function Hero() {
           </header>
 
           {/* Hero Main Content - Vertically Centered */}
-          <div className="my-auto flex-1 flex flex-col justify-center max-w-4xl">
-            <div className="space-y-6">
+          <div className="my-auto flex-1 flex flex-col justify-center max-w-4xl py-6 sm:py-0">
+            <div className="space-y-4 sm:space-y-6">
               {/* Tagline */}
               <div data-hero-reveal className="font-mono text-xs md:text-sm text-cobalt font-semibold tracking-wider">
                 &gt; full-stack engineer · systems &amp; pipelines
               </div>
 
               {/* Headline */}
-              <h1 aria-label="AYUSH KUMAR" className="font-mono text-display font-bold leading-[0.85] text-ink uppercase">
-                <span className="inline-flex items-end">
+              <h1 aria-label="AYUSH KUMAR" className="font-mono text-display font-bold leading-[0.85] text-ink uppercase max-w-full">
+                <span className="inline-flex flex-wrap items-end">
                   {firstNameCharacters.map((char, idx) => (
                     <span key={`first-${char}-${idx}`} className="inline-block overflow-hidden pr-[0.04em]">
                       <span data-hero-character className="inline-block will-change-transform">{char}</span>
@@ -83,8 +83,8 @@ export function Hero() {
               </h1>
 
               {/* One-Line Differentiator */}
-              <p data-hero-reveal className="max-w-2xl font-mono text-sm md:text-base text-ink-muted leading-relaxed">
-                &ldquo;I build real-time multiplayer systems, document processing pipelines,<br />
+              <p data-hero-reveal className="max-w-2xl font-mono text-xs sm:text-sm md:text-base text-ink-muted leading-relaxed">
+                &ldquo;I build real-time multiplayer systems, document processing pipelines,<br className="hidden sm:inline" />
                 and the tools in between.&rdquo;
               </p>
 

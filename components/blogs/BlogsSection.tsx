@@ -56,7 +56,7 @@ export function BlogsSection() {
 
         {/* Blog Post Cards Grid */}
         {loading ? (
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="h-64 rounded-panel border border-line bg-canvas-raised/50 animate-pulse" />
             ))}
@@ -70,7 +70,7 @@ export function BlogsSection() {
             </p>
           </div>
         ) : (
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <article
                 key={post.id}

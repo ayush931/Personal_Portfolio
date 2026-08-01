@@ -7,7 +7,24 @@ export const SITE = {
   github: "https://github.com/ayush931",
   linkedin: "https://www.linkedin.com/in/ayush-kumar-94310522a",
   resumePdf: "/resume.pdf",
+  domain: "ayushkumar.dev",
+  formattedDate: "AUG 2026",
 } as const;
+
+export const TECHNICAL_ARSENAL = [
+  "TypeScript",
+  "React.js",
+  "Next.js",
+  "Node.js",
+  "PostgreSQL",
+  "FastAPI",
+  "Docker",
+  "AWS",
+  "WebSockets",
+  "RabbitMQ",
+  "Python",
+  "Tailwind CSS",
+] as const;
 
 export const RESUME_SUMMARY =
   "Full-Stack Engineer (PERN/MERN) building scalable logistics and SaaS platforms with React.js, Next.js, and Node.js. Specializes in event-driven microservices, secure authentication, and CI/CD-driven delivery – cutting processing time by 45% and boosting query performance by 25%.";
