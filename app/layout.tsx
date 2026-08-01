@@ -5,7 +5,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { GridBackground } from "@/components/common/GridBackground";
 import { ScrollAnimations } from "@/components/common/ScrollAnimations";
-import { BlueprintGridGlow } from "@/components/common/BlueprintGridGlow";
 import { NoiseOverlay } from "@/components/common/NoiseOverlay";
 import { SectionWipeOverlay } from "@/components/navigation/SectionWipeOverlay";
 import { ScrollProgressBar } from "@/components/navigation/ScrollProgressBar";
@@ -128,7 +127,6 @@ export default function RootLayout({
           <TabFocusHandler />
           <GridBackground />
           <ScrollAnimations />
-          <BlueprintGridGlow />
           <NoiseOverlay />
           <CustomCursor />
           <SectionWipeOverlay />

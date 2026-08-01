@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Download, Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SITE } from "@/lib/constants";
 
@@ -16,11 +17,22 @@ const navItems = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [activeSection, setActiveSection] = useState("hero");
   const [hoverItem, setHoverItem] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    if (!isHome) {
+      if (pathname.startsWith("/blogs")) {
+        setActiveSection("blogs");
+      } else {
+        setActiveSection("hero");
+      }
+      return;
+    }
+
     const sectionIds = navItems.map((item) => item.section);
     const observers = sectionIds.map((id) => {
       const el = document.getElementById(id);
@@ -38,7 +50,7 @@ export function Header() {
     });
 
     return () => observers.forEach((o) => o?.disconnect());
-  }, []);
+  }, [isHome, pathname]);
 
   const currentPill = hoverItem || `#${activeSection}`;
 
@@ -48,7 +60,7 @@ export function Header() {
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4">
           {/* Brand Logo / Home Button */}
           <Link
-            href="#hero"
+            href={isHome ? "#hero" : "/#hero"}
             title="Return to Home"
             className="pointer-events-auto group flex items-center gap-2 rounded-full border border-line bg-canvas-raised/90 px-4 py-2 font-mono text-kicker uppercase tracking-kicker backdrop-blur-md transition-all hover:border-cobalt hover:shadow-sm"
           >
@@ -62,24 +74,31 @@ export function Header() {
             className="pointer-events-auto hidden md:flex items-center gap-1 rounded-full border border-line bg-canvas-raised/90 px-3 py-1.5 backdrop-blur-md"
             aria-label="Main Navigation"
           >
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onMouseEnter={() => setHoverItem(item.href)}
-                onMouseLeave={() => setHoverItem(null)}
-                className="relative px-3.5 py-1.5 font-mono text-kicker uppercase tracking-kicker text-ink-muted transition-colors hover:text-ink group"
-              >
-                <span className="relative">
-                  {item.label}
-                  <span
-                    className={`absolute -bottom-0.5 left-0 h-px bg-cobalt transition-all duration-300 ${
-                      currentPill === item.href ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
-                </span>
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const href = isHome
+                ? item.href
+                : item.section === "blogs"
+                ? "/blogs"
+                : `/${item.href}`;
+              return (
+                <Link
+                  key={item.href}
+                  href={href}
+                  onMouseEnter={() => setHoverItem(item.href)}
+                  onMouseLeave={() => setHoverItem(null)}
+                  className="relative px-3.5 py-1.5 font-mono text-kicker uppercase tracking-kicker text-ink-muted transition-colors hover:text-ink group"
+                >
+                  <span className="relative">
+                    {item.label}
+                    <span
+                      className={`absolute -bottom-0.5 left-0 h-px bg-cobalt transition-all duration-300 ${
+                        currentPill === item.href ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    />
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop & Mobile CTAs */}
@@ -94,13 +113,13 @@ export function Header() {
               <span>Resume PDF</span>
             </a>
 
-            <a
-              href="#contact"
+            <Link
+              href={isHome ? "#contact" : "/#contact"}
               className="group hidden sm:inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 font-mono text-kicker uppercase tracking-kicker text-canvas transition-colors hover:bg-cobalt"
             >
               <span>Get in touch</span>
               <ArrowUpRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
 
             {/* Mobile Hamburger Toggle */}
             <button
@@ -128,19 +147,24 @@ export function Header() {
               <div className="text-[0.65rem] uppercase tracking-widest text-ink-muted border-b border-line pb-2 font-bold">
                 NAVIGATION MENU
               </div>
-              {navItems.map((item) => {
-                const isActive = `#${activeSection}` === item.href;
+               {navItems.map((item) => {
+                const isActive = activeSection === item.section;
+                const href = isHome
+                  ? item.href
+                  : item.section === "blogs"
+                  ? "/blogs"
+                  : `/${item.href}`;
                 return (
-                  <a
+                  <Link
                     key={item.href}
-                    href={item.href}
+                    href={href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`text-sm uppercase tracking-wider font-semibold transition-colors py-1 ${
                       isActive ? "text-cobalt" : "text-ink hover:text-cobalt"
                     }`}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 );
               })}
               <div className="pt-4 border-t border-line flex flex-col gap-3">
@@ -153,14 +177,14 @@ export function Header() {
                   <Download size={14} />
                   <span>Download Resume PDF</span>
                 </a>
-                <a
-                  href="#contact"
+                <Link
+                  href={isHome ? "#contact" : "/#contact"}
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center justify-center gap-2 rounded-full bg-cobalt py-2.5 text-xs uppercase tracking-wider text-white font-bold"
                 >
                   <span>Get in touch</span>
                   <ArrowUpRight size={14} />
-                </a>
+                </Link>
               </div>
             </div>
           </motion.div>

@@ -116,8 +116,8 @@ export async function saveBlogPost(
                     slug,
                     excerpt: postData.excerpt || postData.content.slice(0, 160) + "...",
                     content: postData.content,
-                    category: postData.category || "System Design",
-                    tags: postData.tags || ["Engineering"],
+                    category: postData.category || "Uncategorized",
+                    tags: postData.tags || [],
                     readTime:
                         postData.readTime ||
                         `${Math.max(2, Math.ceil(postData.content.split(" ").length / 180))} min read`,
@@ -150,8 +150,8 @@ export async function saveBlogPost(
                     slug,
                     excerpt: postData.excerpt || postData.content.slice(0, 160) + "...",
                     content: postData.content,
-                    category: postData.category || "System Design",
-                    tags: postData.tags || ["Engineering"],
+                    category: postData.category || "Uncategorized",
+                    tags: postData.tags || [],
                     readTime:
                         postData.readTime ||
                         `${Math.max(2, Math.ceil(postData.content.split(" ").length / 180))} min read`,
@@ -193,8 +193,8 @@ export async function saveBlogPost(
                     slug,
                     excerpt: postData.excerpt || postData.content.slice(0, 160) + "...",
                     content: postData.content,
-                    category: postData.category || "System Design",
-                    tags: postData.tags || ["Engineering"],
+                    category: postData.category || "Uncategorized",
+                    tags: postData.tags || [],
                     readTime: `${Math.max(2, Math.ceil(postData.content.split(" ").length / 180))} min read`,
                     publishedAt: new Date().toISOString(),
                     status: postData.status || "published",
@@ -210,8 +210,8 @@ export async function saveBlogPost(
                 slug,
                 excerpt: postData.excerpt || postData.content.slice(0, 160) + "...",
                 content: postData.content,
-                category: postData.category || "System Design",
-                tags: postData.tags || ["Engineering"],
+                category: postData.category || "Uncategorized",
+                tags: postData.tags || [],
                 readTime: `${Math.max(2, Math.ceil(postData.content.split(" ").length / 180))} min read`,
                 publishedAt: new Date().toISOString(),
                 status: postData.status || "published",

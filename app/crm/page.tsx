@@ -1114,19 +1114,16 @@ export default function CrmDashboard() {
                 <div className="grid gap-4 sm:grid-cols-3">
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-ink-muted font-bold mb-1">
-                      Category
+                      Category *
                     </label>
-                    <select
-                      value={editingPost.category || "System Design"}
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. System Design"
+                      value={editingPost.category || ""}
                       onChange={(e) => setEditingPost({ ...editingPost, category: e.target.value })}
-                      className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-xs text-ink outline-none focus:border-cobalt font-mono"
-                    >
-                      <option value="Microservices">Microservices</option>
-                      <option value="Game Engine & Networking">Game Engine &amp; Networking</option>
-                      <option value="WebGL & 3D">WebGL &amp; 3D</option>
-                      <option value="System Design">System Design</option>
-                      <option value="Full Stack">Full Stack</option>
-                    </select>
+                      className="w-full rounded-lg border border-line bg-canvas px-4 py-2 text-xs text-ink outline-none focus:border-cobalt font-mono"
+                    />
                   </div>
 
                   <div>

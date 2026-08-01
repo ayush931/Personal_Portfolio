@@ -39,6 +39,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     if (!window.location.hash) {
       window.scrollTo(0, 0);
       lenis.scrollTo(0, { immediate: true });
+    } else {
+      setTimeout(() => {
+        const targetEl = document.querySelector(window.location.hash) as HTMLElement | null;
+        if (targetEl) {
+          lenis.scrollTo(targetEl, { immediate: true });
+        }
+      }, 150);
     }
 
     lenis.on("scroll", ScrollTrigger.update);

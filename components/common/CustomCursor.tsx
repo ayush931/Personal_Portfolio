@@ -64,7 +64,7 @@ export function CustomCursor() {
       <div
         ref={ringRef}
         className={`fixed top-0 left-0 h-9 w-9 -ml-4.5 -mt-4.5 rounded-full border border-white transition-all duration-200 ease-out ${
-          isHovered ? "scale-175 bg-white/20 border-white" : "scale-100 opacity-70"
+          isHovered ? "scale-175 bg-transparent border-white" : "scale-100 opacity-70"
         }`}
       />
     </div>
